@@ -1,0 +1,7 @@
+{
+  "name": "sd1movil",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
