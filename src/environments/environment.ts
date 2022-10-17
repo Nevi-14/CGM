@@ -3,7 +3,18 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production:   false,
+  adminClave:   '@dmin2021*',
+  preIRPURL:    'https://mercaderistas',
+  preISAURL:    'http://api_isa',
+  TestURL:      '_test',
+  postURL:      '.di-apps.co.cr/api/',
+  OCApURL:      'ONE_OCAprob/',
+  OCAprobURL:   'ONE_OCAprobQuery/',
+  OCTransURL:   'ONE_OCTransQuery/',
+  usuariosURL:  'ONE_Aut/',
+  clientesURL:  'ClientesRut/',
+  prdMode:      true,
 };
 
 /*

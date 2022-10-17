@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-button (click)="regresar()" fill="clear" slot="start">
+        <ion-icon name="chevron-back-outline" size="large"></ion-icon>
+      </ion-button>
+      <ion-title class="ion-text-center">
+        <h1>{{etiqueta}}</h1>
+      </ion-title>
+    </ion-buttons>
+    <ion-toggle slot="end" checked="true" (ionChange)="cambioTipoOC()"></ion-toggle>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list #myList *ngIf="OCAprob">
+
+    <ion-item-sliding *ngFor="let item of bd.ocPendientes; let i = index">
+      <ion-item-options side="start">
+        <ion-item-option color="danger" (click)="aprobarOC(i, false)">
+          <ion-icon slot="start" name="trash-outline" size="large"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+
+      <ion-item (click)="abrirDetalles(i)">
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="5">
+              <div>
+                <ion-text [color]="item.Estatus === 'E' ? 'success' : 'dark'">
+                  {{item.ORDEN_COMPRA}}
+                </ion-text>
+              </div>
+            </ion-col> 
+            <ion-col size="3">
+              <div>
+                <ion-text [color]="item.Estatus === 'E' ? 'success' : 'dark'">
+                  {{item.FechaOC | date : 'shortDate'}}
+                </ion-text>
+              </div>
+            </ion-col> 
+            <ion-col size="4">
+              <div>
+                <ion-text [color]="item.Estatus === 'E' ? 'success' : 'dark'">
+                  {{item.TOTAL_A_COMPRAR | colones}}
+                </ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div>
+                <ion-text [color]="item.Estatus === 'E' ? 'success' : 'primary'">
+                  {{item.NOMBRE}}
+                </ion-text>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="success" (click)="aprobarOC(i, true)">
+          <ion-icon slot="start" name="checkmark-circle-outline" size="large"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+  </ion-list>
+
+  <ion-list #MyList2 *ngIf="!OCAprob">
+
+      <ion-item *ngFor="let item of bd.ocPendientes; let i = index">
+        <ion-grid fixed>
+          <ion-row (click)="abrirDetalles(i)">
+            <ion-col size="4">
+              <div>
+                <ion-text>
+                  {{item.ORDEN_COMPRA}}
+                </ion-text>
+              </div>
+            </ion-col> 
+            <ion-col size="4">
+              <div>
+                <ion-text>
+                  {{item.FechaOC | date : 'shortDate'}}
+                </ion-text>
+              </div>
+            </ion-col> 
+            <ion-col size="4">
+              <div>
+                <ion-text>
+                  {{item.TOTAL_A_COMPRAR | colones}}
+                </ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="12">
+              <div>
+                <ion-text color="success">
+                  {{item.NOMBRE}}
+                </ion-text>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+
+  </ion-list>
+
+</ion-content>
