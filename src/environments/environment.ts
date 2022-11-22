@@ -12,6 +12,7 @@ export const environment = {
   OCApURL:      'ONE_OCAprob/',
   OCAprobURL:   'ONE_OCAprobQuery/',
   OCTransURL:   'ONE_OCTransQuery/',
+  TipGastosURL: 'ONE_TipGastos/',
   usuariosURL:  'ONE_Aut/',
   clientesURL:  'ClientesRut/',
   prdMode:      true,

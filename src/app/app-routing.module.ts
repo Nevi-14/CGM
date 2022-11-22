@@ -23,6 +23,14 @@ const routes: Routes = [
     path: 'oc-detalles',
     loadChildren: () => import('./pages/oc-detalles/oc-detalles.module').then( m => m.OcDetallesPageModule)
   },
+  {
+    path: 'viaticos',
+    loadChildren: () => import('./pages/viaticos/viaticos.module').then( m => m.ViaticosPageModule)
+  },
+  {
+    path: 'nuevo-gasto',
+    loadChildren: () => import('./pages/nuevo-gasto/nuevo-gasto.module').then( m => m.NuevoGastoPageModule)
+  },
 ];
 
 @NgModule({

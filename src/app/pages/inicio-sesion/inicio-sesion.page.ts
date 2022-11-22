@@ -41,7 +41,7 @@ export class InicioSesionPage implements OnInit {
         resp => {
           this.d1.loadingDissmiss();
           if (resp.length > 0){
-            const i = resp.findIndex( x => x.rol === 'A');
+            const i = resp.findIndex( x => x.rol === 'A' || x.rol === 'C');
             if (i >= 0){
               console.log(resp);
               this.d1.usuario = resp[i];

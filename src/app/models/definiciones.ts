@@ -125,3 +125,34 @@ export interface OCAprobBD {
   Fecha:        Date;
 }
 
+/********************************************** Control de Viáticos ****************************************/
+
+export class Viaticos {
+  constructor(
+    public TIPO_GASTO:    string,
+    public DESCRIPCION:   string,
+    public CUENTA:        string,
+    public MONTO:         number,
+    public USUARIO:       string,
+    public lineas:        ViLineas[] = []
+  ){}
+}
+
+export class ViLineas {
+  constructor(
+    public LINEA:         string,
+    public DESCRIPCION:   string,
+    public FECHA:         Date,
+    public MONTO:         number,
+    public PROVEEDOR:     string,
+    public NOMBRE:        string,
+    public FACTURA:       string,
+  ){}
+}
+
+export interface TiposGastos {
+  tipoGasto: string;
+  descripcion: string;
+  cuenta: string;
+}
+

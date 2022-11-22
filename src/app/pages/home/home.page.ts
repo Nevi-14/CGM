@@ -5,6 +5,7 @@ import { BdService } from 'src/app/services/bd.service';
 import { D1Service } from 'src/app/services/d1.service';
 import { InicioSesionPage } from '../inicio-sesion/inicio-sesion.page';
 import { OrdenesCompraPage } from '../ordenes-compra/ordenes-compra.page';
+import { ViaticosPage } from '../viaticos/viaticos.page';
 
 @Component({
   selector: 'app-home',
@@ -151,6 +152,22 @@ export class HomePage implements OnInit {
         }
       } else {
         this.consultarOC();
+      }
+    }
+  }
+
+  async viaticos(){
+    if (this.d1.usuario.usuario !== ''){
+      const modal = await this.modalCtrl.create({
+        component: ViaticosPage,
+        cssClass:  'modal-view',
+        mode:      'ios'
+      });
+      await modal.present();
+      const {data} = await modal.onDidDismiss();
+      if ( data !== undefined ){
+        console.log(data);
+        //this.consultarOC();
       }
     }
   }

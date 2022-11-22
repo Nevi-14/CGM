@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { OC, OCAprobBD, OCLineasBD, Usuarios } from '../models/definiciones';
+import { OC, OCAprobBD, OCLineasBD, TiposGastos, Usuarios } from '../models/definiciones';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -62,6 +62,11 @@ export class BdService {
     };
     console.log(JSON.stringify(ocAprob));
     return this.http.put( URL, JSON.stringify(ocAprob), options );
+  }
+
+  getTiposGastos(){
+    const URL = this.getIRPURL( environment.TipGastosURL, `` );
+    return this.http.get<TiposGastos[]>( URL );
   }
 
 }
