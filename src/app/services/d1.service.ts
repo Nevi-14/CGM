@@ -58,6 +58,7 @@ export class D1Service {
       header: 'Warning',
       subHeader,
       message,
+      mode: 'ios',
       buttons: ['OK']
     });
 

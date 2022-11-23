@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ViaticosPageRoutingModule } from './viaticos-routing.module';
 
 import { ViaticosPage } from './viaticos.page';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ViaticosPageRoutingModule
+    ViaticosPageRoutingModule,
+    PipesModule
   ],
   declarations: [ViaticosPage]
 })

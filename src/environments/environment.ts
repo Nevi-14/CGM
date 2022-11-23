@@ -9,6 +9,7 @@ export const environment = {
   preISAURL:    'http://api_isa',
   TestURL:      '_test',
   postURL:      '.di-apps.co.cr/api/',
+  ONE_LinGastoURL: 'ONE_LineasGasto/',
   OCApURL:      'ONE_OCAprob/',
   OCAprobURL:   'ONE_OCAprobQuery/',
   OCTransURL:   'ONE_OCTransQuery/',

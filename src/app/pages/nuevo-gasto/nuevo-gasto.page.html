@@ -11,6 +11,73 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+  <form #NuevoGasto="ngForm" (ngSubmit)="salvar()">
+    <ion-list>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label>Tipo de Gasto</ion-label>
+              <ion-select name="tipo" [(ngModel)]="nuevoGasto.tipoGasto">
+                <ion-select-option *ngFor="let item of tiposGastos" [value]="descripcion">{{item.descripcion}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">Fecha del Gasto</ion-label>
+              <ion-input name="fecha" type="date" [(ngModel)]="nuevoGasto.fecha" value="nuevoGasto.fecha" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">id Proveedor</ion-label>
+              <ion-input name="idProveedor" type="text" [(ngModel)]="nuevoGasto.idProveedor" value="nuevoGasto.proveedor" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">Proveedor</ion-label>
+              <ion-input name="proveedor" type="text" [(ngModel)]="nuevoGasto.proveedor" value="nuevoGasto.proveedor" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">Factura</ion-label>
+              <ion-input name="factura" type="number" [(ngModel)]="nuevoGasto.factura" value="nuevoGasto.factura" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-item>
+              <ion-label position="floating">Monto</ion-label>
+              <ion-input name="monto" type="number" [(ngModel)]="nuevoGasto.monto" value="nuevoGasto.monto" required></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
+        <ion-row>
+          <ion-col size="12">
+            <ion-button [disabled]="NuevoGasto.invalid"
+                            type="submit"
+                            color="dark"
+                            shape="round"
+                            expand="block">
+                  Salvar
+                </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-list>
+  </form>
 </ion-content>

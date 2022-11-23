@@ -156,3 +156,18 @@ export interface TiposGastos {
   cuenta: string;
 }
 
+export class LineaGasto {
+  constructor(
+    public fecha: Date,
+    public usuario: string,
+    public referencia: string,
+    public ceCo: string,
+    public cuenta: string,
+    public tipo_Gasto: string,
+    public descripcion: string,
+    public monto: number,
+    public rol: string,
+    public procesado: string,
+  ){}
+}
+

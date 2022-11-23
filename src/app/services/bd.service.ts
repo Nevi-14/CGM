@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { OC, OCAprobBD, OCLineasBD, TiposGastos, Usuarios } from '../models/definiciones';
+import { LineaGasto, OC, OCAprobBD, OCLineasBD, TiposGastos, Usuarios } from '../models/definiciones';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -62,6 +62,19 @@ export class BdService {
     };
     console.log(JSON.stringify(ocAprob));
     return this.http.put( URL, JSON.stringify(ocAprob), options );
+  }
+
+  post1LinGasto( lineasGasto: LineaGasto[] ){
+    const URL = this.getIRPURL( environment.ONE_LinGastoURL, `` );
+    const options = {
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+      }
+    };
+    console.log(JSON.stringify(lineasGasto));
+    return this.http.post( URL, JSON.stringify(lineasGasto), options );
   }
 
   getTiposGastos(){
