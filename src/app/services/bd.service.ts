@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class BdService {
 
-  ocLineas: OCLineasBD[] = [];
+  ocLineas: OCLineasBD[] = []
   ocPendientes: OC[] = [];
   cantidadOCs = 0;
 

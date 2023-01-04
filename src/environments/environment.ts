@@ -5,7 +5,7 @@
 export const environment = {
   production:   false,
   adminClave:   '@dmin2021*',
-  preIRPURL:    'https://mercaderistas',
+  preIRPURL:    'http://mercaderistas',
   preISAURL:    'http://api_isa',
   TestURL:      '_test',
   postURL:      '.di-apps.co.cr/api/',
