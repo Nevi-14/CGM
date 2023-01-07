@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { BdService } from 'src/app/services/bd.service';
 import { D1Service } from 'src/app/services/d1.service';
@@ -23,7 +24,8 @@ export class InicioSesionPage implements OnInit {
 
   constructor( private bd: BdService,
                private d1: D1Service,
-               private modalCtrl: ModalController ) { }
+               private modalCtrl: ModalController,
+               private router: Router ) { }
 
   ngOnInit() {
     this.loginUser = {
@@ -46,7 +48,8 @@ export class InicioSesionPage implements OnInit {
               console.log(resp);
               this.d1.usuario = resp[i];
               this.d1.guardarUsuario();
-              this.modalCtrl.dismiss({'Aut': true});
+              this.router.navigateByUrl('/home');
+             // this.modalCtrl.dismiss({'Aut': true});
             } else {
               this.d1.presentAlert('Autenticación', 'El usuario no posee permisos de ingreso...!!!');
             }
