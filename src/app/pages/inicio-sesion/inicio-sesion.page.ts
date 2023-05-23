@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { BdService } from 'src/app/services/bd.service';
-import { D1Service } from 'src/app/services/d1.service';
+import { AlertasService } from '../../services/alertas.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 interface login{
   usuario: string,
@@ -16,16 +16,18 @@ interface login{
   styleUrls: ['./inicio-sesion.page.scss'],
 })
 export class InicioSesionPage implements OnInit {
-
+  focused: boolean;
   showPass = false;
   lock     = false;
   loginUser: login;
 
 
-  constructor( private bd: BdService,
-               private d1: D1Service,
+  constructor(
+               private usuariosService:UsuariosService,
                private modalCtrl: ModalController,
-               private router: Router ) { }
+               private router: Router,
+               private alertasService: AlertasService
+                ) { }
 
   ngOnInit() {
     this.loginUser = {
@@ -38,38 +40,40 @@ export class InicioSesionPage implements OnInit {
     console.log('fLogin', fLogin);
     if (fLogin.valid){
       console.log('Login')
-      this.d1.presentaLoading('Espere...');
-      this.bd.getAut(this.loginUser.usuario, this.loginUser.password).subscribe(
+      this.usuariosService.presentaLoading('Espere...');
+      this.usuariosService.syncGetExactusToPromise(this.loginUser.usuario).then(
         resp => {
-          this.d1.loadingDissmiss();
+          this.usuariosService.loadingDissmiss();
           if (resp.length > 0){
-            const i = resp.findIndex( x => x.rol === 'A' || x.rol === 'C');
-            if (i >= 0){
-              console.log(resp);
-              this.d1.usuario = resp[i];
-              this.d1.guardarUsuario();
-              this.router.navigateByUrl('/home');
-             // this.modalCtrl.dismiss({'Aut': true});
-            } else {
-              this.d1.presentAlert('Autenticación', 'El usuario no posee permisos de ingreso...!!!');
-            }
+            this.router.navigateByUrl('/inicio', {replaceUrl:true});
+            this.usuariosService.usuario = resp[0];
+            this.usuariosService.guardarUsuario();
+
           } else {
-            this.d1.presentAlert('Autenticación', 'El usuario no existe...!!!');
+            this.usuariosService.presentAlert('SD1 Móvil', 'Usuario o contraseña incorrectos..!!!');
             console.log('Usuario no existe')
           }
         }, error => {
-          this.d1.loadingDissmiss();
+          this.usuariosService.loadingDissmiss();
           console.log('Aplicación sin acceso a la BD', error.message);
-          this.d1.presentAlert('Autenticación', 'Aplicación sin acceso a la BD...!!!');
+          this.usuariosService.presentAlert('SD1 Móvil', 'Aplicación sin acceso a la BD...!!!');
         }
       )
     }
   }
 
-  send(){}
+  send(){
+    this.alertasService.message('SD1 Móvil', 'Opción no disponible!.')
+  }
 
   salir(){
     this.modalCtrl.dismiss({'Aut': false});
   }
+  onBlur(event: any) {
+    const value = event.target.value;
 
+    if (!value) {
+      this.focused = false;
+    }
+  }
 }

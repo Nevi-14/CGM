@@ -1,53 +1,31 @@
- 
-
 <ion-content class="ion-padding">
-  <div id="content">
-    <div class="content-body" >
-      <form id="form" (ngSubmit)="login(fLogin)" #fLogin="ngForm" >
-     
-        <ion-row>
-          <ion-col size="12">
-            <div  class="ion-text-center">
-              <img   src="../../../assets/icon/favicon.png" alt="">
-              <h1 >Inicio de Sesión</h1>
-            </div>
-          </ion-col>
-        </ion-row>
-  
-        <ion-row>
-          <ion-col size="12">
-            <ion-label>Usuario</ion-label>
-            <ion-item class="ion-margin-bottom ion-margin-top" lines="none">
-              <ion-input name="usuario"   [(ngModel)]="loginUser.usuario"  type="text" placeholder="Usuario" required></ion-input>
-            </ion-item>
-          </ion-col>
-  
-          <ion-col size="12">
-            <ion-label>Contraseña</ion-label>
-            <ion-item class="ion-margin-bottom ion-margin-top" lines="none">
-              <ion-input name="password" [(ngModel)]="loginUser.password"     type="{{showPass ? 'text' : 'password'}}" placeholder="contraseña" required></ion-input>
-              <ion-icon slot="end"  item-right name="{{showPass ? 'eye' : 'eye-off'}}" (click)="showPass=!showPass"></ion-icon>
-            </ion-item>
-          </ion-col>
+<ion-grid >
+  <ion-row>
+    <ion-col size="12">
+      <img height="100" style="margin: 0 auto;"  src="assets/coris.png" alt="">
+      <h1>Inicio Sesión</h1>
 
-          <ion-col  size="12" class="ion-text-left">
-            <ion-button (click)="send()" fill="clear">
-              Recuperar Contraseña
-            </ion-button>
-          </ion-col>
-
-          <ion-col size="12" size-md="8" style="margin: 0 auto;" class="ion-text-center">
-            <ion-button   class="custom-button"  type="submit" color="dark"    shape="round"  [disabled]="fLogin.invalid" >
-              Iniciar Sesión
-              <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-
-      </form>
+    </ion-col>
+ 
+  </ion-row>
+</ion-grid>
+  <form id="form" (ngSubmit)="login(fLogin)" #fLogin="ngForm">
+    <div class="form-field">
+      <label [ngClass]="focused ? 'label-focused' : ''">Usuario</label>
+      <input name="usuario"   [(ngModel)]="loginUser.usuario"   [type]="type" (focus)="focused = true" (blur)="onBlur($event)" />
     </div>
-  
-  </div>
+    <div class="form-field">
+      <label [ngClass]="focused ? 'label-focused' : ''">Contraseña</label>
+      <input name="usuario"   [(ngModel)]="loginUser.password"  type="password" (focus)="focused = true" (blur)="onBlur($event)" />
+    </div>
+   
+     
+    <ion-button expand='block' type="submit"  [disabled]="fLogin.invalid" >
+      Iniciar Sessión
+    </ion-button>
+    
+    
+  </form>
+
   
 </ion-content>
-

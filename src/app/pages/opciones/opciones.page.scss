@@ -1,0 +1,41 @@
+h5{
+    margin-left: 1rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+} 
+ion-toolbar{
+    --background:white;
+    ion-icon{
+        color: #000;
+    }
+}ion-button ion-icon{
+    color: #000;
+}
+ion-item{
+--padding:0;
+padding:0;
+--padding-bottom:0.5rem;
+ion-grid, ion-row, ion-col{
+    margin: 0;
+    padding: 0;
+}
+}
+
+ion-item-sliding,ion-item-option{
+    --padding:0;
+padding:0;
+}
+ion-col ion-label{
+    font-size: 14px;
+ 
+}
+
+.bottom-button {
+    --padding-top:0.7rem;
+    --padding-bottom:0.7rem;
+    margin-top: 2rem;
+}
+ion-avatar{
+    height: 3rem;
+    width: 3rem;
+  }

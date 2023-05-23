@@ -5,18 +5,54 @@
 export const environment = {
   production:   false,
   adminClave:   '@dmin2021*',
-  preIRPURL:    'http://mercaderistas',
-  preISAURL:    'http://api_isa',
-  TestURL:      '_test',
-  postURL:      '.di-apps.co.cr/api/',
-  ONE_LinGastoURL: 'ONE_LineasGasto/',
+  preURL: 'https://sde1.sderp.site/',
+  TestURL: '_test',
+  preURL2:'https://api_isa',
+  postURL: 'api-coris-control-viaticos/api/',
   OCApURL:      'ONE_OCAprob/',
   OCAprobURL:   'ONE_OCAprobQuery/',
   OCTransURL:   'ONE_OCTransQuery/',
-  TipGastosURL: 'ONE_TipGastos/',
+  TipGastosURL: 'get/tipos/gastos',
   usuariosURL:  'ONE_Aut/',
   clientesURL:  'ClientesRut/',
-  prdMode:      true,
+  // SOFTLAND
+  getusuariosSoftland:'get/usuario/exactus?id=',
+  // CORREO
+  postCorreo:'post/enviar/correo',
+  // ANTICIPOS
+  getAnticipo:'get/anticipo?id=',
+  getVistaAnticipoLineasAnticipo:'get/vista/anticipo/linea/anticipo?id=',
+  putAnticipoAPI: 'put/anticipo?id=',
+
+  // LINEA ANTICIPOS
+  getLineaAnticipo:'get/linea/anticipo?id=',
+  getVistaUsuarioLineaAnticipo:'get/vista/usuario/linea/anticipo?id=',
+  getLineanticipo:'get/linea/anticipo?id=',
+  putLineaAnticipo:'put/linea/anticipo?id=',
+  // GASTOS CON ANTICIPO
+  getGastosConAnticipo:'get/gastos/linea/anticipo?id=',
+  getGastosConAnticipoTipo:'get/gastos/linea/anticipo/tipo?id=',
+  getGastosConAnticipoEstado:'get/gastos/linea/anticipo/estado/?id=',
+  postGastosConAnticipos:'post/gasto/linea/anticipo',
+  putGastosConAnticipos:'put/gasto/linea/anticipo?id=',
+  deleteGastosConAnticipos:'delete/gasto/linea/anticipo?id=',
+  // GASTOS SIN ANTICIPO
+  getGastosSinAnticipoURL:'get/usuario/gastos/sin/anticipo/estado/rango/fecha?id=',
+  postGastosSinAnticipos:'post/gasto/sin/anticipo',
+  putGastosSinAnticipos:'put/gasto/sin/anticipo?id=',
+  deleteGastosSinAnticipos:'delete/gasto/sin/anticipo?id=',
+  getGastosSinAnticipoTipo:'get/gastos/sin/anticipo/tipo?id=',
+
+  // SOBRANTES
+getUsuarioSobrante:'get/sobrante/usuario?id=',
+postSobrante:'post/sobrante',
+putSobrante:'put/sobrante?id=',
+deleteSobrante:'delete/sobrante?id=',
+
+// ESTADOS CUENTA
+getUsuarioEstadosCuenta:'get/usuario/estados/cuenta?id=',
+
+  prdMode:true,
 };
 
 /*

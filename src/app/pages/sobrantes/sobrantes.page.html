@@ -1,0 +1,81 @@
+ 
+<ion-header class="ion-no-border">
+ 
+
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" style="display: flex;justify-content:space-between;align-items: center;">
+          <ion-button (click)="regresar()" fill="clear">
+            <ion-icon size="large" name="chevron-back-outline"></ion-icon>
+          </ion-button>
+          <ion-label class="ion-text-uppercase ion-text-wrap" style="margin-left: 1rem;">
+            <strong>  Sobrantes</strong>
+          </ion-label>
+          <ion-avatar>
+            <img src="assets/gastos/court.svg" />
+          </ion-avatar>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+ 
+
+<ion-content>
+<app-robot-message   *ngIf="sobrantes.length == 0;" message="No hay datos que mostrar!.."></app-robot-message>
+ 
+<ion-list *ngIf="sobrantes.length > 0">
+  <ion-item (click)="detalleSobrante(sobrante)" *ngFor="let sobrante of sobrantes" detail>
+   <ion-grid >
+    <ion-row style="margin-bottom: 0.5rem;">
+      <ion-col size="6">
+        <strong>Metodo Devolución</strong>
+      </ion-col>
+      <ion-col size="6"  > 
+        <span style="margin-left: 0.5rem;">
+          {{sobrante.metodO_DEVOLUCION
+          }}
+        </span>
+      </ion-col>
+      <ion-col size="6">
+        <strong>Cuenta</strong>
+      </ion-col>
+      <ion-col size="6"  >  
+        <span style="margin-left: 0.5rem;">
+          {{sobrante.cuenta
+          }}
+        </span>
+
+      </ion-col>
+      <ion-col size="6">
+        <strong>Monto</strong>
+      </ion-col>
+      <ion-col size="6"  >  
+        <span style="margin-left: 0.5rem;">
+          {{sobrante.monto | colones
+          }}
+        </span>
+
+
+      </ion-col>
+      <ion-col size="6">
+        <strong>Estado</strong>
+      </ion-col>
+      <ion-col size="6"  >  
+        <span style="margin-left: 0.5rem;">
+          {{sobrante.estatus == 'P' ? 'Pendiente' : 'Aprobado'
+          }}
+        </span>
+
+
+      </ion-col>
+    </ion-row>
+   </ion-grid>
+  </ion-item>
+</ion-list>
+ 
+
+
+</ion-content>
+

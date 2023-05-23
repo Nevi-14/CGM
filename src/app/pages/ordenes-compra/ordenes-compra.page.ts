@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonList, ModalController } from '@ionic/angular';
 import { OC, OCAprobBD, OCLineas } from 'src/app/models/definiciones';
-import { BdService } from 'src/app/services/bd.service';
-import { D1Service } from 'src/app/services/d1.service';
 import { OcDetallesPage } from '../oc-detalles/oc-detalles.page';
+import { UsuariosService } from 'src/app/services/usuarios.service';
+import { OrdenesDeCompraService } from 'src/app/services/ordenes-de-compra.service';
 
 @Component({
   selector: 'app-ordenes-compra',
@@ -17,10 +17,12 @@ export class OrdenesCompraPage implements OnInit {
   OCAprob     = true;
   etiqueta    = 'Por Aprobar';
 
-  constructor( public bd: BdService,
-               private d1: D1Service,
+  constructor( 
+               private usuariosService:UsuariosService,
                private modalCtrl: ModalController,
-               private alertCtrl: AlertController ) { }
+               private alertCtrl: AlertController,
+               public ordernesDeComprasService:OrdenesDeCompraService
+               ) { }
 
   ngOnInit() {
   }
@@ -47,16 +49,16 @@ export class OrdenesCompraPage implements OnInit {
   }
 
   consultarOCAprob(){
-    if (this.d1.usuario.usuario !== ''){
-      this.d1.presentaLoading('Consultando BD...');
-      this.bd.getOCAprobLineas(this.d1.usuario.usuario).subscribe(
+    if (this.usuariosService.usuario.usuario !== ''){
+      this.usuariosService.presentaLoading('Consultando BD...');
+      this.ordernesDeComprasService.getOCAprobLineas(this.usuariosService.usuario.usuario).subscribe(
         resp => {
-          this.d1.loadingDissmiss();
-          this.bd.ocLineas = resp.slice(0);
+          this.usuariosService.loadingDissmiss();
+          this.ordernesDeComprasService.ocLineas = resp.slice(0);
           this.cargarOCs();
-          this.bd.cantidadOCs = this.bd.ocPendientes.length; 
+          this.ordernesDeComprasService.cantidadOCs = this.ordernesDeComprasService.ocPendientes.length; 
         }, error => {
-          this.d1.loadingDissmiss();
+          this.usuariosService.loadingDissmiss();
           console.log('Error consultando las OC...', error.message);
         }
       )
@@ -64,16 +66,16 @@ export class OrdenesCompraPage implements OnInit {
   }
 
   consultarOCTrans(){
-    if (this.d1.usuario.usuario !== ''){
-      this.d1.presentaLoading('Consultando BD...');
-      this.bd.getOCTransLineas(this.d1.usuario.usuario).subscribe(
+    if (this.usuariosService.usuario.usuario !== ''){
+      this.usuariosService.presentaLoading('Consultando BD...');
+      this.ordernesDeComprasService.getOCTransLineas(this.usuariosService.usuario.usuario).subscribe(
         resp => {
-          this.d1.loadingDissmiss();
-          this.bd.ocLineas = resp.slice(0);
+          this.usuariosService.loadingDissmiss();
+          this.ordernesDeComprasService.ocLineas = resp.slice(0);
           this.cargarOCs();
-          this.bd.cantidadOCs = this.bd.ocPendientes.length; 
+          this.ordernesDeComprasService.cantidadOCs = this.ordernesDeComprasService.ocPendientes.length; 
         }, error => {
-          this.d1.loadingDissmiss();
+          this.usuariosService.loadingDissmiss();
           console.log('Error consultando las OC...', error.message);
         }
       )
@@ -87,7 +89,7 @@ export class OrdenesCompraPage implements OnInit {
     let ocItem:  OC;
     let oclinea: OCLineas;
 
-    this.bd.ocLineas.forEach(x => {
+    this.ordernesDeComprasService.ocLineas.forEach(x => {
       if (idOC !== x.ordeN_COMPRA){
         idOC = x.ordeN_COMPRA;
         ocItem = new OC(x.ordeN_COMPRA, x.usuario, x.estatus, x.fechaOC, x.usuarioOC, x.tipO_ORDEN, x.desc_Tipo_Orden, x.departamento, x.condicioN_PAGO, x.moneda,
@@ -100,8 +102,8 @@ export class OrdenesCompraPage implements OnInit {
                              x.ordeN_COMPRA_LINEA);
       ordenesCompra[i].lineas.push(oclinea);
     });
-    this.bd.ocPendientes = ordenesCompra.slice(0);
-    console.log(this.bd.ocPendientes);
+    this.ordernesDeComprasService.ocPendientes = ordenesCompra.slice(0);
+    console.log(this.ordernesDeComprasService.ocPendientes);
   }
 
   async abrirDetalles(i: number){
@@ -134,7 +136,7 @@ export class OrdenesCompraPage implements OnInit {
             text: 'OK',
             role: 'confirm',
             handler: () => {
-              this.bd.ocPendientes[i].Estatus = 'E';      // Orden de compra pasa a en Transito.
+              this.ordernesDeComprasService.ocPendientes[i].Estatus = 'E';      // Orden de compra pasa a en Transito.
               this.actualizarOC(i);
             },
           },
@@ -158,7 +160,7 @@ export class OrdenesCompraPage implements OnInit {
             text: 'OK',
             role: 'confirm',
             handler: () => {
-              this.bd.ocPendientes[i].Estatus = 'C';      // Orden de compra pasa a estado NO Aprobada.
+              this.ordernesDeComprasService.ocPendientes[i].Estatus = 'C';      // Orden de compra pasa a estado NO Aprobada.
               this.actualizarOC(i);
             },
           },
@@ -170,22 +172,22 @@ export class OrdenesCompraPage implements OnInit {
   }
 
   actualizarOC( i: number ){
-    console.log(this.bd.ocPendientes);
+    console.log(this.ordernesDeComprasService.ocPendientes);
     let ocAprob: OCAprobBD = {
-      ORDEN_COMPRA: this.bd.ocPendientes[i].ORDEN_COMPRA,
-      Usuario:      this.bd.ocPendientes[i].Usuario,
-      Estatus:      this.bd.ocPendientes[i].Estatus,
+      ORDEN_COMPRA: this.ordernesDeComprasService.ocPendientes[i].ORDEN_COMPRA,
+      Usuario:      this.ordernesDeComprasService.ocPendientes[i].Usuario,
+      Estatus:      this.ordernesDeComprasService.ocPendientes[i].Estatus,
       Fecha:        new Date(),
     }
 
-    this.d1.presentaLoading('Actualizando OC');
-    this.bd.putOCAprob(ocAprob).subscribe(
+    this.usuariosService.presentaLoading('Actualizando OC');
+    this.ordernesDeComprasService.putOCAprob(ocAprob).subscribe(
       resp => {
-        this.d1.loadingDissmiss();
+        this.usuariosService.loadingDissmiss();
         console.log('OC Actualizada')
         this.seActualizo = true;
       }, error => {
-        this.d1.loadingDissmiss();
+        this.usuariosService.loadingDissmiss();
         console.log('ERROR actualizando OC', error.message)
         
       }

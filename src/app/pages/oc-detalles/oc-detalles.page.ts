@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { OC } from 'src/app/models/definiciones';
-import { BdService } from 'src/app/services/bd.service';
+import { OrdenesDeCompraService } from 'src/app/services/ordenes-de-compra.service';
+
 
 @Component({
   selector: 'app-oc-detalles',
@@ -14,12 +15,12 @@ export class OcDetallesPage implements OnInit {
   etiqueta = '';
   oc: OC;
 
-  constructor( public bd: BdService,
+  constructor( public ordenesDeCompraService:OrdenesDeCompraService,
                private modalCtrl: ModalController ) { }
 
   ngOnInit() {
-    this.etiqueta = this.bd.ocPendientes[this.i].ORDEN_COMPRA;
-    this.oc = this.bd.ocPendientes[this.i];
+    this.etiqueta = this.ordenesDeCompraService.ocPendientes[this.i].ORDEN_COMPRA;
+    this.oc = this.ordenesDeCompraService.ocPendientes[this.i];
   }
 
   regresar(){

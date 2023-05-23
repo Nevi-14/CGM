@@ -1,0 +1,61 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+   <ion-button slot="start" (click)="regresar()" fill="clear">
+     <ion-icon size="large" name="close-outline"></ion-icon>
+   </ion-button>
+   <ion-title>Estados Cuenta</ion-title>
+   <ion-avatar slot="end">
+    <img src="assets/gastos/court.svg" />
+  </ion-avatar>
+  </ion-toolbar>
+  
+ </ion-header>
+ 
+<ion-content>
+<app-robot-message   *ngIf="estadosCuenta.length == 0;" message="No hay datos que mostrar!.."></app-robot-message>
+ 
+<ion-list *ngIf="estadosCuenta.length > 0">
+  <ion-item (click)="descargarEstadoDeCuenta(estadoCuenta)" *ngFor="let estadoCuenta of estadosCuenta" detail>
+    <ion-grid >
+      <ion-row style="margin-bottom: 0.5rem;">
+        <ion-col size="6">
+          <strong>Referencia</strong>
+        </ion-col>
+        <ion-col size="6"  > 
+          <span style="margin-left: 0.5rem;">
+            {{estadoCuenta.referencia
+            }}
+          </span>
+        </ion-col>
+        <ion-col size="12" style="margin-top: 0.5rem;">
+          <strong>Fecha</strong>
+        </ion-col>
+        <ion-col size="12"  style="margin-bottom: 0.5rem;margin-top: 0.5rem;">  
+          <span style="margin-left: 0.5rem;">
+            {{estadoCuenta.fechA_INICIAL | date
+            }} /    {{estadoCuenta.fechA_FINAL | date
+            }}
+          </span>
+  
+        </ion-col>
+        <ion-col size="6">
+          <strong>Monto</strong>
+        </ion-col>
+        <ion-col size="6"  >  
+          <span style="margin-left: 0.5rem;">
+            {{estadoCuenta.monto | colones
+            }}
+          </span>
+  
+  
+        </ion-col>
+    
+      </ion-row>
+     </ion-grid>
+  </ion-item>
+</ion-list>
+ 
+
+
+</ion-content>
+

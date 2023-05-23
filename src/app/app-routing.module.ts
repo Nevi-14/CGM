@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, Route, RouterModule, Routes, UrlSegment, CanLoad } from '@angular/router';
+import { IntroGuard } from './guards/intro.guard';
 
 const routes: Routes = [
 
@@ -9,8 +10,13 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'calendario-popover',
+    loadChildren: () => import('./pages/calendario-popover/calendario-popover.module').then( m => m.CalendarioPopoverPageModule)
+  },
+  {
     path: 'inicio-sesion',
-    loadChildren: () => import('./pages/inicio-sesion/inicio-sesion.module').then( m => m.InicioSesionPageModule)
+    loadChildren: () => import('./pages/inicio-sesion/inicio-sesion.module').then( m => m.InicioSesionPageModule),
+    canLoad:[IntroGuard]
   },
   {
     path: 'home',
@@ -25,13 +31,80 @@ const routes: Routes = [
     loadChildren: () => import('./pages/oc-detalles/oc-detalles.module').then( m => m.OcDetallesPageModule)
   },
   {
-    path: 'viaticos',
-    loadChildren: () => import('./pages/viaticos/viaticos.module').then( m => m.ViaticosPageModule)
+    path: 'intro',
+    loadChildren: () => import('./pages/intro/intro.module').then( m => m.IntroPageModule)
   },
   {
-    path: 'nuevo-gasto',
-    loadChildren: () => import('./pages/nuevo-gasto/nuevo-gasto.module').then( m => m.NuevoGastoPageModule)
+    path: 'mostrar-gastos',
+    loadChildren: () => import('./pages/mostrar-gastos/mostrar-gastos.module').then( m => m.MostrarGastosPageModule)
   },
+  {
+    path: 'gestion-gastos',
+    loadChildren: () => import('./pages/gestion-gastos/gestion-gastos.module').then( m => m.GestionGastosPageModule)
+  },
+  {
+    path: 'lista-anticipos',
+    loadChildren: () => import('./pages/lista-anticipos/lista-anticipos.module').then( m => m.ListaAnticiposPageModule)
+  },
+  {
+    path: 'mis-gastos',
+    loadChildren: () => import('./pages/mis-gastos/mis-gastos.module').then( m => m.MisGastosPageModule)
+  },
+  {
+    path: 'informacion',
+    loadChildren: () => import('./pages/informacion/informacion.module').then( m => m.InformacionPageModule)
+  },
+  {
+    path: 'control-gastos',
+    loadChildren: () => import('./pages/control-gastos/control-gastos.module').then( m => m.ControlGastosPageModule)
+  },
+  {
+    path: 'nuevo-gasto-anticipo',
+    loadChildren: () => import('./pages/nuevo-gasto-anticipo/nuevo-gasto-anticipo.module').then( m => m.NuevoGastoAnticipoPageModule)
+  },
+  {
+    path: 'nuevo-gasto-sin-anticipo',
+    loadChildren: () => import('./pages/nuevo-gasto-sin-anticipo/nuevo-gasto-sin-anticipo.module').then( m => m.NuevoGastoSinAnticipoPageModule)
+  },
+  {
+    path: 'tipos-gastos',
+    loadChildren: () => import('./pages/tipos-gastos/tipos-gastos.module').then( m => m.TiposGastosPageModule)
+  },
+  {
+    path: 'editar-gasto',
+    loadChildren: () => import('./pages/editar-gasto/editar-gasto.module').then( m => m.EditarGastoPageModule)
+  },
+  {
+    path: 'estados-cuenta',
+    loadChildren: () => import('./pages/estados-cuenta/estados-cuenta.module').then( m => m.EstadosCuentaPageModule)
+  },
+ 
+  {
+    path: 'sobrantes',
+    loadChildren: () => import('./pages/sobrantes/sobrantes.module').then( m => m.SobrantesPageModule)
+  },
+  {
+    path: 'editar-gasto-sin-anticipo',
+    loadChildren: () => import('./pages/editar-gasto-sin-anticipo/editar-gasto-sin-anticipo.module').then( m => m.EditarGastoSinAnticipoPageModule)
+  },
+  {
+    path: 'opciones',
+    loadChildren: () => import('./pages/opciones/opciones.module').then( m => m.OpcionesPageModule)
+  },
+  {
+    path: 'inicio',
+    loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
+  },
+
+
+
+
+
+
+ 
+
+
+
 ];
 
 @NgModule({

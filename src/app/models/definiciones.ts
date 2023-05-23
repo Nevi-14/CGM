@@ -1,13 +1,4 @@
 
-export interface Usuarios {
-  empleado: string;
-  usuario:  string;
-  clave:    string;
-  email:    string;
-  nombre:   string;
-  rol:      string;
-  fecha:    Date;
-}
 
 export interface OCLineasBD {
   ordeN_COMPRA: string;
@@ -131,6 +122,8 @@ export class Viaticos {
   constructor(
     public TIPO_GASTO:    string,
     public DESCRIPCION:   string,
+    public tarjeta:boolean,
+    public anticipo:boolean,
     public CUENTA:        string,
     public MONTO:         number,
     public USUARIO:       string,
@@ -150,24 +143,8 @@ export class ViLineas {
   ){}
 }
 
-export interface TiposGastos {
-  tipoGasto: string;
-  descripcion: string;
-  cuenta: string;
-}
 
-export class LineaGasto {
-  constructor(
-    public fecha: Date,
-    public usuario: string,
-    public referencia: string,
-    public ceCo: string,
-    public cuenta: string,
-    public tipo_Gasto: string,
-    public descripcion: string,
-    public monto: number,
-    public rol: string,
-    public procesado: string,
-  ){}
-}
+
+
+
 

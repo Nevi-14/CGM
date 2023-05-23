@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { InicioSesionPageRoutingModule } from './inicio-sesion-routing.module';
 
 import { InicioSesionPage } from './inicio-sesion.page';
+import { ComponentModule } from 'src/app/components/component.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    InicioSesionPageRoutingModule
+    InicioSesionPageRoutingModule,
+    ComponentModule
   ],
   declarations: [InicioSesionPage]
 })

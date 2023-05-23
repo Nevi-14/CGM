@@ -1,21 +1,19 @@
-<ion-header [translucent]="true" mode="ios" class="ion-no-border">
-  <p></p>
+ 
   <ion-toolbar color="light">
 
-    <ion-thumbnail style="width: 90px;height:90px;">
-      <img src="../../../assets/icon/Logo SDE.png" style="margin: 5px;"/>
+    <ion-thumbnail style="width: 100px;height:100px;margin-left: 1rem;">
+      <img src="../../../assets/icon/Dione.svg" style="margin:0.5rem"/>
     </ion-thumbnail>
     
     <ion-buttons slot="end">
       <ion-button fill="clear" slot="end" size="large" (click)="login()"> 
-        <h1>{{nombre}}</h1>
-        <ion-icon color="danger" size="large" slot="end" name="person-outline"></ion-icon>
+        <ion-label style="margin-top: 0.5rem;" slot="start"><strong>{{nombre}}</strong></ion-label>
+        <ion-icon color="dark"   slot="end" name="person"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
   
-  <p></p>
-</ion-header>
+ 
 
 <ion-content [fullscreen]="true" color="light">
   <ion-grid fixed>
@@ -23,7 +21,7 @@
       <ion-col size="6">
         <ion-card class="ion-margin" class="ion-padding-bottom" (click)="aprobarOCs()">
           <ion-card-header>
-            <ion-card-subtitle>Aprobación ({{bd.cantidadOCs}})</ion-card-subtitle>
+            <ion-card-subtitle>Aprobación ({{ordernesDeComprasService.cantidadOCs}})</ion-card-subtitle>
             <ion-card-title class="ion-text-center">OC</ion-card-title>
           </ion-card-header>
           <ion-img class="ion-padding-horizontal" src="../../../assets/icon/oc.png"></ion-img>

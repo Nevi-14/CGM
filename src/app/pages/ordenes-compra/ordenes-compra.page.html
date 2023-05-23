@@ -15,7 +15,7 @@
 <ion-content class="ion-padding">
   <ion-list #myList *ngIf="OCAprob">
 
-    <ion-item-sliding *ngFor="let item of bd.ocPendientes; let i = index">
+    <ion-item-sliding *ngFor="let item of ordernesDeComprasService.ocPendientes; let i = index">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="aprobarOC(i, false)">
           <ion-icon slot="start" name="trash-outline" size="large"></ion-icon>
@@ -68,7 +68,7 @@
 
   <ion-list #MyList2 *ngIf="!OCAprob">
 
-      <ion-item *ngFor="let item of bd.ocPendientes; let i = index">
+      <ion-item *ngFor="let item of ordernesDeComprasService.ocPendientes; let i = index">
         <ion-grid fixed>
           <ion-row (click)="abrirDetalles(i)">
             <ion-col size="4">

@@ -1,0 +1,41 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar  >
+<ion-grid >
+  <ion-row>
+    <ion-col size="12" style="display: flex;justify-content: flex-start;align-items: center;">
+<h5><strong>Opciones</strong></h5>
+    </ion-col>
+ 
+  </ion-row>
+</ion-grid>
+       </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list  >
+
+    <ion-item detail (click)="estadosDeCuenta()">
+      <ion-avatar slot="start">
+        <img src="assets/opciones/financial-statement.svg" alt="">
+       </ion-avatar>
+      <ion-label>Estados De Cuenta</ion-label>
+    </ion-item>
+                    
+     
+<ion-item detail (click)="gastosSinanticipo()">
+  <ion-avatar slot="start">
+    <img src="assets/opciones/wallet.svg" alt="">
+   </ion-avatar>
+  <ion-label>Gastos Sin Anticipos</ion-label>
+</ion-item>
+             
+
+
+<ion-item detail (click)="sobrantes()">
+  <ion-avatar slot="start">
+    <img src="assets/opciones/cash-on-delivery.svg" alt="">
+   </ion-avatar>
+  <ion-label>Sobrantes</ion-label>
+</ion-item>
+             </ion-list>
+</ion-content>

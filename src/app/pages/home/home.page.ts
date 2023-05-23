@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import { OC, OCLineas } from 'src/app/models/definiciones';
-import { BdService } from 'src/app/services/bd.service';
-import { D1Service } from 'src/app/services/d1.service';
 import { InicioSesionPage } from '../inicio-sesion/inicio-sesion.page';
 import { OrdenesCompraPage } from '../ordenes-compra/ordenes-compra.page';
-import { ViaticosPage } from '../viaticos/viaticos.page';
+import { Router } from '@angular/router';
+import { ControlGastosPage } from '../control-gastos/control-gastos.page';
+import { UsuariosService } from 'src/app/services/usuarios.service';
+import { OrdenesDeCompraService } from 'src/app/services/ordenes-de-compra.service';
 
 @Component({
   selector: 'app-home',
@@ -16,19 +17,21 @@ export class HomePage implements OnInit {
 
   nombre = '';
 
-  constructor( public  d1: D1Service,
-               public bd: BdService,
+  constructor( public  usuariosService:UsuariosService,
                private modalCtrl: ModalController,
-               private actSheetCtrl: ActionSheetController ) {}
+               private actSheetCtrl: ActionSheetController,
+               public router: Router,
+              public ordernesDeComprasService:OrdenesDeCompraService
+               ) {}
 
   ngOnInit(): void {
-    this.nombre = this.d1.usuario.nombre;
+    this.nombre = this.usuariosService.usuario.nombre;
     this.consultarOC();
     //this.consultarPrueba();
   }
 
   async login(){
-    if (this.d1.usuario.usuario === ''){
+    if (this.usuariosService.usuario.usuario === ''){
       console.log('Abriendo el modal')
       const modal = await this.modalCtrl.create({
         component: InicioSesionPage,
@@ -40,7 +43,7 @@ export class HomePage implements OnInit {
       if ( data !== undefined ){
         if ( data.Aut ){
           console.log(data);
-          this.nombre = this.d1.usuario.nombre;
+          this.nombre = this.usuariosService.usuario.nombre;
           this.consultarOC();
         }
       }
@@ -48,23 +51,15 @@ export class HomePage implements OnInit {
       const actionSheet = await this.actSheetCtrl.create({
         header: 'Login',
         mode: 'ios',
-        cssClass: 'my-custom-class',
+        cssClass: 'left-align-buttons',
         buttons: [{
-          text: 'Log Out',
+          text: 'Cerrar Sessión',
           role: 'destructive',
-          icon: 'trash',
+          icon: 'log-out',
           id: 'delete-button',
           handler: () => {
             console.log('Delete clicked');
             this.logout();
-          }
-        }, {
-          text: 'Nuevo Usuario',
-          icon: 'share',
-          handler: () => {
-            console.log('Share clicked');
-            this.logout();
-            this.login();
           }
         }, {
           text: 'Cancel',
@@ -83,29 +78,35 @@ export class HomePage implements OnInit {
   }
 
   logout(){
-    this.bd.ocPendientes = [];
-    this.bd.cantidadOCs = 0;
-    this.d1.usuario.clave = '';
-    this.d1.usuario.empleado = '';
-    this.d1.usuario.email = '';
-    this.d1.usuario.nombre = '';
-    this.d1.usuario.rol = '';
-    this.d1.usuario.usuario = '';
+    
+    this.ordernesDeComprasService.ocPendientes = [];
+    this.ordernesDeComprasService.cantidadOCs = 0;
+    this.usuariosService.usuario.clave = '';
+    this.usuariosService.usuario.usuario=null;
+    this.usuariosService.usuario.nombre=null;
+    this.usuariosService.usuario.clave=null;
+    this.usuariosService.usuario.cia=null;
+   // this.usuariosService.usuario.empleado = '';
+    //this.usuariosService.usuario.email = '';
+    //this.usuariosService.usuario.nombre = '';
+   // this.usuariosService.usuario.rol = '';
+    //this.usuariosService.usuario.usuario = '';
     this.nombre = '';
-    this.d1.guardarUsuario();
+    this.usuariosService.guardarUsuario();
+    this.router.navigateByUrl('/');
   }
 
   consultarOC(){
-    if (this.d1.usuario.usuario !== ''){
-      this.d1.presentaLoading('Consultando BD...');
-      this.bd.getOCAprobLineas(this.d1.usuario.usuario).subscribe(
+    if (this.usuariosService.usuario.usuario !== ''){
+      this.usuariosService.presentaLoading('Consultando ordernesDeComprasService...');
+      this.ordernesDeComprasService.getOCAprobLineas(this.usuariosService.usuario.usuario).subscribe(
         resp => {
-          this.d1.loadingDissmiss();
-          this.bd.ocLineas = resp.slice(0);
+          this.usuariosService.loadingDissmiss();
+          this.ordernesDeComprasService.ocLineas = resp.slice(0);
           this.cargarOCs();
-          this.bd.cantidadOCs = this.bd.ocPendientes.length; 
+          this.ordernesDeComprasService.cantidadOCs = this.ordernesDeComprasService.ocPendientes.length; 
         }, error => {
-          this.d1.loadingDissmiss();
+          this.usuariosService.loadingDissmiss();
           console.log('Error consultando las OC...', error.message);
         }
       )
@@ -119,7 +120,7 @@ export class HomePage implements OnInit {
     let ocItem:  OC;
     let oclinea: OCLineas;
 
-    this.bd.ocLineas.forEach(x => {
+    this.ordernesDeComprasService.ocLineas.forEach(x => {
       if (idOC !== x.ordeN_COMPRA){
         idOC = x.ordeN_COMPRA;
         ocItem = new OC(x.ordeN_COMPRA, x.usuario, x.estatus, x.fechaOC, x.usuarioOC, x.tipO_ORDEN, x.desc_Tipo_Orden, x.departamento, x.condicioN_PAGO, x.moneda,
@@ -132,13 +133,15 @@ export class HomePage implements OnInit {
                              x.ordeN_COMPRA_LINEA);
       ordenesCompra[i].lineas.push(oclinea);
     });
-    this.bd.ocPendientes = ordenesCompra.slice(0);
-    console.log(this.bd.ocPendientes);
+    this.ordernesDeComprasService.ocPendientes = ordenesCompra.slice(0);
+    console.log(this.ordernesDeComprasService.ocPendientes);
   }
 
   async aprobarOCs(){
-    if (this.d1.usuario.usuario !== ''){
-      if (this.bd.ocPendientes.length > 0){
+
+    return
+    if (this.usuariosService.usuario.usuario !== ''){
+      if (this.ordernesDeComprasService.ocPendientes.length > 0){
         const modal = await this.modalCtrl.create({
           component: OrdenesCompraPage,
           cssClass:  'modal-view',
@@ -157,9 +160,9 @@ export class HomePage implements OnInit {
   }
 
   async viaticos(){
-    if (this.d1.usuario.usuario !== ''){
+    if (this.usuariosService.usuario.usuario !== ''){
       const modal = await this.modalCtrl.create({
-        component: ViaticosPage,
+        component: ControlGastosPage,
         cssClass:  'modal-view',
         mode:      'ios'
       });

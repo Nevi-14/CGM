@@ -1,0 +1,11 @@
+
+
+<ion-content>
+  <ion-datetime
+ [(ngModel)]="calendarioFecha"
+        #popoverDatetime2
+        presentation="date"
+        [max]="max"
+        (ionChange)="formatDate(popoverDatetime2.value)"
+      ></ion-datetime>
+</ion-content>

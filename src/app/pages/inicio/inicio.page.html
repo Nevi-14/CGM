@@ -1,0 +1,81 @@
+<app-encabezado titulo="Inicio"></app-encabezado>
+<ion-toolbar class="ion-padding-top">
+  <ion-title>Resumen Gastos</ion-title>
+  <ion-fab-button (click)="otrasAcciones()" slot="end"  size="small" color="dark">
+    <ion-icon name="search"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button (click)="listaAnticipos()" slot="end"  size="small" color="dark">
+    <ion-icon   name="swap-horizontal-outline"></ion-icon>
+  </ion-fab-button>
+</ion-toolbar>
+<ion-content >
+<ion-grid >
+  <ion-row>
+    <ion-col size="12">
+      <ion-button  size="large"  expand="block" fill="solid" color="danger"  >
+  <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;">
+    <li class="ion-margin-bottom">Balance</li>
+    <li>$2000</li>
+  </ul>
+    
+      </ion-button>
+    </ion-col>
+ 
+    <ion-col size="12">
+      <ion-slides style="margin-top: 2rem;" pager="true"   mode="ios" [options]="sliderOpts" >
+        <ion-slide *ngFor="let tipoGasto of controlGastosService.gastos">
+          <ion-card (click)="detalle(tipoGasto)" button >
+            <img src="{{tipoGasto.imagen}}" alt="">
+            <ion-card-header>
+        <ion-label style="font-size: 12px;"> {{tipoGasto.descripcion}} </ion-label>
+            </ion-card-header>
+            <ion-card-content  >
+           <ion-label><strong>{{tipoGasto.total   | colones }}</strong></ion-label>
+            </ion-card-content>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </ion-col>
+
+  </ion-row>
+
+  <ion-row>
+
+    <ion-col size="12"    style="display: flex;justify-content: center;align-items: center;" >
+  
+      <span  [ngStyle]="{'min-height': chartHeight,'width': chartHeight}" >
+        <canvas   baseChart 
+        [data]="pieChartData"
+        [type]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins">
+       
+      </canvas>
+      </span>
+      
+      
+              
+              </ion-col>
+              
+              <ion-col size="12">
+                <ion-list>
+       
+                  <ion-item *ngFor="let gasto of gastos; let i = index;" detail>
+                    <ion-fab-button color="success" size="small" slot="start">
+                      {{gasto.gastos.length}}
+                    </ion-fab-button>
+                    <ion-label>{{gasto.gasto}}</ion-label>
+              
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+            
+  </ion-row>
+</ion-grid>
+</ion-content>
+<ion-fab  slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button (click)="nuevoGasto()" color="danger">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+   
+</ion-fab>

@@ -1,0 +1,58 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+   <ion-button slot="start" (click)="regresar()" fill="clear">
+     <ion-icon size="large" name="close-outline"></ion-icon>
+   </ion-button>
+   <ion-title>Mis Gastos</ion-title>
+  
+  </ion-toolbar>
+  
+ </ion-header>
+<ion-content class="ion-padding">
+
+  <app-robot-message   *ngIf="gastos.length == 0;" message="No hay datos que mostrar!.."></app-robot-message>
+ 
+
+
+
+  <ion-grid *ngIf="gastos.length > 0">
+    <ion-row>
+
+      <ion-col size="12"    style="display: flex;justify-content: center;align-items: center;" >
+    
+        <span  [ngStyle]="{'min-height': chartHeight,'width': chartHeight}" >
+          <canvas   baseChart 
+          [data]="pieChartData"
+          [type]="pieChartType"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins">
+         
+        </canvas>
+        </span>
+        
+        
+                
+                </ion-col>
+                
+                <ion-col size="12">
+                  <ion-list>
+         
+                    <ion-item *ngFor="let gasto of gastos; let i = index;" detail>
+                      <ion-fab-button color="success" size="small" slot="start">
+                        {{gasto.gastos.length}}
+                      </ion-fab-button>
+                      <ion-label>{{gasto.gasto}}</ion-label>
+                
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
+              
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+ <ion-footer>
+  <ion-toolbar class="ion-text-center">
+    <ion-title><strong>Total Gastos</strong> : {{ total | colones}}</ion-title>
+  </ion-toolbar>
+ </ion-footer>
