@@ -14,6 +14,7 @@ import { PdfMakeWrapper } from 'pdfmake-wrapper';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
 //  npm install @ionic-native/camera --save --dev
+// npm i @ionic/storage-angular
 // set font to PDF
 PdfMakeWrapper.setFonts(pdfFonts);
 @NgModule({

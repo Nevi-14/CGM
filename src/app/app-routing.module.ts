@@ -47,16 +47,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/lista-anticipos/lista-anticipos.module').then( m => m.ListaAnticiposPageModule)
   },
   {
-    path: 'mis-gastos',
-    loadChildren: () => import('./pages/mis-gastos/mis-gastos.module').then( m => m.MisGastosPageModule)
-  },
-  {
     path: 'informacion',
     loadChildren: () => import('./pages/informacion/informacion.module').then( m => m.InformacionPageModule)
-  },
-  {
-    path: 'control-gastos',
-    loadChildren: () => import('./pages/control-gastos/control-gastos.module').then( m => m.ControlGastosPageModule)
   },
   {
     path: 'nuevo-gasto-anticipo',
@@ -94,7 +86,23 @@ const routes: Routes = [
   {
     path: 'inicio',
     loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
+  },  {
+    path: 'mi-perfil',
+    loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule)
   },
+  {
+    path: 'mis-gastos',
+    loadChildren: () => import('./pages/mis-gastos/mis-gastos.module').then( m => m.MisGastosPageModule)
+  },
+  {
+    path: 'liquidaciones',
+    loadChildren: () => import('./pages/liquidaciones/liquidaciones.module').then( m => m.LiquidacionesPageModule)
+  },
+  {
+    path: 'formulario-liquidacion',
+    loadChildren: () => import('./pages/formulario-liquidacion/formulario-liquidacion.module').then( m => m.FormularioLiquidacionPageModule)
+  },
+
 
 
 

@@ -13,159 +13,40 @@
   
  </ion-header>
  
- <ion-content>
+ <ion-content class="ion-padding">
  <app-robot-message   *ngIf="gastos.length == 0;" message="No hay datos que mostrar!.."></app-robot-message>
+ <ion-row    *ngIf="lineaAnticipo && estado  && anticiposService.vistaAnticipo  && sobrante || anticiposService.vistaAnticipo  && sobrante">
   
- 
- 
-   <ion-grid *ngIf="gastos.length > 0;">
-     <ion-row>
-
-      <ion-col size="12">
-        <ion-toolbar>
-    <h3><strong>Detalle Gastos</strong></h3>
-        </ion-toolbar>    
-          </ion-col>
-       <ion-col size="12">
-         <ion-list>
-          
-       
-           <ion-item-sliding *ngFor="let item of gastos" >
-                     
-             <ion-item-options *ngIf="item.estatus != 'A'" side="start" style="display: flex;justify-content: flex-start;align-items: center;">
-       <ion-button (click)="delete(item)"  fill="clear"  >
-        <ion-icon  size="large" color="danger" name="trash"></ion-icon>
-       </ion-button>
-             </ion-item-options>
-             <ion-item class="ion-margin-bottom"  detail  (click)="editarGasto(item)" lines="full">
-               <ion-grid>
-                 <ion-row>
-                   <ion-col size="12" style="display: flex;justify-content: space-between;align-items: center;">
-                     <ion-label class="ion-text-capitalize" style="margin-bottom: 0.5rem;">
-                       <strong>{{item.proveedor}}</strong>
-                     </ion-label>
-   
-                     <a *ngIf="item.adjunto" href="{{url+item.id}}" download>
-                       <ion-fab-button size="small">
-   
-                         <ion-icon name="cloud-download-outline">
-   
-   
-                         </ion-icon>
-   
-                       </ion-fab-button>
-   
-                     </a>
-                      
-                   </ion-col>
-                   <ion-col size="12" style="display: flex;justify-content: space-between;align-items: center;">
-   
-                     <ion-label>M# {{item.referencia}}
-                     </ion-label>
-                     <ion-label style="margin-right: 1rem;"><strong> -{{item.monto | colones}}</strong></ion-label>
-   
-   
-                   </ion-col>
-   
-   
-                   <ion-col size="12">
-                     <ion-label>{{item.fecha | date }}</ion-label>
-                   </ion-col>
-                   <ion-col size="12" style="display: flex;justify-content: space-between;align-items: center;">
-                     <ion-label>Estatus</ion-label>
-                     {{item.estatus == 'P' ? 'Pendiente' : item.estatus == 'A' ? 'Aprobado' : 'Rechazado'}}
-                   </ion-col>
-                 </ion-row>
-               </ion-grid>
-   
-             </ion-item>
-   
- 
-           </ion-item-sliding>
- 
-           <ion-grid   *ngIf="estado && anticiposService.vistaAnticipo  || anticiposService.vistaAnticipo">
-            <ion-row>
-             <ion-col size="12">
-           <ion-toolbar>
-       <h3><strong>Detalle Anticipo</strong></h3>
-           </ion-toolbar>    
-             </ion-col>
-              <ion-col size="12">
-     <strong>Compañia</strong> 
-              </ion-col>
-              <ion-col size="12" class="ion-text-right">
-            <ion-label>{{anticiposService.vistaAnticipo.coD_COMPANIA}}</ion-label>
-              </ion-col>
-              <ion-col size="12">
-            <strong>Corte</strong>
-              </ion-col>
-              <ion-col size="12" class="ion-text-right">
-    <ion-label>{{anticiposService.vistaAnticipo.fechA_INICIAL | date }} - {{anticiposService.vistaAnticipo.fechA_FINAL | date}}</ion-label>
-              </ion-col>
-              <ion-col size="12">
-            <strong>Anticipo</strong>
-              </ion-col>
-              <ion-col size="12" class="ion-text-right">
-  <ion-label># {{anticiposService.vistaAnticipo.numerO_TRANSACCION }}</ion-label>
-              </ion-col>
-             
-               <ion-col size="12">
-               <strong>Total Dispensado</strong>
-               </ion-col>
-               <ion-col size="12" class="ion-text-right">
-               <ion-label>{{ anticiposService.vistaAnticipo.monto | colones}}</ion-label>
-               </ion-col>
-               <ion-col size="12">
-              <strong>Total Consumido</strong>
-               </ion-col>
-               <ion-col size="12" class="ion-text-right">
-  <ion-label>- {{ anticiposService.vistaAnticipo.utilizado | colones}}</ion-label>
-               </ion-col>
-               <ion-col size="12">
-               <strong>Sobrante</strong>
-               </ion-col>
-               <ion-col size="12" class="ion-text-right">
-    <ion-label>{{ anticiposService.vistaAnticipo.restante | colones}}</ion-label>
-               </ion-col>
-
-               <ion-col size="12">
-                <ion-toolbar>
-            <h3><strong>Liquidar Anticipo</strong></h3>
-                </ion-toolbar>    
-                  </ion-col>
-               <ion-col size="12" size="12" *ngIf="estado || anticiposService.vistaAnticipo.estatus == 'R'" >
-                 <ion-label class="ion-text-wrap ion-margin-top ion-margin-bottom">
-                   Si desea liquidar los gastos, por favor completar el formulario adjunto y dale click al botón de liquidar
-                 </ion-label>
-               </ion-col>
-            </ion-row>
+ <ion-col size="12" size="12" *ngIf="estado || anticiposService.vistaAnticipo.estatus == 'R'" >
+  <p>  Si desea liquidar los gastos, por favor completar el formulario adjunto y dale click al botón de liquidar</p>
+ </ion-col>
+</ion-row>
 
 
-            <ion-row  class="ion-margin-top" *ngIf="lineaAnticipo && estado  && anticiposService.vistaAnticipo  && sobrante || anticiposService.vistaAnticipo  && sobrante">
-              <ion-col size="12">
+<ion-row  class="ion-margin-top" *ngIf="lineaAnticipo && estado  && anticiposService.vistaAnticipo  && sobrante || anticiposService.vistaAnticipo  && sobrante">
+<ion-col size="12">
 
-                  
- <div class="form-field">
-  <label  #label [ngClass]="focuse[0].focus1 ? 'label-focused' : ''">Metodo Devolución</label>
+    
+<div class="form-field">
+<label  #label [ngClass]="focuse[0].focus1 ? 'label-focused' : ''">Metodo Devolución</label>
 
-  <ion-select  (focus)="focuse[0].focus1 = true" (blur)="sobrante.metodO_DEVOLUCION?  focuse[0].focus1  = true : focuse[0].focus1  = false"  (ionChange)="cambiarMetodoDevolucion()" [(ngModel)]="sobrante.metodO_DEVOLUCION"   class="ion-text-wrap">
-    <ion-select-option value="sinpe">Sinpe</ion-select-option>
-    <ion-select-option value="transferencia">Transferencia</ion-select-option>
-    <ion-select-option value="deposito">Deposito</ion-select-option>
-  </ion-select>
+<ion-select  (focus)="focuse[0].focus1 = true" (blur)="sobrante.metodO_DEVOLUCION?  focuse[0].focus1  = true : focuse[0].focus1  = false"  (ionChange)="cambiarMetodoDevolucion()" [(ngModel)]="sobrante.metodO_DEVOLUCION"   class="ion-text-wrap">
+<ion-select-option value="sinpe">Sinpe</ion-select-option>
+<ion-select-option value="transferencia">Transferencia</ion-select-option>
+<ion-select-option value="deposito">Deposito</ion-select-option>
+</ion-select>
 </div>
 
 
 
 
-              </ion-col>
-            
-            </ion-row>
-            <ion-row *ngIf="sobrante.metodO_DEVOLUCION == 'sinpe'">
-              <ion-col size="12">
+</ion-col>
+</ion-row>
+<ion-row *ngIf="sobrante.metodO_DEVOLUCION == 'sinpe'">
+  <ion-col size="12">
 
 
-                    
+        
 <div class="form-field">
 <label #label [ngClass]="focuse[1].focus2 ? 'label-focused' : ''">Telefono</label>
 <input (focus)="focuse[1].focus2  = true"  #input name="proveedor" [(ngModel)]="sobrante.telefono"  (blur)="sobrante.telefono?  focuse[1].focus2  = true : focuse[1].focus2  = false" />
@@ -173,14 +54,18 @@
 
 
 
-     
-              </ion-col>
-         
-            </ion-row>
-            <ion-row *ngIf="sobrante.metodO_DEVOLUCION != 'sinpe'">
-              <ion-col size="12">
 
-                    
+  </ion-col>
+<ion-col size="12">
+  <ion-button *ngIf="estado || anticiposService.vistaAnticipo.estatus == 'R'" class="ion-button" (click)="metodoDevolucion()"  expand="block">
+    <ion-label>Liquidar Gastos</ion-label>
+  </ion-button> 
+</ion-col>
+</ion-row>
+<ion-row *ngIf="sobrante.metodO_DEVOLUCION != 'sinpe' && lineaAnticipo">
+  <ion-col size="12">
+
+        
 <div class="form-field">
 <label #label [ngClass]="focuse[2].focus3  ? 'label-focused' : ''">Numero de cuenta</label>
 <input (focus)="focuse[2].focus3 = true"  #input name="proveedor"   [(ngModel)]="sobrante.cuenta"  (blur)="sobrante.cuenta ?  focuse[2].focus3 = true : focuse[2].focus3 = false" />
@@ -188,30 +73,50 @@
 
 
 
-  
-              </ion-col>
-          
-        
-            </ion-row>
+
+  </ion-col>
+
+
+</ion-row>
 <ion-col size="12">
-  <ion-button *ngIf="estado || anticiposService.vistaAnticipo.estatus == 'R'" class="ion-button" (click)="metodoDevolucion()"  expand="block">
+  <ion-button *ngIf="!anticiposService.vistaAnticipo" class="ion-button" (click)="metodoDevolucion()"  expand="block">
     <ion-label>Liquidar Gastos</ion-label>
   </ion-button> 
 </ion-col>
-           </ion-grid>
+  <ion-toolbar>
+    <ion-title>Mis Gastos</ion-title>
+  </ion-toolbar>
+ <ion-card (click)="editarGasto(item)" button size="12"  *ngFor="let item of gastos">
+  <ion-grid >
+    <ion-row >
+      <ion-col size="4">
+        <img src="{{imagenT(item)}}" alt="">
+      
 
+      </ion-col>
+      <ion-col size="8">
+        <ion-card-header>
+ <ion-grid>
+  <ion-row >
+    <ion-col  class="ion-col" size="12">
+      <ion-label>{{item.fecha | date }}</ion-label>
 
-
-          
-            
-         </ion-list>
- 
-       </ion-col>
+    </ion-col>
+    <ion-col  class="ion-col" size="12">
+      <ion-label> <strong>{{item.proveedor}}</strong> </ion-label>
+    </ion-col>
+    <ion-col  class="ion-col"  size="12">
+      <ion-label color="danger"><strong>-{{item.monto | colones}}</strong></ion-label>
+    </ion-col>
+  </ion-row>
+ </ion-grid>
+              </ion-card-header>
+              
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+      </ion-card>
   
-     </ion-row>
- 
-   </ion-grid>
- 
  
  
  </ion-content>

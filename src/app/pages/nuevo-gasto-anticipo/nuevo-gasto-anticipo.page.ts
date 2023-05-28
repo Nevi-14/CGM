@@ -44,16 +44,7 @@ export class NuevoGastoAnticipoPage implements OnInit {
 
   }
   
-focuse = [
-  {focus1:true},
-  {focus2:true},
-  {focus3:null},
-  {focus4:null},
-  {focus5:null},
-  {focus6:null},
-  {focus7:null},
-  {focus8:null}
-]
+
   constructor(
     private usuariosService: UsuariosService,
     private modalCtrl: ModalController,
@@ -80,7 +71,13 @@ focuse = [
       this.focused = false;
     }
   }
-  async salvar(fLogin: NgForm) {
+  async registrarGasto(fRegistroGasto: NgForm) {
+    let gasto = fRegistroGasto.value;
+    this.nuevoGasto.proveedor =  gasto.proveedor
+    this.nuevoGasto.referencia =  gasto.referencia
+    //this.nuevoGasto.moneda =  gasto.moneda
+    this.nuevoGasto.monto =  gasto.monto
+    this.nuevoGasto.descripcion =  gasto.descripcion
 
     if (!this.nuevoGasto.referencia || !this.nuevoGasto.monto || !this.nuevoGasto.proveedor) {
       this.usuariosService.presentAlert('SD1 Móvil', 'Todos los campos son requeridos!..');
@@ -95,14 +92,22 @@ focuse = [
     let anticipos = await this.anticiposService.syncGetUsuarioAnticipoBYId(this.anticiposService.vistaAnticipo.id);
     let anticipo = anticipos[0];
     let lineaAnticipos = await this.anticiposService.syncGetLineaUsuarioAnticipoBYId(this.anticiposService.vistaAnticipo.iD_LINEA);
-    let lineaAnticipo = lineaAnticipos[0];
-    anticipo.utilizado += this.nuevoGasto.monto;
-    anticipo.restante -= this.nuevoGasto.monto;
-    lineaAnticipo.utilizado += this.nuevoGasto.monto;
-    lineaAnticipo.restante -= this.nuevoGasto.monto;
 
-    this.anticiposService.vistaAnticipo.utilizado += this.nuevoGasto.monto;
-    this.anticiposService.vistaAnticipo.restante -= this.nuevoGasto.monto;
+    let lineaAnticipo = lineaAnticipos[0];
+
+    // anticipo
+    anticipo.restante -= this.nuevoGasto.monto;
+    anticipo.utilizado = anticipo.monto - anticipo.restante;
+
+   // linea
+
+    lineaAnticipo.restante -= this.nuevoGasto.monto;
+    lineaAnticipo.utilizado =  lineaAnticipo.monto - lineaAnticipo.restante;
+
+// anticipo vista
+
+this.anticiposService.vistaAnticipo.restante -= this.nuevoGasto.monto;
+this.anticiposService.vistaAnticipo.utilizado = this.anticiposService.vistaAnticipo.monto - this.anticiposService.vistaAnticipo.restante;
 
     if (this.gestorImagenesService.images.length > 0) {
       this.nuevoGasto.adjunto = this.gestorImagenesService.images[0].fileName
@@ -116,7 +121,6 @@ focuse = [
           await this.gestorImagenesService.startUpload();
         }
         this.usuariosService.loadingDissmiss();
-      //  this.controlGastosService.sincronizarGastos();
         this.usuariosService.presentAlert('SD1 Móvil', 'Gasto Registrado');
         this.modalCtrl.dismiss({ 'check': true, });
       }, error => {
@@ -222,7 +226,7 @@ focuse = [
       console.log('done')
       console.log('resp')
       this.changeDetector.detectChanges();
-      this.tiposGastosService.tipo ?  this.focuse[7].focus8 = true : this.focuse[7].focus8 = false
+
     
      })
    
@@ -237,9 +241,8 @@ focuse = [
     }
   }
   async tiposGastosModal(){
-    this.focuse[2].focus3 = true
   await  this.tiposGastosService.tiposGastosModal()
-  this.tiposGastosService.tipo ?  this.focuse[2].focus3 = true : this.focuse[2].focus3 = false
+
   }
   login(fLogin: NgForm){
 console.log(fLogin,'fLogin')

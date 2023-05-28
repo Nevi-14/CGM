@@ -1,9 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AlertasService } from './services/alertas.service';
-import { MenuController, Platform } from '@ionic/angular';
+import { MenuController, ModalController, Platform } from '@ionic/angular';
 import { StatusBar} from '@capacitor/status-bar';
 import { Router } from '@angular/router';
 import { ConfiguracionesServiceService } from './services/configuraciones-service.service';
+import { UsuariosService } from './services/usuarios.service';
+import { EstadosCuentaPage } from './pages/estados-cuenta/estados-cuenta.page';
+import { InformacionPage } from './pages/informacion/informacion.page';
+import { MiPerfilPage } from './pages/mi-perfil/mi-perfil.page';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -16,13 +20,10 @@ export class AppComponent implements OnInit {
   value1 = new Date(this.y, this.m , 1).toISOString();
   value2 = new Date(this.y, this.m+1 , 0).toISOString();
   public appPages = [
-    { title: 'Inicio', url: '/inicio/detalle', icon: 'home' },
-
-    { title: 'Gestión Anticipos', url: '/inicio/control-anticipos', icon: 'document-text' },
-    //{ title: 'Viáticos', url: '/inicio/control-viaticos', icon: 'cash' },
-    { title: 'Gastos Sin Anticipos', url: '/inicio/gastos-sin-anticipo', icon: 'wallet' },
+    { title: 'Inicio', url: '/inicio', icon: 'home' },
     { title: 'Estados Cuenta', url: '/inicio/control-estados-cuenta', icon: 'card' },
     { title: 'Mi Perfil', url: 'perfil', icon: 'person' },
+    { title: 'Información', url: 'informacion', icon: 'information-circle' },
     { title: 'Cerrar Sesión', url: 'salir', icon: 'exit' }
   ];
    class: boolean = false;
@@ -37,6 +38,8 @@ export class AppComponent implements OnInit {
     public router: Router,
     public menuCtrl: MenuController,
     public configuracionesService: ConfiguracionesServiceService,
+    public usuariosService:UsuariosService,
+    public modalCtrl:ModalController
   ) {}
 
 ngOnInit() {
@@ -49,17 +52,57 @@ ngOnInit() {
 }
 // REMVOE MENU ON BIGGER SCREENS
 menuAction(url) {
+  console.log('url', url)
   this.class = false;
   this.configuracionesService.menu = false;
   if (url == 'perfil') {
-   // this.perfil();
+   this.miPerfil();
   } else if (url == 'salir') {
-   // this.cerrarSesion();
-  } else {
+    this.cerrarSesion();
+  }   else if (url == 'informacion') {
+    this.informacion();
+  }else if(url == '/inicio/control-estados-cuenta') {
+ 
+this.estadosDeCuenta();
+  }
+  
+  else {
     this.router.navigateByUrl(url, { replaceUrl: true })
   }
 
 }
+async miPerfil(){
+  this.modalCtrl.dismiss();
+  let modal = await this.modalCtrl.create({
+    component: MiPerfilPage,
+
+  })
+
+  await modal.present();
+  const { data } = await modal.onDidDismiss();
+  if (data !== undefined) {
+ 
+  }
+}
+async informacion(){
+  this.modalCtrl.dismiss();
+  let modal = await this.modalCtrl.create({
+    component: InformacionPage,
+
+  })
+
+  await modal.present();
+  const { data } = await modal.onDidDismiss();
+  if (data !== undefined) {
+ 
+  }
+}
+cerrarSesion() {
+ 
+  this.usuariosService.usuario = null;
+  this.router.navigateByUrl('/');
+}
+
 openMenu() {
   if (!this.configuracionesService.menu) {
     this.class = true;
@@ -106,7 +149,19 @@ toggle() {
 
 }
 // CHECKS SCREEN RESIZE LIVE
+async estadosDeCuenta(){
+  this.modalCtrl.dismiss();
+  let modal = await this.modalCtrl.create({
+    component: EstadosCuentaPage,
 
+  })
+
+  await modal.present();
+  const { data } = await modal.onDidDismiss();
+  if (data !== undefined) {
+ 
+  }
+}
 @HostListener('window:resize', ['$event'])
 
 private onResize(event) {

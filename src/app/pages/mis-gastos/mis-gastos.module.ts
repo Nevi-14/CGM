@@ -7,9 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { MisGastosPageRoutingModule } from './mis-gastos-routing.module';
 
 import { MisGastosPage } from './mis-gastos.page';
-import { NgChartsModule } from 'ng2-charts';
-import { PipesModule } from '../../pipes/pipes.module';
 import { ComponentModule } from 'src/app/components/component.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -17,9 +16,8 @@ import { ComponentModule } from 'src/app/components/component.module';
     FormsModule,
     IonicModule,
     MisGastosPageRoutingModule,
-    NgChartsModule,
-    PipesModule,
-    ComponentModule
+    ComponentModule,
+    PipesModule
   ],
   declarations: [MisGastosPage]
 })

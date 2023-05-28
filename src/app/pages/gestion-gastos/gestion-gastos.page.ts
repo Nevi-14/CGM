@@ -15,6 +15,7 @@ import { EditarGastoSinAnticipoPage } from '../editar-gasto-sin-anticipo/editar-
 import { GastoSinAnticipo } from 'src/app/models/gastoSinAnticipo';
 import { Sobrantes } from 'src/app/models/sobrantes';
 import { SobrantesService } from 'src/app/services/sobrantes.service';
+import { TiposGastosService } from 'src/app/services/tipos-gastos.service';
 @Component({
   selector: 'app-gestion-gastos',
   templateUrl: './gestion-gastos.page.html',
@@ -67,7 +68,8 @@ url = "https://sde1.sderp.site/api-coris-control-gastos/api/descargar-archivo?id
     public alertCtrl:AlertController,
     public controlGastosService:ControlGastosService,
     public gastosSinAnticipoService:GastosSinAnticipoService,
-    public sobrantesService:SobrantesService
+    public sobrantesService:SobrantesService,
+    public tiposGastosService:TiposGastosService
   ) { }
 
  async ngOnInit() {
@@ -85,7 +87,7 @@ async sincronizar(){
          this.total += gasto.monto;
          if(index  == gastos.length -1){
          if(this.anticiposService.vistaAnticipo.estatus == 'R'){
-          let sobrante = await this.sobrantesService.syncGetSobranteAnticipoUsuarioToPromise(this.usuariosService.usuario.usuario, this.anticiposService.vistaAnticipo.numerO_TRANSACCION);
+          let sobrante = await this.sobrantesService.syncGetSobranteAnticipoUsuarioToPromise(this.usuariosService.usuario.usuario, String(this.anticiposService.vistaAnticipo.numerO_TRANSACCION));
           if(sobrante){
             this.sobrante = sobrante[0]; 
             this.focuse[0].focus1 = true;
@@ -114,6 +116,12 @@ async sincronizar(){
   
   }
 
+  imagenT(gastos:any){
+    let i = this.tiposGastosService.tiposGastos.findIndex(e => e.id == gastos.iD_TIPO_GASTO);
+    if(i >=0){
+      return this.tiposGastosService.tiposGastos[i].imagen
+    }
+  }
   cambiarMetodoDevolucion(){
     if(this.sobrante.metodO_DEVOLUCION == 'sinpe'){
       this.sobrante.cuenta = null;
@@ -128,8 +136,7 @@ async sincronizar(){
   }
 
  async  liquidarGastos(data?){
-
- 
+this.controlGastosService.anticipoLiquidado = true;
  if(this.anticiposService.vistaAnticipo){
   let email:Correo = {
     toEmail:'nelson@sde.cr',
@@ -254,9 +261,93 @@ gastos.forEach(async (element, index) => {
         nuevoGasto
       }
     })
-   modal.present();
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+
+    if (data != undefined) {
+      if(this.controlGastosService.accionGasto && this.anticiposService.vistaAnticipo){
+
+        let  lineaAnticipos =  await this.anticiposService.syncGetLineaUsuarioAnticipoBYId(this.anticiposService.vistaAnticipo.iD_LINEA);
+        this.lineaAnticipo = lineaAnticipos[0];
+        console.log('lineaAnticipo',this.lineaAnticipo)
+          this.gastosConAnticipoService.getUsuarioGastosConAnticipoEstadoToPromise(this.anticiposService.vistaAnticipo.iD_LINEA,this.estado ? this.estado : "").then(gastos =>{
+           this.gastos = gastos;
+           if(gastos.length == 0){
+             this.modalCtrl.dismiss(true)
+           }
+           gastos.forEach(gasto =>{
+             this.total += gasto.monto;
+           })
+
+           gastos.forEach(async (gasto, index) =>{
+             this.total += gasto.monto;
+             if(index  == gastos.length -1){
+             if(this.anticiposService.vistaAnticipo.estatus == 'R'){
+              let sobrante = await this.sobrantesService.syncGetSobranteAnticipoUsuarioToPromise(this.usuariosService.usuario.usuario, this.anticiposService.vistaAnticipo.numerO_TRANSACCION);
+              if(sobrante){
+                this.sobrante = sobrante[0]; 
+                this.focuse[0].focus1 = true;
+                this.focuse[1].focus2 = true;
+                this.focuse[2].focus3 = true;
+              }
+             }
+             }
+           })
+          })
 
 
+
+     
+       }
+    if(this.controlGastosService.accionGasto && !this.anticiposService.vistaAnticipo){
+
+
+      let identificador = this.controlGastosService.fechaInicioSemana.split('T')[0]+this.controlGastosService.fechaFinSemana.split('T')[0];
+
+   let gastos = await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario,'P', this.controlGastosService.fechaInicioMes, this.controlGastosService.fechaFinMes)
+   this.gastos = gastos;
+   if(gastos.length == 0){
+     this.controlGastosService.accionGasto = false;
+     this.modalCtrl.dismiss()
+     this.controlGastosService.gastoSinAnticipo = true;
+   }
+   gastos.forEach(async (gasto, index) =>{
+    this.total += gasto.monto;
+   })
+
+ 
+ }
+ 
+
+
+ 
+    }
+
+
+   }
+
+  async  liquidarGastosSinAntnicipo(){
+    let gastos = await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario,'P', this.controlGastosService.fechaInicioMes, this.controlGastosService.fechaFinMes)
+    this.gastos = gastos;
+    if(gastos.length == 0){
+      this.modalCtrl.dismiss(true)
+    }
+    gastos.forEach(async (element, index) => {
+ 
+     element.estatus = 'I'
+    await this.gastosSinAnticipoService.syncPutGastoSinAnticipoToPromise(element)
+    
+    if(index == gastos.length -1){
+     this.controlGastosService.limpiarDatos();
+     await this.controlGastosService.syncTiposGastos();
+     this.controlGastosService.gastoSinAnticipo = false;
+     await this.controlGastosService.sincronizarGastos();
+     this.modalCtrl.dismiss(true)
+     this.alertasService.loadingDissmiss();
+     this.alertasService.message('SD1 Móvil', 'Liquidación enviada!..')
+    }
+     
+    });
    }
    async actualizarMonto(gasto:GastoConAnticipo) {
     const alert = await this.alertCtrl.create({

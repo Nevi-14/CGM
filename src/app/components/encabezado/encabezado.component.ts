@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MenuController, Platform } from '@ionic/angular';
 import { ConfiguracionesServiceService } from 'src/app/services/configuraciones-service.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 
 @Component({
@@ -14,11 +15,14 @@ fecha = new Date().toLocaleDateString();
   constructor(
     public menuCtrl: MenuController,
     private plt:Platform,
-    public configuracionesService: ConfiguracionesServiceService
+    public configuracionesService: ConfiguracionesServiceService,
+    public usuariosService:UsuariosService
     
       ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
   toggle(){
  this.configuracionesService.menu = !this.configuracionesService.menu ;
     this.menuCtrl.toggle('myMenu');

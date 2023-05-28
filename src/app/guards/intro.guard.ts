@@ -14,9 +14,9 @@ export class IntroGuard implements CanLoad {
 
   async canLoad():Promise<boolean>  {
 
-
+ 
   return   this.storageService.get(INTRO_KEY).then(hasSeenIntro =>{
-
+console.log('hasSeenIntro',hasSeenIntro)
 
       if(hasSeenIntro){
         return true;

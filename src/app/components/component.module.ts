@@ -10,6 +10,7 @@ import { ButtonComponent } from './button/button.component';
 import { IconButtonComponent } from './icon-button/icon-button.component';
 import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { EncabezadoComponent } from './encabezado/encabezado.component';
+import { SelectComponent } from './select/select.component';
 
 
 
@@ -20,7 +21,8 @@ import { EncabezadoComponent } from './encabezado/encabezado.component';
   InputComponent,
   ButtonComponent,
   IconButtonComponent,
-  EncabezadoComponent
+  EncabezadoComponent,
+  SelectComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { EncabezadoComponent } from './encabezado/encabezado.component';
     InputComponent,
     ButtonComponent,
     IconButtonComponent,
-    EncabezadoComponent
+    EncabezadoComponent,
+    SelectComponent
   ],
 
 })

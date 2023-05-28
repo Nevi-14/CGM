@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ControlGastosPageRoutingModule } from './control-gastos-routing.module';
+import { MiPerfilPageRoutingModule } from './mi-perfil-routing.module';
 
-import { ControlGastosPage } from './control-gastos.page';
-import { PipesModule } from 'src/app/pipes/pipes.module';
+import { MiPerfilPage } from './mi-perfil.page';
 import { ComponentModule } from 'src/app/components/component.module';
 
 @NgModule({
@@ -15,10 +14,9 @@ import { ComponentModule } from 'src/app/components/component.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ControlGastosPageRoutingModule,
-    PipesModule,
+    MiPerfilPageRoutingModule,
     ComponentModule
   ],
-  declarations: [ControlGastosPage]
+  declarations: [MiPerfilPage]
 })
-export class ControlGastosPageModule {}
+export class MiPerfilPageModule {}

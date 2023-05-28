@@ -132,3 +132,34 @@ ion-avatar{
         padding: 0;
     }
   }
+
+  ion-avatar{
+    height: 2.5rem;
+    width: 2.5rem;
+}
+ 
+ion-grid,ion-row,ion-col{
+  padding: 0;
+  margin: 0;
+  --padding: 0;
+  --margin: 0;
+  .ion-col{
+      margin-bottom: 0.5rem;
+  }
+}
+  ion-card{
+    margin-bottom: 0.2rem;
+    display: block;
+      width: 95%;
+      height:100px;
+      border-radius: 20px;
+      img{
+          height: 4rem;
+          width: 4rem;
+          display: block;
+          margin: 0 auto;
+          margin-top: 10px;
+      }
+  
+  }
+ 

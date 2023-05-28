@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, ViewChild } from '@angular/core';
 import { GastoConAnticipo } from '../models/gastoConAnticipo';
 import { GastoSinAnticipo } from '../models/gastoSinAnticipo';
 import { Anticipos } from '../models/anticipos';
@@ -14,6 +14,7 @@ import { LineasAnticiposService } from './lineas-anticipos.service';
 import { PdfService } from './pdf.service';
 import { AlertasService } from './alertas.service';
 import { TiposGastos } from '../models/tiposGastos';
+import { Chart } from 'chart.js';
 interface gastos {
   id: number,
   imagen: string,
@@ -26,10 +27,13 @@ interface gastos {
   providedIn: 'root'
 })
 export class ControlGastosService {
- 
+  barChart: any;
+  doughnutChart: any;
+  lineChart: any;
+ accionGasto:boolean = false;
   gastos: gastos[] = [];
   tiposGastos: TiposGastos[] = [];
-
+anticipoLiquidado:boolean = false;
   fecha: Date = new Date();
   ano = this.fecha.getFullYear();
   mes = this.fecha.getMonth();
@@ -41,7 +45,8 @@ export class ControlGastosService {
   fechaFinMes = new Date(this.ano, this.mes + 1, 0).toISOString();
   gastoSinAnticipo: boolean = false;
   total: number = 0;
-
+  labels = [];
+  data = [];
   constructor(
 public alertasService:AlertasService,
 public usuariosService:UsuariosService,
@@ -56,8 +61,139 @@ public pdfService:PdfService
 
   ) { }
 
-  limpiarDatos() {
 
+
+ async  destruirDashboard(){
+ 
+    if(this.barChart instanceof Chart)
+    {
+      this.barChart.destroy();
+    }
+     
+    if(this.doughnutChart instanceof Chart)
+    {
+      this.doughnutChart.destroy();
+    }
+     
+    
+    if(this.lineChart instanceof Chart)
+    {
+      this.lineChart.destroy();
+    }
+   }
+
+ async   cargarGRaficos(){
+  await this.destruirDashboard();
+    this.barChartMethod();
+    this.doughnutChartMethod();
+    this.lineChartMethod();
+     
+  }
+
+   barChartMethod() {
+    let barCanvas: any = document.getElementById('barCanvas');
+    console.log('barCanvas',barCanvas)
+    this.barChart = new Chart(barCanvas, {
+      type: 'bar',
+      data: {
+        labels: this.labels,
+        datasets: [{
+          label: '# de gastos',
+          data: this.data,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+
+      }
+    });
+  }
+
+  doughnutChartMethod() {
+    let doughnutCanvas: any = document.getElementById('doughnutCanvas');
+    console.log('doughnutCanvas',doughnutCanvas)
+    this.doughnutChart = new Chart(doughnutCanvas, {
+      type: 'doughnut',
+      data: {
+        labels: this.labels,
+        datasets: [{
+          label: '# de gastos',
+          data: this.data,
+          backgroundColor: [
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)'
+          ],
+          hoverBackgroundColor: [
+            '#FFCE56',
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#FF6384'
+          ]
+        }]
+      }
+    });
+  }
+
+  lineChartMethod() {
+    let lineCanvas: any = document.getElementById('lineCanvas');
+    console.log('lineCanvas',lineCanvas)
+    this.lineChart = new Chart(lineCanvas, {
+      type: 'line',
+      data: {
+        labels: this.labels,
+        datasets: [
+          {
+            label: 'Gastos Mensuales',
+            fill: false,
+            backgroundColor: 'rgba(75,192,192,0.4)',
+            borderColor: 'rgba(75,192,192,1)',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: 'rgba(75,192,192,1)',
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+            pointHoverBorderColor: 'rgba(220,220,220,1)',
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+            data: this.data,
+            spanGaps: false,
+          }
+        ]
+      }
+    });
+  }
+
+   // end dashboard
+  limpiarDatos() {
+    this.labels = [];
+    this.data = [];
+    this.labels = ['No hay gastos que mostrar!.'];
+    this.data = [0];
     this.anticiposService.anticipos = [];
     this.anticiposService.vistaAnticipos = [];
     this.gastos = [];
@@ -87,13 +223,13 @@ public pdfService:PdfService
     return new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + daysToSunday);
   }
  async syncTiposGastos() {
+
     this.tiposGastosService.getTiposGastos().subscribe(
       resp => {
         console.log('Cargados los Tipos de Gastos')
         this.tiposGastosService.tiposGastos = resp.slice(0);
  
         this.tiposGastos = resp.slice(0);
-        localStorage.setItem('usuariosServicetiposGasto', JSON.stringify(this.tiposGastos));
 
         this.tiposGastosService.tiposGastos.forEach((tipo, indexT) => {
           let  index = this.tiposGastosService.tiposGastos.findIndex( e => e.id == tipo.id)
@@ -128,7 +264,7 @@ let gastosUsuario = [];
     if(this.anticiposService.vistaAnticipo){
       gastosUsuario =  await this.lineasAnticiposService.syncGetAnticipoLineaGastosToPromise(this.anticiposService.vistaAnticipo.iD_LINEA);
     }else{
-      gastosUsuario = await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario, 'P', this.fechaInicioMes, this.fechaFinMes)
+      gastosUsuario = await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario, '', this.fechaInicioMes, this.fechaFinMes)
     }
  
     if(gastosUsuario.length == 0){

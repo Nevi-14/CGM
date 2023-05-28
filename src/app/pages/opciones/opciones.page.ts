@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { ControlGastosService } from 'src/app/services/control-gastos.service';
 import { SobrantesPage } from '../sobrantes/sobrantes.page';
 import { EstadosCuentaPage } from '../estados-cuenta/estados-cuenta.page';
+import { AnticiposService } from 'src/app/services/anticipos.service';
 
 @Component({
   selector: 'app-opciones',
@@ -13,7 +14,8 @@ export class OpcionesPage implements OnInit {
 
   constructor(
     public modalCtrl:ModalController,
-  public controlGastosService:ControlGastosService  
+  public controlGastosService:ControlGastosService,
+  public anticiposService:AnticiposService
   ) { }
 
   ngOnInit() {
@@ -33,10 +35,9 @@ export class OpcionesPage implements OnInit {
     }
   }
   gastosSinanticipo(){
-    
+    this.anticiposService.vistaAnticipo = null;
     this.controlGastosService.gastoSinAnticipo = true;
-    this.controlGastosService.sincronizarGastos();
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss(true);
 
   }
   async sobrantes(){

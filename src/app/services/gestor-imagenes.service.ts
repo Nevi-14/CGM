@@ -6,6 +6,7 @@ import { Filesystem, Directory } from '@capacitor/filesystem';
 import { LoadingController, Platform, ToastController, ModalController, AlertController, ActionSheetController, ActionSheetButton } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 // npm i @capacitor/camera --save --dev
+// npm install @capacitor/filesystem --save --dev
 let IMAGE_DIR = null;
  
 interface LocalFile {

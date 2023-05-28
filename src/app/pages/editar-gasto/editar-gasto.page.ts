@@ -24,16 +24,7 @@ export class EditarGastoPage implements OnInit {
   restanteAnterior = 0;
   @Input() tipo:TiposGastos;
   file = null;
-  focuse = [
-    {focus1:true},
-    {focus2:true},
-    {focus3:true},
-    {focus4:true},
-    {focus5:true},
-    {focus6:true},
-    {focus7:true},
-    {focus8:true}
-  ]
+
   constructor(
     public modalctrl: ModalController,
     public gastosConAnticipoService: GastosConAnticipoService,
@@ -59,10 +50,20 @@ export class EditarGastoPage implements OnInit {
     }
   }
 
-  async actualziarGasto(fLogin: NgForm) {
+  async actualziarGasto(fRegistroGasto: NgForm) {
+    let gasto = fRegistroGasto.value;
+    this.nuevoGasto.proveedor =  gasto.proveedor
+    this.nuevoGasto.referencia =  gasto.referencia
+    //this.nuevoGasto.moneda =  gasto.moneda
+    this.nuevoGasto.monto =  gasto.monto
+    this.nuevoGasto.descripcion =  gasto.descripcion
+    if(this.nuevoGasto.monto < 0  || this.nuevoGasto.monto > this.anticiposService.vistaAnticipo.restante){
+
+      return this.alertasService.message('SD1','Lo sentimos el monto excede el limite de disponible')
+    }
     this.alertasService.presentaLoading('Guardando cambios...')
     this.nuevoGasto.iD_TIPO_GASTO = this.tiposGastosService.tipo.id;
-
+    this.controlGastosService.accionGasto = true;
     if(this.gestorImagenesService.images.length > 0){
       this.nuevoGasto.adjunto = this.gestorImagenesService.images[0].fileName
 
@@ -73,7 +74,10 @@ export class EditarGastoPage implements OnInit {
     let anticipo = anticipos[0];
     anticipo.utilizado -= this.montoAnterior;
     anticipo.utilizado += this.nuevoGasto.monto;
+    
     anticipo.restante = anticipo.monto - anticipo.utilizado;
+
+
 
   
 
@@ -113,7 +117,6 @@ export class EditarGastoPage implements OnInit {
       console.log('done')
       console.log('resp')
       this.changeDetector.detectChanges();
-      this.tiposGastosService.tipo ?  this.focuse[7].focus8 = true : this.focuse[7].focus8 = false
     
      })
    
@@ -167,9 +170,39 @@ export class EditarGastoPage implements OnInit {
 
 
   async tiposGastosModal(){
-    this.focuse[2].focus3 = true
   await  this.tiposGastosService.tiposGastosModal()
-  this.tiposGastosService.tipo ?  this.focuse[2].focus3 = true : this.focuse[2].focus3 = false
+
   }
+
+
+  async deleteGastoConAnticipo(){
+    this.alertasService.presentaLoading('Eliminando Gasto!')
+    let anticipos = await this.anticiposService.syncGetUsuarioAnticipoBYId(this.anticiposService.vistaAnticipo.id);
+      let anticipo = anticipos[0];
+      anticipo.utilizado -= this.nuevoGasto.monto;
+      anticipo.restante = anticipo.monto - anticipo.utilizado;
+      this.anticiposService.vistaAnticipo.utilizado -=  this.nuevoGasto.monto;
+      this.anticiposService.vistaAnticipo.restante = anticipo.monto - anticipo.utilizado;
+      
+    
+      
+      let lineas = await this.anticiposService.syncGetLineaUsuarioAnticipoBYId(this.anticiposService.vistaAnticipo.iD_LINEA);
+      await this.anticiposService.syncPutAnticipoToPromise(anticipo);
+      let linea = lineas[0];
+      console.log('lineas', lineas)
+      console.log('linea', linea)
+      linea.utilizado -=  this.nuevoGasto.monto;
+      linea.restante = linea.monto - linea.utilizado;
+      await this.anticiposService.syncPutLineaAnticipoToPromise(linea);
+    this.gastosConAnticipoService.syncDeleteGastoConAnticipoToPromise( this.nuevoGasto.id);
+    //await this.anticiposService.sincronizarDatos();
+    //await this.sincronizar()
+    //this.controlGastosService.sincronizarGastos();
+    this.controlGastosService.accionGasto = true;
+    this.alertasService.loadingDissmiss();
+    this.modalctrl.dismiss(true);
+     
+  }
+
 
 }

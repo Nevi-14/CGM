@@ -8,6 +8,7 @@ import { NuevoGastoAnticipoPageRoutingModule } from './nuevo-gasto-anticipo-rout
 
 import { NuevoGastoAnticipoPage } from './nuevo-gasto-anticipo.page';
 import { PipesModule } from 'src/app/pipes/pipes.module';
+import { ComponentModule } from 'src/app/components/component.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { PipesModule } from 'src/app/pipes/pipes.module';
     FormsModule,
     IonicModule,
     NuevoGastoAnticipoPageRoutingModule,
-    PipesModule
+    PipesModule,
+    ComponentModule
   ],
   declarations: [NuevoGastoAnticipoPage]
 })

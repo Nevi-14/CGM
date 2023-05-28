@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AlertasService } from '../../services/alertas.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { Correo } from 'src/app/models/correo';
+import { EmailService } from 'src/app/services/email.service';
+import { ControlGastosService } from 'src/app/services/control-gastos.service';
 
 interface login{
   usuario: string,
@@ -16,17 +19,19 @@ interface login{
   styleUrls: ['./inicio-sesion.page.scss'],
 })
 export class InicioSesionPage implements OnInit {
-  focused: boolean;
   showPass = false;
   lock     = false;
   loginUser: login;
-
-
+  verificarCuenta:boolean = false;
+  codigoSeguridad = null;
   constructor(
                private usuariosService:UsuariosService,
                private modalCtrl: ModalController,
                private router: Router,
-               private alertasService: AlertasService
+               private alertasService: AlertasService,
+               public emailService:EmailService,
+               public controlGastosService:ControlGastosService,
+               public cd:ChangeDetectorRef
                 ) { }
 
   ngOnInit() {
@@ -35,33 +40,95 @@ export class InicioSesionPage implements OnInit {
       password: ''
     }
   }
-
+ 
   login(fLogin: NgForm){
-    console.log('fLogin', fLogin);
+
+
+    console.log('fLogin', fLogin.value);
+    this.loginUser.usuario =  fLogin.value.usuario;
+    this.loginUser.password =  fLogin.value.password;
+    console.log('this.loginUser', this.loginUser)
     if (fLogin.valid){
       console.log('Login')
       this.usuariosService.presentaLoading('Espere...');
       this.usuariosService.syncGetExactusToPromise(this.loginUser.usuario).then(
-        resp => {
+       async (resp) => {
           this.usuariosService.loadingDissmiss();
           if (resp.length > 0){
+            if(!this.verificarCuenta ){
+              this.verificarCuenta = true;
+           this.enviarCodigoSeguridad(fLogin)
+                     
+
+            }else{
+          if(this.codigoSeguridad == this.loginUser.password){
+            this.controlGastosService.limpiarDatos();
+      await this.controlGastosService.syncTiposGastos();
+      this.controlGastosService.cargarGRaficos();
             this.router.navigateByUrl('/inicio', {replaceUrl:true});
             this.usuariosService.usuario = resp[0];
             this.usuariosService.guardarUsuario();
+          }else{
+            this.usuariosService.presentAlert('SD1 Móvil', 'Código de seguridad incorrecto!..');
+          }
+            }
+           
 
           } else {
-            this.usuariosService.presentAlert('SD1 Móvil', 'Usuario o contraseña incorrectos..!!!');
-            console.log('Usuario no existe')
+            this.codigoSeguridad = null;
+            this.verificarCuenta = false;
+            this.usuariosService.presentAlert('SD1 Móvil', 'Lo sentimos, contacta al administrador!..');
+          this.cd.detectChanges();
           }
         }, error => {
           this.usuariosService.loadingDissmiss();
-          console.log('Aplicación sin acceso a la BD', error.message);
-          this.usuariosService.presentAlert('SD1 Móvil', 'Aplicación sin acceso a la BD...!!!');
+          this.usuariosService.presentAlert('SD1 Móvil', 'Lo sentimos, algo salio mal!..');
         }
       )
+   
     }
   }
 
+ async enviarCodigoSeguridad(fLogin: NgForm){
+ 
+    this.loginUser.usuario =  fLogin.value.usuario;
+    this.alertasService.message('SD1 Móvil','Se ha enviado un código de seguridad a su correo!.')
+    this.codigoSeguridad =  this.generarCodigoSeguridad(4)
+     this.usuariosService.syncGetExactusToPromise(this.loginUser.usuario).then( async (resp) =>{
+if(resp.length == 0){
+  this.codigoSeguridad = null;
+  this.verificarCuenta = false;
+  this.usuariosService.presentAlert('SD1 Móvil', 'Lo sentimos, contacta al administrador!..');
+this.cd.detectChanges();
+  return
+}
+      let email:Correo = {
+        toEmail:resp[0].correO_ELECTRONICO,
+        file:null,
+        subject:'Código verificación',
+        body:`Código verificación inicio de sesión ${this.codigoSeguridad } Por favor no compartir el  código de verificación con nadie, si usted no solicito este código de verificación por favor cominicarse con el adminisrrador.`
+      }
+             await this.emailService.syncPostEmailToPromise(email)
+    }, error =>{
+      this.codigoSeguridad = null;
+      this.verificarCuenta = false;
+      this.usuariosService.presentAlert('SD1 Móvil', 'Lo sentimos algo salio mal!..');
+
+    })
+
+            
+  }
+  generarCodigoSeguridad(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
   send(){
     this.alertasService.message('SD1 Móvil', 'Opción no disponible!.')
   }
@@ -69,11 +136,5 @@ export class InicioSesionPage implements OnInit {
   salir(){
     this.modalCtrl.dismiss({'Aut': false});
   }
-  onBlur(event: any) {
-    const value = event.target.value;
 
-    if (!value) {
-      this.focused = false;
-    }
-  }
 }

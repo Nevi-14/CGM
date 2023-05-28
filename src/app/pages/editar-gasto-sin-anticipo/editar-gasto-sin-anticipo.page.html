@@ -4,7 +4,7 @@
    <ion-button slot="start" (click)="regresar()" fill="clear">
      <ion-icon size="large" name="close-outline"></ion-icon>
    </ion-button>
-   <ion-title>Editar Gasto</ion-title>
+   <ion-title>Registrar Gasto</ion-title>
    <ion-avatar *ngIf="tiposGastosService.tipo" slot="end">
      <img [src]="tiposGastosService.tipo.imagen" />
    </ion-avatar>
@@ -13,44 +13,31 @@
  </ion-header>
  <ion-content class="ion-padding">
   
-   <form id="form" (ngSubmit)="actualziarGasto(fLogin)" #fLogin="ngForm">
-     <div class="form-field">
-       <label #label [ngClass]="focuse[0].focus1 ? 'label-focused' : ''">Centro Costo</label>
-       <input (focus)="focuse[0].focus1 = true"  #input name="centroCosto"   [(ngModel)]="usuariosService.usuario.centrO_COSTO"   [type]="type" (blur)="focuse[0].focus1 = false" />
-     </div>
-     <div class="form-field">
-       <label  #label [ngClass]="focuse[1].focus2 ? 'label-focused' : ''">Fecha</label>
-       <input (click)="calendarioPopOver()"  (focus)="focuse[1].focus2 = true"  #input name="fecha"   readonly [value]="nuevoGasto.fecha | date "  [type]="type"   (blur)="focuse[1].focus2 = false" />
-     </div>
-    
-     <div class="form-field">
-       <label  #label [ngClass]="focuse[2].focus3 ? 'label-focused' : ''">Tipo Gasto</label>
-       <input    #input  (click)="tiposGastosModal()"  name="tipoGasto"   readonly  [value]="tiposGastosService.tipo ? tiposGastosService.tipo.descripcion : ''"    />
-     </div>
-    
-     <div class="form-field">
-       <label #label [ngClass]="focuse[3].focus4 ? 'label-focused' : ''">Proveedor</label>
-       <input (focus)="focuse[3].focus4 = true"  #input name="proveedor"   [(ngModel)]="nuevoGasto.proveedor"  (blur)="nuevoGasto.proveedor ?  focuse[3].focus4 = true : focuse[3].focus4 = false" />
-     </div>
+   <form id="form" (ngSubmit)="actualziarGasto(fRegistroGasto)" #fRegistroGasto="ngForm">
+  
+     <app-input readonly="true"  (click)="calendarioPopOver()"  name="fecha" type="text" label="Fecha" ngModel="{{nuevoGasto.fecha | date}}"></app-input>
  
-     <div class="form-field">
-       <label #label  [ngClass]="focuse[4].focus5 ? 'label-focused' : ''">Factura</label>
-       <input (focus)="focuse[4].focus5 = true"  #input name="referencia"   [(ngModel)]="nuevoGasto.referencia" (blur)="nuevoGasto.referencia ? focuse[4].focus5 = true : focuse[4].focus5 = false" />
-     </div>
+ 
+     <app-input  readonly="true" (click)="tiposGastosModal()" name="tipoGasto" type="text" label="Tipo Gasto" ngModel="{{tiposGastosService.tipo ? tiposGastosService.tipo.descripcion : ''}}"></app-input>
+ 
+  
     
-     <div class="form-field">
-       <label #label  [ngClass]="focuse[5].focus6 ? 'label-focused' : ''">Monto</label>
-       <input (focus)="focuse[5].focus6 = true"  #input name="monto"   [(ngModel)]="nuevoGasto.monto"  (blur)="nuevoGasto.monto ? focuse[5].focus6 = true : focuse[5].focus6 = false" />
-     </div>
-      
-     <div class="form-field">
-       <label #label  [ngClass]="focuse[6].focus7 ? 'label-focused' : ''">Detalle</label>
-       <input  (focus)="focuse[6].focus7 = true" #input name="descripcion"   [(ngModel)]="nuevoGasto.descripcion"  (blur)="nuevoGasto.descripcion ? focuse[6].focus7 = true : focuse[6].focus7 = false"  />
-     </div>
-     <div class="form-field">
-       <label #label  [ngClass]="focuse[7].focus8 ? 'label-focused' : ''">Adjunto</label>
-       <input #input   (focus)="focuse[7].focus8 = true" name="adjunto"   [(ngModel)]="file" (click)="adjuntarImagen()"  readonly    />
-     </div>
+  
+ 
+     <app-input   name="proveedor" type="text" label="Proveedor" ngModel="{{nuevoGasto.proveedor}}"></app-input>
+ 
+  
+     <app-input   name="referencia" type="text" label="Factura" ngModel="{{nuevoGasto.referencia}}"></app-input>
+ 
+     <app-select  name="moneda"  [data]="['Dolares','Colones']"  label="Moneda" ngModel="{{nuevoGasto.moneda}}"></app-select>
+  
+   <app-input   name="monto" type="text" label="Monto" ngModel="{{nuevoGasto.monto}}"></app-input>
+ 
+   <app-input   name="descripcion" type="text" label="Detalle" ngModel="{{nuevoGasto.descripcion}}"></app-input>
+ 
+   <app-input readonly="true"  (click)="adjuntarImagen()"  name="file" type="text" label="Adjunto" ngModel="{{file}}"></app-input>
+ 
+  
     
      <ion-grid *ngIf="gestorImagenesService.images.length > 0">
        <ion-row>
@@ -68,10 +55,8 @@
          </ion-col>
        </ion-row>
      </ion-grid>
-     <ion-button  class="ion-button " expand='block' type="submit"   >
-       Actualizar Gasto Sin Anticipo
-     </ion-button>
-     
+  
+     <app-button label="Actualizar Gasto Sin Anticipo"></app-button>
      
    </form>
  

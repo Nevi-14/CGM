@@ -25,16 +25,6 @@ export class NuevoGastoSinAnticipoPage implements OnInit {
   @ViewChildren('input') input:Input | any
   @ViewChildren('label') label:Input | any
 
-focuse = [
-  {focus1:true},
-  {focus2:true},
-  {focus3:null},
-  {focus4:null},
-  {focus5:null},
-  {focus6:null},
-  {focus7:null},
-  {focus8:null}
-]
   focused: boolean;
   file = null;
   nuevoGasto :GastoSinAnticipo  = {
@@ -97,17 +87,24 @@ focuse = [
       this.gestorImagenesService.deleteImage(this.gestorImagenesService.images[0])
     }
   }
-  async salvar(fLogin: NgForm) {
+   registrarGasto(fRegistroGasto: NgForm) {
+
+    let gasto = fRegistroGasto.value;
+    this.nuevoGasto.proveedor =  gasto.proveedor
+    this.nuevoGasto.referencia =  gasto.referencia
+    this.nuevoGasto.moneda =  gasto.moneda
+    this.nuevoGasto.monto =  gasto.monto
+    this.nuevoGasto.descripcion =  gasto.descripcion
 
     if (!this.nuevoGasto.referencia || !this.nuevoGasto.monto || !this.nuevoGasto.proveedor) {
       this.usuariosService.presentAlert('SD1 Móvil', 'Todos los campos son requeridos!..');
       return
     }
  
+    
     this.alertasService.presentaLoading('Guardando cambios...')
     this.nuevoGasto.iD_TIPO_GASTO = this.tiposGastosService.tipo.id;
-    this.controlGastosService.fechaInicioS.setHours(0, 0, 0, 0)
-    this.controlGastosService.fechaFinS.setHours(0, 0, 0, 0)
+ 
     let identificador = this.controlGastosService.fechaInicioMes.split('T')[0]+this.controlGastosService.fechaFinMes.split('T')[0];
     this.nuevoGasto.identificador = identificador;
     if(this.gestorImagenesService.images.length > 0){
@@ -135,9 +132,8 @@ focuse = [
 
   }
  async tiposGastosModal(){
-    this.focuse[2].focus3 = true
   await  this.tiposGastosService.tiposGastosModal()
-  this.tiposGastosService.tipo ?  this.focuse[2].focus3 = true : this.focuse[2].focus3 = false
+
   }
   cerrarModal(){
     this.modalCtrl.dismiss();
@@ -197,7 +193,7 @@ focuse = [
       console.log('done')
       console.log('resp')
       this.changeDetector.detectChanges();
-      this.tiposGastosService.tipo ?  this.focuse[7].focus8 = true : this.focuse[7].focus8 = false
+ 
     
      })
    

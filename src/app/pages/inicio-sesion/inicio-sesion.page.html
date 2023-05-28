@@ -1,31 +1,23 @@
 <ion-content class="ion-padding">
-<ion-grid >
-  <ion-row>
-    <ion-col size="12">
-      <img height="100" style="margin: 0 auto;"  src="assets/coris.png" alt="">
-      <h1>Inicio Sesión</h1>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <img height="100" style="margin: 0 auto;" src="assets/coris.png" alt="">
+        <h1>Inicio Sesión</h1>
 
-    </ion-col>
- 
-  </ion-row>
-</ion-grid>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
   <form id="form" (ngSubmit)="login(fLogin)" #fLogin="ngForm">
-    <div class="form-field">
-      <label [ngClass]="focused ? 'label-focused' : ''">Usuario</label>
-      <input name="usuario"   [(ngModel)]="loginUser.usuario"   [type]="type" (focus)="focused = true" (blur)="onBlur($event)" />
-    </div>
-    <div class="form-field">
-      <label [ngClass]="focused ? 'label-focused' : ''">Contraseña</label>
-      <input name="usuario"   [(ngModel)]="loginUser.password"  type="password" (focus)="focused = true" (blur)="onBlur($event)" />
-    </div>
-   
-     
-    <ion-button expand='block' type="submit"  [disabled]="fLogin.invalid" >
-      Iniciar Sessión
-    </ion-button>
-    
-    
+    <app-input    name="usuario" type="text" label="usuario" ngModel="{{loginUser.usuario}}"></app-input>
+    <app-input *ngIf="verificarCuenta" name="password" type="password" label="Codigo Seguridad" ngModel="{{loginUser.password}}"></app-input>
+
+
+    <app-button label=" {{!verificarCuenta ? 'Verificar Cuenta'  : 'Iniciar Sessión' }}"></app-button>
+<app-icon-button (click)="enviarCodigoSeguridad(fLogin)" *ngIf="verificarCuenta" icon="paper-plane" label="Reenviar Código Seguridad!."></app-icon-button>
+
   </form>
 
-  
+
 </ion-content>

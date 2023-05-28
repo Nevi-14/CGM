@@ -95,7 +95,7 @@ syncGetGastosSinAnticipoTipoToPromise(id: string , tipo: number, identificador: 
  
 
   async sincronizarGastosSinAnticipos(usuario:string, valor1:string, valor2:string) {
-   return this.syncGetGastosSinAnticipoToPromise(usuario,'P',valor1,valor2);
+   return this.syncGetGastosSinAnticipoToPromise(usuario,'',valor1,valor2);
    
   }
 

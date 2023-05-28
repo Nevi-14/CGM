@@ -4,7 +4,6 @@ import { OC, OCLineas } from 'src/app/models/definiciones';
 import { InicioSesionPage } from '../inicio-sesion/inicio-sesion.page';
 import { OrdenesCompraPage } from '../ordenes-compra/ordenes-compra.page';
 import { Router } from '@angular/router';
-import { ControlGastosPage } from '../control-gastos/control-gastos.page';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { OrdenesDeCompraService } from 'src/app/services/ordenes-de-compra.service';
 
@@ -159,20 +158,6 @@ export class HomePage implements OnInit {
     }
   }
 
-  async viaticos(){
-    if (this.usuariosService.usuario.usuario !== ''){
-      const modal = await this.modalCtrl.create({
-        component: ControlGastosPage,
-        cssClass:  'modal-view',
-        mode:      'ios'
-      });
-      await modal.present();
-      const {data} = await modal.onDidDismiss();
-      if ( data !== undefined ){
-        console.log(data);
-        //this.consultarOC();
-      }
-    }
-  }
+
 
 }

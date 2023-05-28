@@ -7,13 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { NuevoGastoSinAnticipoPageRoutingModule } from './nuevo-gasto-sin-anticipo-routing.module';
 
 import { NuevoGastoSinAnticipoPage } from './nuevo-gasto-sin-anticipo.page';
- 
+import { ComponentModule } from 'src/app/components/component.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NuevoGastoSinAnticipoPageRoutingModule
+    NuevoGastoSinAnticipoPageRoutingModule,
+    ComponentModule
   ],
   declarations: [NuevoGastoSinAnticipoPage]
 })

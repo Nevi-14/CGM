@@ -1,0 +1,78 @@
+.button::after{
+    content: "\a";
+    white-space: pre;
+}
+
+.swiper-slide, .swiper-pagination {
+    top: -20px! important;
+}
+ion-avatar{
+    height: 2.5rem;
+    width: 2.5rem;
+}
+ion-slides {
+    height: 100%;
+} 
+ion-slides, ion-slide{
+    height: 100%;
+    --background-color:#fff!important;
+} 
+ion-card{
+    height: 100%;
+}
+.ion-card{
+    width: 100%;
+    height:100px;
+    border-radius: 20px;
+    img{
+        height: 4rem;
+        width: 4rem;
+        display: block;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+}
+.ion-fab-button{
+    height: 4rem;
+    width: 4rem;
+   ion-icon{
+    font-size: 2rem;
+   }
+    --box-shadow:none;
+}
+ion-button{
+    height: 5rem;
+    margin: 0.5rem;
+}
+.ion-button {
+  margin-top: 2rem;
+  --box-shadow: none;
+  --border-radius: 10px;
+  --background: linear-gradient(
+    90deg,
+    rgba(54, 172, 198, 1)0%,
+    rgb(72, 151, 167) 100%
+  );
+  height: 48px;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-transform: initial;
+}
+
+ion-fab-button{
+    --box-shadow:none;
+}
+
+ion-skeleton-text , ion-thumbnail  {
+    height: 100%;
+    width: 100%;
+    --border-radius: 9999px;
+    --background: rgba(188, 0, 255, 0.065);
+    --background-rgb: 188, 0, 255;
+  }
+
+  #bar-chart-container {
+    height: 150px; 
+    width: 100%;
+  }

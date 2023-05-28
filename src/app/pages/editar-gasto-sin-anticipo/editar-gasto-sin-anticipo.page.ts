@@ -21,16 +21,6 @@ export class EditarGastoSinAnticipoPage implements OnInit {
 @Input() nuevoGasto:GastoSinAnticipo
 @Input() tipo:TiposGastos;
 file = null;
-focuse = [
-  {focus1:true},
-  {focus2:true},
-  {focus3:true},
-  {focus4:true},
-  {focus5:true},
-  {focus6:true},
-  {focus7:true},
-  {focus8:true}
-]
   constructor(
 public alertasService:AlertasService,
 public gastosSinAnticiposService:GastosSinAnticipoService,
@@ -49,7 +39,14 @@ public usuariosService:UsuariosService
     let i = this.tiposGastosService.tiposGastos.findIndex(e => e.id == this.nuevoGasto.iD_TIPO_GASTO);
     if(i >=0) this.tiposGastosService.tipo = this.tiposGastosService.tiposGastos[i];
   }
-  async actualziarGasto(fLogin: NgForm) {
+  async actualziarGasto(fRegistroGasto: NgForm) {
+    let gasto = fRegistroGasto.value;
+    this.nuevoGasto.proveedor =  gasto.proveedor
+    this.nuevoGasto.referencia =  gasto.referencia
+    this.nuevoGasto.moneda =  gasto.moneda
+    this.nuevoGasto.monto =  gasto.monto
+    this.nuevoGasto.descripcion =  gasto.descripcion
+
     this.alertasService.presentaLoading('Guardando cambios...')
     this.nuevoGasto.iD_TIPO_GASTO = this.tiposGastosService.tipo.id;
     if(this.gestorImagenesService.images.length > 0){
@@ -82,7 +79,6 @@ public usuariosService:UsuariosService
       console.log('done')
       console.log('resp')
       this.changeDetector.detectChanges();
-      this.tiposGastosService.tipo ?  this.focuse[7].focus8 = true : this.focuse[7].focus8 = false
     
      })
    
@@ -120,9 +116,17 @@ public usuariosService:UsuariosService
   }
 
   async tiposGastosModal(){
-    this.focuse[2].focus3 = true
   await  this.tiposGastosService.tiposGastosModal()
-  this.tiposGastosService.tipo ?  this.focuse[2].focus3 = true : this.focuse[2].focus3 = false
-  }
 
+  }
+  async deleteGastoSinAnticipo(){
+    await this.gastosSinAnticiposService.syncDeleteGastoSinAnticipoToPromise(this.nuevoGasto.id);
+    this.controlGastosService.accionGasto  = true;
+     //await this.anticiposService.sincronizarDatos();
+     //await this.sincronizar()
+     this.controlGastosService.sincronizarGastos();
+   
+     this.modalctrl.dismiss(true)
+     this.alertasService.loadingDissmiss();
+   }
 }

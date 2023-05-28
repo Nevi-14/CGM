@@ -40,22 +40,9 @@ public gastosSinAnticipoService:GastosSinAnticipoService
   ngOnInit() {
  console.log(this.tipo)
 if(this.anticiposService.vistaAnticipo){
-  this.anticiposService.syncgetUsuarioGastosAnticipoTipo(this.usuariosService.usuario.usuario,this.anticiposService.vistaAnticipo.iD_LINEA,this.tipo.id).then(gastos =>{
-    this.gastos = gastos;
-    gastos.forEach(gasto =>{
-      this.total += gasto.monto;
-    })
-   })
+this.cargarDatos();
 }else{
-  this.controlGastosService.fechaInicioS.setHours(0, 0, 0, 0)
-  this.controlGastosService.fechaFinS.setHours(0, 0, 0, 0)
-  let identificador = this.controlGastosService.fechaInicioSemana.split('T')[0]+this.controlGastosService.fechaFinSemana.split('T')[0];
-  this.gastosSinAnticipoService.syncGetGastosSinAnticipoTipoToPromise(this.usuariosService.usuario.usuario,this.tipo.id, identificador).then(gastos =>{
-    this.gastos = gastos;
-    gastos.forEach(gasto =>{
-      this.total += gasto.monto;
-    })
-   })
+this.gastosSinAnticipo()
 }
    }
   regresar(){
@@ -63,19 +50,77 @@ this.modalCtrl.dismiss();
 
   }
 
+  gastosSinAnticipo(){
+    this.alertasService.presentaLoading('Cargando gastos...')
+    this.controlGastosService.fechaInicioS.setHours(0, 0, 0, 0)
+    this.controlGastosService.fechaFinS.setHours(0, 0, 0, 0)
+    let identificador = this.controlGastosService.fechaInicioMes.split('T')[0]+this.controlGastosService.fechaFinMes.split('T')[0];
+    this.gastosSinAnticipoService.syncGetGastosSinAnticipoTipoToPromise(this.usuariosService.usuario.usuario,this.tipo.id, identificador).then(gastos =>{
+      this.alertasService.loadingDissmiss()
+      this.gastos = gastos;
+      gastos.forEach(gasto =>{
+        this.total += gasto.monto;
+      })
+     }, error =>{
+      this.alertasService.loadingDissmiss()
+      this.alertasService.message('SD1 Móvil', 'Lo sentimos algo salio mal!..')
+     })
+  }
+  cargarDatos(){
+    this.alertasService.presentaLoading('Cargando gastos...')
+  this.anticiposService.syncgetUsuarioGastosAnticipoTipo(this.usuariosService.usuario.usuario,this.anticiposService.vistaAnticipo.iD_LINEA,this.tipo.id).then(gastos =>{
+    this.gastos = gastos;
+    this.alertasService.loadingDissmiss()
+    gastos.forEach(gasto =>{
+      this.total += gasto.monto;
+    })
+   }, error =>{
+    this.alertasService.loadingDissmiss()
+    this.alertasService.message('SD1 Móvil', 'Lo sentimos algo salio mal!..')
+   })
+}
   async editarGasto(nuevoGasto:GastoConAnticipo){
     if(nuevoGasto.estatus == 'A'){
       return this.alertasService.message('SD1 Móvil','Lo sentimos, no se pueden modificar gastos aprobados!..')
     }
     const modal = await this.modalCtrl.create({
-      component: !this.controlGastosService.gastoSinAnticipo ? EditarGastoPage : EditarGastoSinAnticipoPage,
+      component: this.anticiposService.vistaAnticipo ? EditarGastoPage : EditarGastoSinAnticipoPage,
       mode:'ios',
       componentProps:{
         nuevoGasto
       }
     })
-   modal.present();
+    modal.present();
+    const { data } = await modal.onDidDismiss();
 
+    if (data != undefined) {
+      if(this.controlGastosService.accionGasto && this.anticiposService.vistaAnticipo){
+        this.anticiposService.syncgetUsuarioGastosAnticipoTipo(this.usuariosService.usuario.usuario,this.anticiposService.vistaAnticipo.iD_LINEA,this.tipo.id).then(gastos =>{
+          this.gastos = gastos;
+          if(gastos.length == 0){
+            this.modalCtrl.dismiss(true)
+          }
+          gastos.forEach(gasto =>{
+            this.total += gasto.monto;
+          })
+         })
+       }
+    if(this.controlGastosService.accionGasto && !this.anticiposService.vistaAnticipo){
+      this.controlGastosService.fechaInicioS.setHours(0, 0, 0, 0)
+      this.controlGastosService.fechaFinS.setHours(0, 0, 0, 0)
+      let identificador = this.controlGastosService.fechaInicioSemana.split('T')[0]+this.controlGastosService.fechaFinSemana.split('T')[0];
+      this.gastosSinAnticipoService.syncGetGastosSinAnticipoTipoToPromise(this.usuariosService.usuario.usuario,this.tipo.id, identificador).then(gastos =>{
+        this.gastos = gastos;
+        if(gastos.length == 0){
+          this.modalCtrl.dismiss(true)
+        }
+        gastos.forEach(gasto =>{
+          this.total += gasto.monto;
+        })
+       })
+      
+    }
+    }
 
    }
 }

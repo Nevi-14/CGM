@@ -1,0 +1,131 @@
+<app-encabezado titulo="Inicio"></app-encabezado>
+<ion-toolbar>
+  <h4 class="ion-text-wrap" slot="start" style="margin-left: 1rem;">Resumen Gastos</h4>
+  <ion-fab-button (click)="otrasAcciones()" slot="end"  size="small" color="dark">
+    <ion-icon name="search"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button (click)="listaAnticipos()" slot="end"  size="small" color="dark">
+    <ion-icon   name="swap-horizontal-outline"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button *ngIf="!vacio" (click)="limpiarDatosAnticipo()" slot="end"  size="small" color="dark">
+    <ion-icon   name="reload-outline"></ion-icon>
+  </ion-fab-button>
+</ion-toolbar>
+<ion-content >
+<ion-grid  style="margin-bottom: 6rem;">
+  <ion-row>
+    <ion-col size="12">
+      <ion-button *ngIf="anticiposService.vistaAnticipo"  size="large"  expand="block" fill="solid" color="danger"  >
+  <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;font-size: 16px;">
+    <li style="margin-bottom: 0.5rem;">Anticipo # {{anticiposService.vistaAnticipo ? anticiposService.vistaAnticipo.numerO_TRANSACCION : '' }}</li>
+    <li style="margin-bottom: 0.5rem;">Balance {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.restante     | colones }}</li>
+    <li>Utilizado {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.utilizado     | colones }}</li>
+  </ul>
+    
+      </ion-button>
+      <ion-button *ngIf="!anticiposService.vistaAnticipo"  size="large"  expand="block" fill="solid" color="primary"  >
+        <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;font-size: 16px;">
+          <li style="margin-bottom: 1rem;">Gastos Sin Anticipo</li>
+ 
+          <li> {{ controlGastosService.total    | colones }}</li>
+        </ul>
+          
+            </ion-button>
+    </ion-col>
+ 
+    <ion-col size="12">
+      <ion-slides pager="true"   mode="ios" [options]="sliderOpts" >
+        <ion-slide *ngFor="let tipoGasto of controlGastosService.gastos">
+          <ion-card class="ion-card" (click)="detalle(tipoGasto)" button >
+      <ion-grid >
+        <ion-row>
+          <ion-col size="4">
+            <img src="{{tipoGasto.imagen}}" alt="">
+          
+
+          </ion-col>
+          <ion-col size="8">
+            <ion-card-header>
+              <ion-label> <strong>{{tipoGasto.descripcion}}</strong> </ion-label>
+                  </ion-card-header>
+                  <ion-card-content  >
+                 <ion-label><strong>{{tipoGasto.total   | colones }}</strong></ion-label>
+                  </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </ion-col>
+    <ion-col size="12">
+      <ion-header [translucent]="true">
+        <ion-toolbar>
+          <ion-title>
+            Charts.js in Ionic
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      
+      <ion-content [fullscreen]="true">
+        <div class="ion-padding">
+          <ion-card>
+            <ion-card-header>
+              Bar Chart
+            </ion-card-header>
+            <ion-card-content>
+              <canvas #barCanvas style="position: relative; height:20vh; width:40vw"></canvas>
+            </ion-card-content>
+          </ion-card>
+      
+          <ion-card>
+            <ion-card-header>
+              Doughnut Chart
+            </ion-card-header>
+            <ion-card-content>
+              <canvas #doughnutCanvas style="position: relative; height:20vh; width:40vw"></canvas>
+            </ion-card-content>
+          </ion-card>
+       
+          <ion-card>
+            <ion-card-header>
+              Line Chart
+            </ion-card-header>
+            <ion-card-content>
+              <canvas #lineCanvas style="position: relative; height:20vh; width:40vw"></canvas>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-content>
+    </ion-col>
+    <ion-col *ngIf="controlGastosService.gastos.length > 0" size="12"  style="display: flex;justify-content: center;height: 350px; ">
+ <ion-card>
+  <ion-card-content>
+ 
+    <canvas     baseChart 
+    [data]="pieChartData"
+    [type]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins">
+    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+  </canvas>
+
+  </ion-card-content>
+ </ion-card>
+   </ion-col>
+   <ion-col size="12">
+    <ion-button class="ion-button"  *ngIf="controlGastosService.gastos.length.length > 0 && listo" (click)="gestionGastos('liquidaciones')"  expand="block">
+      <ion-label>Liquidar Gastos</ion-label>
+    </ion-button> 
+  </ion-col>
+  </ion-row>
+
+ 
+</ion-grid>
+</ion-content>
+<ion-fab  class="ion-fab-button" slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button (click)="nuevoGasto()" color="danger">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+   
+</ion-fab>
