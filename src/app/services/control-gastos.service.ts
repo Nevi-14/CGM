@@ -1,8 +1,6 @@
-import { ElementRef, Injectable, ViewChild } from '@angular/core';
+import {  Injectable } from '@angular/core';
 import { GastoConAnticipo } from '../models/gastoConAnticipo';
 import { GastoSinAnticipo } from '../models/gastoSinAnticipo';
-import { Anticipos } from '../models/anticipos';
-import { anticiposLineasView } from '../models/anticiposLineasView';
 import { GastosConAnticipoService } from './gastos-con-anticipo.service';
 import { GastosSinAnticipoService } from './gastos-sin-anticipo.service';
 import { SobrantesService } from './sobrantes.service';
@@ -20,7 +18,8 @@ interface gastos {
   imagen: string,
   tipo: string,
   descripcion: string,
-  total: number,
+  totalColones:number,
+  totalDolares:number,
   gastos: any[] 
 }
 @Injectable({
@@ -44,7 +43,8 @@ anticipoLiquidado:boolean = false;
   fechaInicioMes = new Date(this.ano, this.mes, 1).toISOString();
   fechaFinMes = new Date(this.ano, this.mes + 1, 0).toISOString();
   gastoSinAnticipo: boolean = false;
-  total: number = 0;
+  totalColones: number = 0;
+  totalDolares: number = 0;
   labels = [];
   data = [];
   constructor(
@@ -93,70 +93,75 @@ public pdfService:PdfService
    barChartMethod() {
     let barCanvas: any = document.getElementById('barCanvas');
     console.log('barCanvas',barCanvas)
-    this.barChart = new Chart(barCanvas, {
-      type: 'bar',
-      data: {
-        labels: this.labels,
-        datasets: [{
-          label: '# de gastos',
-          data: this.data,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
+ if(barCanvas){
+  this.barChart = new Chart(barCanvas, {
+    type: 'bar',
+    data: {
+      labels: this.labels,
+      datasets: [{
+        label: '# de gastos',
+        data: this.data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
 
-      }
-    });
+    }
+  });
+ }
   }
 
   doughnutChartMethod() {
     let doughnutCanvas: any = document.getElementById('doughnutCanvas');
-    console.log('doughnutCanvas',doughnutCanvas)
-    this.doughnutChart = new Chart(doughnutCanvas, {
-      type: 'doughnut',
-      data: {
-        labels: this.labels,
-        datasets: [{
-          label: '# de gastos',
-          data: this.data,
-          backgroundColor: [
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)'
-          ],
-          hoverBackgroundColor: [
-            '#FFCE56',
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#FF6384'
-          ]
-        }]
-      }
-    });
+if(doughnutCanvas){
+  console.log('doughnutCanvas',doughnutCanvas)
+  this.doughnutChart = new Chart(doughnutCanvas, {
+    type: 'doughnut',
+    data: {
+      labels: this.labels,
+      datasets: [{
+        label: '# de gastos',
+        data: this.data,
+        backgroundColor: [
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)'
+        ],
+        hoverBackgroundColor: [
+          '#FFCE56',
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#FF6384'
+        ]
+      }]
+    }
+  });
+}
   }
 
   lineChartMethod() {
     let lineCanvas: any = document.getElementById('lineCanvas');
     console.log('lineCanvas',lineCanvas)
+  if(lineCanvas){
     this.lineChart = new Chart(lineCanvas, {
       type: 'line',
       data: {
@@ -187,28 +192,40 @@ public pdfService:PdfService
       }
     });
   }
+  }
 
    // end dashboard
-  limpiarDatos() {
+  async limpiarDatos() {
+    
     this.labels = [];
     this.data = [];
     this.labels = ['No hay gastos que mostrar!.'];
     this.data = [0];
     this.anticiposService.anticipos = [];
     this.anticiposService.vistaAnticipos = [];
-    this.gastos = [];
-
+ 
     this.anticiposService.vistaAnticipo = null;
     this.anticiposService.anticipo = null;
+    this.gastoSinAnticipo = null;
 
     this.fecha = new Date();
     this.ano = this.fecha.getFullYear();
     this.mes = this.fecha.getMonth();
     this.fechaInicioMes = new Date(this.ano, this.mes, 1).toISOString();
     this.fechaFinMes = new Date(this.ano, this.mes + 1, 0).toISOString();
-    this.total = 0;
+    this.totalColones = 0;
+    this.totalDolares = 0;
+   await  this.syncTiposGastos();
 
   }
+
+  async limpiarDatosIniciales(){
+    await this.limpiarDatos();
+    await this.destruirDashboard();
+    await this.sincronizarGastos();
+    await this.cargarGRaficos();
+  }
+
   getMonday(d) {
     d = new Date(d);
     var day = d.getDay(),
@@ -238,7 +255,8 @@ public pdfService:PdfService
             imagen:tipo.imagen,
             tipo: tipo.tipo,
             descripcion: this.tiposGastosService.tiposGastos[index].descripcion,
-            total: 0,
+            totalColones: 0,
+            totalDolares:0,
             gastos: []
           }
           let i = this.gastos.findIndex(v => v.id == tipo.id);
@@ -258,12 +276,13 @@ public pdfService:PdfService
     }
   }
  async sincronizarGastos(){
-this.total = 0;
+  this.totalColones = 0;
+  this.totalDolares = 0;
   this.alertasService.presentaLoading('Cargando gastos..')
 let gastosUsuario = [];
     if(this.anticiposService.vistaAnticipo){
       gastosUsuario =  await this.lineasAnticiposService.syncGetAnticipoLineaGastosToPromise(this.anticiposService.vistaAnticipo.iD_LINEA);
-    }else{
+    }else if(this.gastoSinAnticipo){
       gastosUsuario = await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario, '', this.fechaInicioMes, this.fechaFinMes)
     }
  
@@ -272,18 +291,16 @@ let gastosUsuario = [];
     }
     console.log('gastosgastos', gastosUsuario)
       this.gastos.forEach((viatico, index) =>{
-        viatico.total = 0;
-console.log(viatico, 'viaa')
+        viatico.totalColones = 0;
+        viatico.totalDolares = 0;
         if(index == this.gastos.length -1){
          
      if(this.anticiposService.vistaAnticipo){
       gastosUsuario.forEach((gasto: GastoConAnticipo, index2) => {
-  
-        console.log(gasto, 'gasto')
         let g = this.gastos.findIndex(ga => ga.id == gasto.iD_TIPO_GASTO);
         if(g >=0){
-          this.total += gasto.monto
-          this.gastos[g].total += gasto.monto
+          this.totalColones += gasto.monto
+          this.gastos[g].totalColones += gasto.monto
           this.gastos[g].gastos.push(gasto)
         }
 
@@ -298,8 +315,14 @@ console.log(viatico, 'viaa')
         console.log(gasto, 'gasto')
         let g = this.gastos.findIndex(ga => ga.id == gasto.iD_TIPO_GASTO);
         if(g >=0){
-          this.total += gasto.monto
-          this.gastos[g].total += gasto.monto
+         if(gasto.moneda == '¢'){
+          this.totalColones += gasto.monto
+          this.gastos[g].totalColones += gasto.monto
+         }else{
+          this.totalDolares += gasto.monto
+          this.gastos[g].totalDolares += gasto.monto
+         }
+     
           this.gastos[g].gastos.push(gasto)
         }
 

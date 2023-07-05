@@ -2,7 +2,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
    <ion-button slot="start" (click)="regresar()" fill="clear">
-     <ion-icon size="large" name="close-outline"></ion-icon>
+    <ion-icon size="large" name="arrow-back-outline"></ion-icon>
    </ion-button>
   <ion-label><strong>Formulario Liquidación</strong></ion-label>
  
@@ -12,11 +12,12 @@
 <ion-content class="ion-padding">
   <h1>Liquidaciones,</h1>
   <h3>Gastos Sin Anticipo</h3>
-  <form>
+  <form id="form" (ngSubmit)="liquidarGastos(fLiquidaciones)" #fLiquidaciones="ngForm">
+  
     <p style="margin-bottom: 1rem;margin-top:1rem;">  Si desea liquidar los gastos, por favor completar el formulario adjunto y dale click al botón de liquidar</p>
-    <app-select label="Metodo Devolución" [data]="['Sinpe','Transferencia','Deposito']"></app-select>
-    <app-input label="Telefono" type="text"></app-input>
-    <app-input label="Cuenta" type="text"></app-input>
+    <app-select name="metodoDevolucion" (ionChange)="metodoPago(fLiquidaciones, $event)" label="Metodo Devolución" [data]="metodoDevolucion" ngModel="{{sobrante.metodO_DEVOLUCION}}"></app-select>
+    <app-input name="telefono" *ngIf="sobrante.metodO_DEVOLUCION == 'S'" label="Telefono" type="text"  ngModel="{{sobrante.telefono}}"></app-input>
+    <app-input name="cuenta"  *ngIf="sobrante.metodO_DEVOLUCION == 'T' || sobrante.metodO_DEVOLUCION == 'D'" label="Cuenta" type="text" ngModel="{{sobrante.cuenta}}"></app-input>
     
     <app-button label='Liquidar Gastos'></app-button>
    

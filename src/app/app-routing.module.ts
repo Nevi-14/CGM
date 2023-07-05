@@ -38,10 +38,7 @@ const routes: Routes = [
     path: 'mostrar-gastos',
     loadChildren: () => import('./pages/mostrar-gastos/mostrar-gastos.module').then( m => m.MostrarGastosPageModule)
   },
-  {
-    path: 'gestion-gastos',
-    loadChildren: () => import('./pages/gestion-gastos/gestion-gastos.module').then( m => m.GestionGastosPageModule)
-  },
+  
   {
     path: 'lista-anticipos',
     loadChildren: () => import('./pages/lista-anticipos/lista-anticipos.module').then( m => m.ListaAnticiposPageModule)
@@ -72,28 +69,18 @@ const routes: Routes = [
   },
  
   {
-    path: 'sobrantes',
-    loadChildren: () => import('./pages/sobrantes/sobrantes.module').then( m => m.SobrantesPageModule)
-  },
-  {
     path: 'editar-gasto-sin-anticipo',
     loadChildren: () => import('./pages/editar-gasto-sin-anticipo/editar-gasto-sin-anticipo.module').then( m => m.EditarGastoSinAnticipoPageModule)
   },
   {
-    path: 'opciones',
-    loadChildren: () => import('./pages/opciones/opciones.module').then( m => m.OpcionesPageModule)
-  },
-  {
     path: 'inicio',
     loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
-  },  {
+  },
+  {
     path: 'mi-perfil',
     loadChildren: () => import('./pages/mi-perfil/mi-perfil.module').then( m => m.MiPerfilPageModule)
   },
-  {
-    path: 'mis-gastos',
-    loadChildren: () => import('./pages/mis-gastos/mis-gastos.module').then( m => m.MisGastosPageModule)
-  },
+ 
   {
     path: 'liquidaciones',
     loadChildren: () => import('./pages/liquidaciones/liquidaciones.module').then( m => m.LiquidacionesPageModule)
@@ -102,7 +89,25 @@ const routes: Routes = [
     path: 'formulario-liquidacion',
     loadChildren: () => import('./pages/formulario-liquidacion/formulario-liquidacion.module').then( m => m.FormularioLiquidacionPageModule)
   },
+  {
+    path: 'notificaciones',
+    loadChildren: () => import('./pages/notificaciones/notificaciones.module').then( m => m.NotificacionesPageModule)
+  },
+  {
+    path: 'detalle-notificaciones',
+    loadChildren: () => import('./pages/detalle-notificaciones/detalle-notificaciones.module').then( m => m.DetalleNotificacionesPageModule)
+  },
+ 
+  {
+    path: 'filtro-historial',
+    loadChildren: () => import('./pages/filtro-historial/filtro-historial.module').then( m => m.FiltroHistorialPageModule)
+  },  {
+    path: 'menu',
+    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+  },
 
+ 
+   
 
 
 

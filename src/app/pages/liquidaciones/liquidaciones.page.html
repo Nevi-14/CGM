@@ -1,64 +1,65 @@
-<ion-toolbar  *ngIf="totalColones > 0 || totalDolares > 0">
- 
-    <ion-grid >
-      <ion-row>
-        <ion-col size="6" class="ion-text-center">
-          <strong>{{totalColones | colones }}</strong>
-        </ion-col>
-        <ion-col size="6" class="ion-text-center">
-         <strong> {{totalDolares | colones : 2 : '.' : ',' :  '$'}}</strong>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+   <ion-button slot="start" (click)="regresar()" fill="clear">
+    <ion-icon size="large" name="arrow-back-outline"></ion-icon>
+   </ion-button>
+   <ion-title>Liquidaciones  <ion-badge style="margin-left: 0.5rem;"   color="danger" mode="ios">{{gastos.length}}</ion-badge></ion-title>
    
-</ion-toolbar>
+    
+  </ion-toolbar>
+  <ion-toolbar>
+   <ion-searchbar style="margin-top: 0.5rem;" placeholder="buscar gasto"   type="text"   [debounce]="250"  mode="ios"></ion-searchbar>
+   <ion-fab-button (click)="filtro()" size="small" slot="end" color="danger">
+    <ion-icon name="funnel"></ion-icon>
+   </ion-fab-button>
+  </ion-toolbar>
+ </ion-header>
 <ion-content class="ion-padding">
  
-  <app-robot-message  *ngIf="totalColones == 0 && totalDolares == 0"  message="No hay datos que mostrar!.."></app-robot-message>
+  <app-robot-message  *ngIf="totalColones == 0 && totalDolares == 0" ></app-robot-message>
 <ion-list   style="margin-top: 1rem;margin-bottom: 2rem;">
 
-  <ion-card (click)="editarGasto(item)" button size="12"  *ngFor="let item of gastos">
-    <ion-grid >
-      <ion-row >
-        <ion-col size="4">
-          <img src="{{imagenT(item)}}" alt="">
-        
-  
-        </ion-col>
-        <ion-col size="8">
-          <ion-card-header>
-   <ion-grid>
-    <ion-row >
-      <ion-col  class="ion-col" size="12">
-        <ion-label>{{item.fecha | date }}</ion-label>
-  
-      </ion-col>
-      <ion-col  class="ion-col" size="12">
-        <ion-label> <strong>{{item.proveedor}}</strong> </ion-label>
-      </ion-col>
-      <ion-col  class="ion-col"  size="12">
-        <ion-label color="danger"><strong>-{{item.monto | colones}}</strong></ion-label>
-      </ion-col>
-    </ion-row>
-   </ion-grid>
-                </ion-card-header>
-                
-        </ion-col>
-        <ion-col size="12">
-          
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-        </ion-card>
 
-       
+        <ng-template ngFor let-gasto [ngForOf]="gastos"
+        let-i="index" let-odd="odd" >
+        <ion-item detail    (click)="editarGasto(gasto)" button  lines="full">
+          <ion-grid >
+            <ion-row>
+              <ion-col size="4">
+                <img src="{{imagenT(gasto)}}" alt="">
+              
+      
+              </ion-col>
+              <ion-col size="8">
+      
+                <ion-row>
+                  <ion-col size="12">
+                    {{gasto.fecha | date }}
+                  </ion-col>
+                  <ion-col size="12">
+                    <ion-label  class="ion-text-capitalize"> <strong>{{gasto.descripcion}}</strong> </ion-label>
+                  </ion-col>
+                  <ion-col size="12">
+                    <ion-label color="danger"><strong>- {{gasto.monto | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : gasto.moneda }}</strong></ion-label>
+                  </ion-col>
+                </ion-row>
+         
+              </ion-col>
+              <ion-badge color="{{gasto.estatus == 'I' ? 'primary' : gasto.estatus == 'P' ? 'warning' : 'success'}}" mode="ios" style="position: absolute;top:0.5rem; right:3rem;">{{gasto.estatus == 'I' ? 'En Proceso' : gasto.estatus == 'P' ? 'Pendiente' : 'Aprobado'}}</ion-badge>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ng-template>
+      
       
 </ion-list>
 
+ 
 
 </ion-content>
 <ion-footer class="ion-no-border" *ngIf="totalColones > 0 || totalDolares > 0">
   <ion-toolbar style="padding: 0.5rem;">
-    <app-button  (click)="formularioLiquidacion()" label='Liquidar '></app-button>
+    <app-button  (click)="formularioLiquidacion()" label="Liquidar {{totalColones | colones}}  / {{ totalDolares | colones : '2' : '.' : ',' :  '$'}} "></app-button>
   </ion-toolbar>
 </ion-footer>

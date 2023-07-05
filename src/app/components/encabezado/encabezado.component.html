@@ -1,17 +1,28 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar  >
-
-    
-    <ion-button  slot="start" contentId="main-content"  (click)="toggle()"  fill="clear" >
-      <ion-icon color="light" name="menu" size="large"></ion-icon>
-    </ion-button>
-    <ion-title slot="start" class="ion-text-capitalize">{{titulo}}</ion-title>
- <ion-chip color="transparent"  slot="end" mode="ios" outline="false" size="large">
-  <ion-avatar>
-    <img src="assets/icon/user.svg" />
-  </ion-avatar>
-  <ion-label>{{usuariosService.usuario.usuario}}</ion-label>
- </ion-chip>
-  </ion-toolbar>
-</ion-header>
-
+<ion-header class="ion-no-border" >
+    <ion-toolbar  >
+  
+      
+      <ion-button  slot="start" contentId="main-content"  (click)="toggle()"  fill="clear" >
+        <ion-icon color="light" name="menu" size="large"></ion-icon>
+      </ion-button>
+  <strong slot="start">{{titulo}}</strong>
+   <ion-chip color="transparent"  slot="end" mode="ios" outline="false" size="large">
+    <ion-avatar>
+      <img src="assets/icon/user.svg" />
+    </ion-avatar>
+    <ion-label *ngIf="usuariosService.usuario">{{usuariosService.usuario.usuario}}</ion-label>
+   </ion-chip>
+ 
+   <span slot="end"  style="position: relative;margin-right: 0.15rem;">
+    <ion-button (click)="notificaciones()" style="margin-right: 0.5rem;"    fill="clear"  >
+      <ion-icon  style="font-size: 1.5rem;"   name="notifications-outline"></ion-icon>
+     </ion-button>
+       <ion-badge  color="danger" mode="ios" style="position: absolute;right: 0rem;"> {{notificacionesService.notificaciones.length }}</ion-badge>
+   
+  </span>
+   
+    </ion-toolbar>
+ 
+  </ion-header>
+   
+  

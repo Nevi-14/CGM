@@ -16,9 +16,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgModel } from '@angular/forms
 export class InputComponent  implements ControlValueAccessor{
   @Input() name: any = '';
   @Input() ngModel:any = '';
-  @Input() readonly:boolean;
+  @Input() readonly:boolean= false;
   @Input() label: string = '';
   @Input() type = 'text'; // set default type be text
+  showPass:boolean = true;
 public onChange!: Function;
   constructor(){
 

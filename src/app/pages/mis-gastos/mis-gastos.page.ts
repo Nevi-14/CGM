@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import {ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { AlertasService } from 'src/app/services/alertas.service';
@@ -8,27 +8,27 @@ import { GastosConAnticipoService } from 'src/app/services/gastos-con-anticipo.s
 import { GastosSinAnticipoService } from 'src/app/services/gastos-sin-anticipo.service';
 import { TiposGastosService } from 'src/app/services/tipos-gastos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import { Chart } from 'chart.js';
 import { ListaAnticiposPage } from '../lista-anticipos/lista-anticipos.page';
 import { EstadosCuentaPage } from '../estados-cuenta/estados-cuenta.page';
 import { NuevoGastoSinAnticipoPage } from '../nuevo-gasto-sin-anticipo/nuevo-gasto-sin-anticipo.page';
 import { NuevoGastoAnticipoPage } from '../nuevo-gasto-anticipo/nuevo-gasto-anticipo.page';
 import { MostrarGastosPage } from '../mostrar-gastos/mostrar-gastos.page';
+import { LiquidacionesPage } from '../liquidaciones/liquidaciones.page';
 interface gastos {
   id: number,
   imagen: string,
   tipo: string,
   descripcion: string,
   total: number,
-  gastos: any[] 
+  gastos: any[]
 }
 @Component({
   selector: 'app-mis-gastos',
   templateUrl: './mis-gastos.page.html',
   styleUrls: ['./mis-gastos.page.scss'],
 })
-export class MisGastosPage implements  AfterViewInit{
-vacio:boolean = true;
+export class MisGastosPage {
+  vacio: boolean = true;
   sliderOpts = {
     zoom: false,
     slidesPerView: 4,
@@ -64,7 +64,7 @@ vacio:boolean = true;
       }
     },
   };
-  listo:boolean
+  listo: boolean
   constructor(
     public usuariosService: UsuariosService,
     public modalCtrl: ModalController,
@@ -76,25 +76,20 @@ vacio:boolean = true;
     public tiposGastosService: TiposGastosService,
     public alertCtrl: AlertController,
     public controlGastosService: ControlGastosService,
-    public gastosSinAnticipoService:GastosSinAnticipoService,
-    public gastosConAnticipoService:GastosConAnticipoService,
-    public tipoGastosService:TiposGastosService,
-    public changeDetector:ChangeDetectorRef
+    public gastosSinAnticipoService: GastosSinAnticipoService,
+    public gastosConAnticipoService: GastosConAnticipoService,
+    public tipoGastosService: TiposGastosService,
+    public changeDetector: ChangeDetectorRef
 
   ) { }
 
 
-  ngAfterViewInit() {
-    
-     }
 
-     
   async ionViewWillEnter() {
-    this.controlGastosService.destruirDashboard();
-      this.cargarGastos()
-     }
+    this.cargarGastos()
+  }
 
-     
+
   async listaAnticipos() {
     const modal = await this.modalCtrl.create({
       component: ListaAnticiposPage,
@@ -106,72 +101,25 @@ vacio:boolean = true;
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data != undefined) {
-   this.controlGastosService.gastoSinAnticipo = false;
-  // await  this.controlGastosService.syncTiposGastos();
-     this.gastosConAnticipo()
+      this.controlGastosService.gastoSinAnticipo = false;
+      this.anticiposService.anticipo =  data.anticipo;
+      this.anticiposService.vistaAnticipo = data.vistaAnticipo;
+      this.gastosConAnticipo()
     }
   }
-  limpiarGraficos(){
-    this.controlGastosService.gastoSinAnticipo = null;
-    this.controlGastosService.total = 0
-    this.controlGastosService.labels = [];
-    this.controlGastosService.data = [];
-    this.controlGastosService.labels = ['No hay gastos que mostrar!...'];
-    this.controlGastosService.data = [0];
-    this.anticiposService.vistaAnticipo = null;
-    this.anticiposService.anticipo = null;
-    this.cargarGastos();
+
+ 
+  async cargarGastos() {
+    if (this.controlGastosService.gastoSinAnticipo || this.anticiposService.vistaAnticipo) return this.controlGastosService.cargarGRaficos();
+    await this.controlGastosService.limpiarDatosIniciales();
   }
- async cargarGastos(){
-if(this.controlGastosService.gastoSinAnticipo || this.anticiposService.vistaAnticipo){
- 
-  this.controlGastosService.cargarGRaficos();
-  return
 
-}
- 
-//this.anticiposService.vistaAnticipo = null;
-this.controlGastosService.limpiarDatos();
-await this.controlGastosService.syncTiposGastos();
-this.controlGastosService.cargarGRaficos();
-return
-
-
-
-
-return
-     this.listo = false;
-     //this.alertasService.presentaLoading('Cargando Datos...')
-     if(this.anticiposService.vistaAnticipo){
-       this.vacio = false;
-     this.gastosConAnticipo();
-     }else{
-       this.vacio = true;
-       this.alertasService.loadingDissmiss();
-       let gastosSinAnticipo = await     this.gastosSinAnticipoService.sincronizarGastosSinAnticipos( this.usuariosService.usuario.usuario, this.controlGastosService.fechaInicioMes, this.controlGastosService.fechaFinMes)
-  
-       if(gastosSinAnticipo.length>0) {
-     
-      if(this.vacio){
-       this.vacio = false;
-       return this.alertaGastosSinAnticipo();
-      }else{
-       this.gastosSinAnticipo()
-      }
- 
-       } 
-       this.alertasService.message('SD1', 'Lo sentimos no se ha registrado ningun gasto, selecciona un anticipo o crear un gasto sin anticipo!..')
-       //this.cargarGraficosSinGastos();
-     }
- 
-   }
-
-   async detalle(tipo: gastos) {
-    if (this.controlGastosService.total == 0   || !this.anticiposService.vistaAnticipo) return this.alertasService.message('SD1 Móvil', 'No hay gastos que consultar!')
+  async detalle(tipo: gastos) {
+    if (this.controlGastosService.totalColones == 0 && this.controlGastosService.totalDolares == 0 || !this.anticiposService.vistaAnticipo && !this.controlGastosService.gastoSinAnticipo) return this.alertasService.message('SD1 Móvil', 'No hay gastos que consultar!')
 
     let modal = await this.modalCtrl.create({
       component: MostrarGastosPage,
-      mode:'ios',
+      mode: 'ios',
       componentProps: {
         tipo: tipo
       }
@@ -181,25 +129,41 @@ return
     const { data } = await modal.onDidDismiss();
 
     if (data != undefined) {
-        this.cargarGastos()
-      }
+      this.cargarGastos()
+    }
   }
- 
-   async alertaGastosSinAnticipo(){
- 
+
+  async liquidaciones() {
+
+    let modal = await this.modalCtrl.create({
+      component: LiquidacionesPage,
+      mode: 'ios'
+    })
+
+    modal.present();
+    const { data } = await modal.onDidDismiss();
+
+    if (data != undefined) {
+      this.cargarGastos()
+    }
+  }
+
+  async alertaGastosSinAnticipo() {
+
+
     const alert = await this.alertCtrl.create({
       header: 'SD1',
-      subHeader:'Se han detectado gastos sin anticipos existentes!..',
-      message:'¿Desea cargar los gastos sin anticipo?',
+      subHeader: 'Se han detectado gastos sin anticipos existentes!..',
+      message: '¿Desea cargar los gastos sin anticipo?',
       buttons: [
-    
+
         {
           text: 'SI',
           role: 'confirm',
           handler: async () => {
             this.controlGastosService.gastoSinAnticipo = true;
-            if(this.controlGastosService.gastoSinAnticipo){
-          this.gastosSinAnticipo()
+            if (this.controlGastosService.gastoSinAnticipo) {
+              this.gastosSinAnticipo()
             }
           },
         },
@@ -207,9 +171,9 @@ return
           text: 'NO',
           role: 'cancel',
           handler: () => {
-          this.vacio = true;
-          this.controlGastosService.cargarGRaficos();
-      
+            this.vacio = true;
+            this.controlGastosService.cargarGRaficos();
+
           },
         }
       ],
@@ -219,44 +183,104 @@ return
 
     const { role } = await alert.onDidDismiss();
 
+
+  }
+
+  async limpiarDatos() {
+    const alert = await this.alertCtrl.create({
+      header: 'DIONE',
+      subHeader:'¿Desea limpiar los datos?',
+      mode:'ios',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+           
+          },
+        },
+        {
+          text: 'Confirmar',
+          role: 'confirm',
+          handler: () => {
+             this.controlGastosService.limpiarDatosIniciales()
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+ 
   
 }
+  async menu() {
+    const alert = await this.alertCtrl.create({
+      header: 'Dione',
+      subHeader:'Seleccione una opción',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
 
-async gastosConAnticipo2(){
- 
-await  this.controlGastosService.sincronizarGastos();
-  this.gastosConAnticipoService.getUsuarioGastosConAnticipoEstadoToPromise(this.anticiposService.vistaAnticipo.iD_LINEA, "").then(resp =>{
-    console.log('gastos resp', resp)
-    this.alertasService.loadingDissmiss();
-  
-    for(let i =0; i < resp.length ; i++){
- 
-      console.log( resp[i],' resp[i]')
-         this.controlGastosService.labels.push(this.controlGastosService.gastos[i].descripcion)
+          },
+        },
+        {
+          text: 'Continuar',
+          role: 'confirm',
+          handler: (data) => {
+            console.log('data', data)
+
+            if(data == 'LA'){
+              this.listaAnticipos();
+
+            }else{
+              this.gastosSinAnticipo();
+            }
+
+          },
+        },
+      ],
+      mode:'ios',
+      inputs: [
+        {
+          label: 'Lista Anticipo',
+          type: 'radio',
+          value: 'LA',
+        },
+        {
+          label: 'Gastos Sin Anticipo',
+          type: 'radio',
+          value: 'GS',
+        }
+      ],
+    });
+
+    await alert.present();
+  }
+  async gastosSinAnticipo() {
+    this.controlGastosService.labels = [];
+    this.controlGastosService.data = [];
+    await this.controlGastosService.limpiarDatos();
+    await this.controlGastosService.destruirDashboard();
+    this.controlGastosService.gastoSinAnticipo = true;
+    await this.controlGastosService.sincronizarGastos();
+    if(this.controlGastosService.gastos.length > 0){
+      this.controlGastosService.labels = [];
+      this.controlGastosService.data =[];
+    }
+    for (let i = 0; i < this.controlGastosService.gastos.length; i++) {
+
+      if (this.controlGastosService.gastos[i].gastos.length > 0) {
+        this.controlGastosService.labels.push(this.controlGastosService.gastos[i].descripcion)
         this.controlGastosService.data.push(this.controlGastosService.gastos[i].gastos.length)
-        console.log('gastos',this.controlGastosService.gastos[i])
-          let g = this.controlGastosService.gastos.findIndex(gasto => gasto.id == resp[i].iD_TIPO_GASTO)
-          if(g >=0){
-            this.controlGastosService[g].total = 0;
-            this.controlGastosService[g].gastos.push(resp[i])
-            this.controlGastosService[g].total = this.controlGastosService.gastos[g].gastos.length;
-          }else{
-            let  index = this.tipoGastosService.tiposGastos.findIndex( e => e.id == resp[i].iD_TIPO_GASTO)
-      
+      }
 
-            this.controlGastosService.gastos.push({
-              id:resp[i].iD_TIPO_GASTO,
-              imagen:this.tipoGastosService.tiposGastos[index].imagen,
-              tipo:this.tipoGastosService.tiposGastos[index].descripcion,
-              total:resp[i].monto,
-              descripcion:this.tipoGastosService.tiposGastos[index].descripcion,
-              gastos:[resp[i]]
-            })
-          }
-      if(i == resp.length -1){
-
- 
-
+      if (i == this.controlGastosService.gastos.length - 1) {
+        this.listo = true;
+        this.controlGastosService.cargarGRaficos();
       }
     }
 
@@ -264,90 +288,53 @@ await  this.controlGastosService.sincronizarGastos();
 
 
 
-  }, error =>{
-    this.alertasService.loadingDissmiss();
+  }
+  async gastosConAnticipo() {
+    let anticipo =  this.anticiposService.anticipo;
+    let vistaAnticipo =  this.anticiposService.vistaAnticipo;
+    await this.controlGastosService.limpiarDatos();
+    await this.controlGastosService.destruirDashboard();
+    this.anticiposService.anticipo = anticipo;
+    this.anticiposService.vistaAnticipo = vistaAnticipo;
+    await  this.controlGastosService.sincronizarGastos();
+    if(this.controlGastosService.gastos.length > 0){
+      this.controlGastosService.labels = [];
+      this.controlGastosService.data =[];
+    }
 
-  })
-}
- async  gastosSinAnticipo(){
+    for (let i = 0; i < this.controlGastosService.gastos.length; i++) {
+      if (this.controlGastosService.gastos[i].gastos.length > 0) {
+        this.controlGastosService.labels.push(this.controlGastosService.gastos[i].descripcion)
+        this.controlGastosService.data.push(this.controlGastosService.gastos[i].gastos.length)
+      }
+      if (i == this.controlGastosService.gastos.length - 1) {
+        this.listo = true;
+        this.controlGastosService.cargarGRaficos();
+      }
+    }
 
-  this.controlGastosService.gastoSinAnticipo = true;
- this.controlGastosService.destruirDashboard();
- await  this.controlGastosService.sincronizarGastos();
-this.controlGastosService.labels = [];
-this.controlGastosService.data = [];
- for(let i =0; i <this.controlGastosService.gastos.length; i++){
 
-  if(this.controlGastosService.gastos[i].gastos.length > 0){
-    this.controlGastosService.labels.push(this.controlGastosService.gastos[i].descripcion)
-    this.controlGastosService.data.push(this.controlGastosService.gastos[i].gastos.length)
-    console.log('gastos',this.controlGastosService.gastos[i])
+
+
+
   }
 
-  if(i == this.controlGastosService.gastos.length -1){
+
+  async nuevoGasto() {
+    this.tiposGastosService.tipo = null;
   
-    this.controlGastosService.gastos.sort((a,b) => b.total - a.total)
-this.listo = true;
-this.controlGastosService.cargarGRaficos();
+    if (this.anticiposService.vistaAnticipo) {
+      await this.nuevoGastoAnticipo()
+    }
+    else {
+      await this.nuevoGastoSinAnticipo()
 
-    
-
-  }
-}
- 
- 
-
-     
-
-}
-
-async  gastosConAnticipo(){
-
-  this.controlGastosService.gastoSinAnticipo = false;
- this.controlGastosService.destruirDashboard();
- await  this.controlGastosService.sincronizarGastos();
-this.controlGastosService.labels = [];
-this.controlGastosService.data = [];
- for(let i =0; i <this.controlGastosService.gastos.length; i++){
-
-  if(this.controlGastosService.gastos[i].gastos.length > 0){
-    this.controlGastosService.labels.push(this.controlGastosService.gastos[i].descripcion)
-    this.controlGastosService.data.push(this.controlGastosService.gastos[i].gastos.length)
-    console.log('gastos',this.controlGastosService.gastos[i])
+    }
   }
 
-  if(i == this.controlGastosService.gastos.length -1){
-  
-    this.controlGastosService.gastos.sort((a,b) => b.total - a.total)
-this.listo = true;
-this.controlGastosService.cargarGRaficos();
 
-    
+  async nuevoGastoAnticipo() {
 
-  }
-}
- 
- 
-
-     
-
-}
-
-
-     async nuevoGasto(){
-      this.tiposGastosService.tipo = null;
-     if(this.anticiposService.vistaAnticipo){
-       await this.nuevoGastoAnticipo()
-     }
-   else{
-  await this.nuevoGastoSinAnticipo()
- 
-     }
-   }
-
-
-   async nuevoGastoAnticipo() {
-  
     if (!this.anticiposService.vistaAnticipo.id) {
       return this.alertasService.message('SD1 Móvil', 'Selecciona un anticipo para continuar..')
     }
@@ -364,14 +351,10 @@ this.controlGastosService.cargarGRaficos();
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data !== undefined) {
-     
-      this.controlGastosService.gastoSinAnticipo = false;
-      await  this.controlGastosService.syncTiposGastos();
-      this.controlGastosService.sincronizarGastos();
-        this.cargarGastos()
+     this.gastosConAnticipo();
     }
-  } 
-   async nuevoGastoSinAnticipo() {  
+  }
+  async nuevoGastoSinAnticipo() {
 
     const modal = await this.modalCtrl.create({
       component: NuevoGastoSinAnticipoPage,
@@ -388,18 +371,18 @@ this.controlGastosService.cargarGRaficos();
   }
 
 
-     async estadosDeCuenta(){
-      this.modalCtrl.dismiss();
-      let modal = await this.modalCtrl.create({
-        component: EstadosCuentaPage,
-  
-      })
-  
-      await modal.present();
-      const { data } = await modal.onDidDismiss();
-      if (data !== undefined) {
-        
-        this.controlGastosService.sincronizarGastos();
-      }
+  async estadosDeCuenta() {
+    this.modalCtrl.dismiss();
+    let modal = await this.modalCtrl.create({
+      component: EstadosCuentaPage,
+
+    })
+
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data !== undefined) {
+
+      this.controlGastosService.sincronizarGastos();
     }
+  }
 }

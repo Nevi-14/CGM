@@ -1,8 +1,8 @@
  
 <div class="form-field">
   <label [ngClass]="focused ? 'label-focused' : ''">{{label}}</label>
-  <ion-select mode="ios" name="name"   [value]="ngModel"  [multiple]="multiple"  (focus)="focused = true" (blur)="onBlur($event)" (ionChange)="changeText($event)">
-    <ion-select-option *ngFor="let select of data" [value]="select">{{select}}</ion-select-option>
+  <ion-select [disabled]="readonly"  mode="ios" name="name"   [value]="ngModel"  [multiple]="multiple"  (focus)="focused = true" (blur)="onBlur($event)" (ionChange)="changeText($event)">
+    <ion-select-option *ngFor="let select of data" [value]="select.id">{{select.valor}}</ion-select-option>
   </ion-select>
 
  

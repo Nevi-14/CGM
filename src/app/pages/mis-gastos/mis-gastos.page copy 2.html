@@ -1,68 +1,108 @@
-
+<ion-toolbar class="ion-padding">
+ 
+  <ion-label> 
+    Gastos Sin Anticipo
+    <p>
+     Fechas :  01 Junio 2023 / 31 Junio 2023
+    </p>
+    <p>
+     Consumo :  {{ controlGastosService.totalColones    | colones }}  / {{ controlGastosService.totalDolares    | colones : 2 : '.' : ',' :  '$'}}
+    </p>
+  </ion-label>
+ 
+</ion-toolbar>
 <ion-content >
 <ion-grid  style="margin-bottom: 6rem;">
   <ion-row>
     <ion-col size="12">
-      <ion-button *ngIf="anticiposService.vistaAnticipo"  size="large"  expand="block" fill="solid" color="danger"  >
-  <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;font-size: 16px;">
-    <li style="margin-bottom: 0.5rem;">Anticipo # {{anticiposService.vistaAnticipo ? anticiposService.vistaAnticipo.numerO_TRANSACCION : '' }}</li>
-    <li style="margin-bottom: 0.5rem;">Balance {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.restante     | colones }}</li>
-    <li>Utilizado {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.utilizado     | colones }}</li>
-  </ul>
-    
-      </ion-button>
-      <ion-button *ngIf="!anticiposService.vistaAnticipo"  size="large"  expand="block" fill="solid" color="primary"  >
-        <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;font-size: 16px;">
-          <li style="margin-bottom: 1rem;">Gastos Sin Anticipo</li>
+
+      <h1>Gastos {{anticiposService.vistaAnticipo ?  'Con' : 'Sin' }} Anticipo</h1>
+      <h3 *ngIf="anticiposService.vistaAnticipo"> # {{anticiposService.vistaAnticipo.numerO_TRANSACCION}}</h3>
  
-          <li> {{ controlGastosService.total    | colones }}</li>
-        </ul>
-          
+
+    </ion-col>
+    <ion-col size="6" *ngIf="anticiposService.vistaAnticipo">
+      <ion-button         expand="block" fill="solid" color="danger"  style="height: 3rem;" >
+    <ion-label >
+      Balance
+      
+      <p style="color:white"> {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.restante     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}</p>
+    </ion-label>
+            </ion-button>
+    </ion-col>
+     
+    <ion-col size="6" *ngIf="anticiposService.vistaAnticipo">
+      <ion-button      expand="block" fill="solid" color="danger"  style="height: 3rem;" >
+        <ion-label  >
+Consumo 
+<p style="color:white">{{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.utilizado     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}</p>
+
+</ion-label>
             </ion-button>
     </ion-col>
  
     <ion-col size="12">
-      <ion-slides pager="true"   mode="ios" [options]="sliderOpts" >
-        <ion-slide *ngFor="let tipoGasto of controlGastosService.gastos">
-          <ion-card class="ion-card" (click)="detalle(tipoGasto)" button >
-      <ion-grid >
-        <ion-row>
-          <ion-col size="4">
-            <img src="{{tipoGasto.imagen}}" alt="">
-          
 
-          </ion-col>
-          <ion-col size="8">
-            <ion-card-header>
+      <ion-list>
+        <ng-template ngFor let-tipoGasto [ngForOf]="controlGastosService.gastos"
+  let-i="index" let-odd="odd" >
+  <ion-item *ngIf="tipoGasto.totalColones > 0 || tipoGasto.totalDolares > 0"  (click)="detalle(tipoGasto)" button  lines="full">
+    <ion-grid >
+      <ion-row>
+        <ion-col size="4">
+          <img src="{{tipoGasto.imagen}}" alt="">
+        
+
+        </ion-col>
+        <ion-col size="8">
+
+          <ion-row>
+            <ion-col size="12">
               <ion-label> <strong>{{tipoGasto.descripcion}}</strong> </ion-label>
-                  </ion-card-header>
-                  <ion-card-content  >
-                 <ion-label><strong>{{tipoGasto.total   | colones }}</strong></ion-label>
-                  </ion-card-content>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-          </ion-card>
-        </ion-slide>
-      </ion-slides>
+            </ion-col>
+            <ion-col size="12">
+         
+               <ion-label >
+
+                <strong>{{tipoGasto.totalColones   | colones }}</strong>
+         <span *ngIf="!anticiposService.vistaAnticipo">
+          /
+          <strong>{{tipoGasto.totalDolares    | colones : 2 : '.' : ',' :  '$' }}</strong>
+         </span>
+               </ion-label>
+            </ion-col>
+          </ion-row>
+   
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ng-template>
+
+
+    
+ 
+      </ion-list>
+     
     </ion-col>
     <ion-col size="12">
       <div>
         <ion-card>
           <ion-card-header>
-            Bar Chart
+            Gráfico De Barras
           </ion-card-header>
           <ion-card-content>
-            <canvas #barCanvas style="position: relative; height:15vh; width:40vw"></canvas>
+            <canvas  id="barCanvas"  #barCanvas style="position: relative; height:35vh; width:100%"></canvas>
           </ion-card-content>
         </ion-card>
     
         <ion-card>
           <ion-card-header>
-            Doughnut Chart
+            Gráfico De Anillos
+
           </ion-card-header>
           <ion-card-content>
-            <canvas #doughnutCanvas style="position: relative; height:15vh; width:40vw"></canvas>
+            <canvas  id="doughnutCanvas"  #doughnutCanvas style="position: relative; height:35vh; width:100%"></canvas>
           </ion-card-content>
         </ion-card>
 
@@ -70,42 +110,41 @@
      
         <ion-card>
           <ion-card-header>
-            Line Chart
+            Gráfico De Linea
+
           </ion-card-header>
           <ion-card-content>
-            <canvas #lineCanvas style="position: relative; height:15vh; width:40vw"></canvas>
+            <canvas  id="lineCanvas"  #lineCanvas style="position: relative; height:35vh; width:100%"></canvas>
           </ion-card-content>
         </ion-card>
       </div>
     </ion-col>
 
  
-   <ion-col size="12">
-    <ion-button class="ion-button"  *ngIf="controlGastosService.gastos.length > 0 && listo" (click)="gestionGastos('liquidaciones')"  expand="block">
-      <ion-label>Liquidar Gastos</ion-label>
-    </ion-button> 
-  </ion-col>
   </ion-row>
 
  
 </ion-grid>
 </ion-content>
-<ion-fab style="position: fixed;bottom: 7rem;right: 1rem;">
+
+
+
+<ion-fab  [ngStyle]="{'bottom': controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0  || anticiposService.vistaAnticipo ? '9rem' : '5rem' }" style="position: fixed;right: 1rem;">
   <ion-fab-button color="primary" class="">
     <ion-icon name="search"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="top">
-    <ion-fab-button color="primary" routerLink="/contacts/create" routerDirection="forward" data-desc="Estados De Cuenta">
+    <ion-fab-button color="primary" (click)="estadosDeCuenta()"  data-desc="Estados De Cuenta">
       <ion-avatar  class="ion-avatar">
         <img src="assets/opciones/financial-statement.svg" alt="">
        </ion-avatar>
     </ion-fab-button>
-    <ion-fab-button color="primary" routerLink="/contacts/create" routerDirection="forward" data-desc="Gastos Sin Anticipo">
+    <ion-fab-button color="primary" (click)="gastosSinAnticipo()"  data-desc="Gastos Sin Anticipo">
       <ion-avatar  class="ion-avatar">
         <img src="assets/opciones/cash-on-delivery.svg" alt="">
        </ion-avatar>
     </ion-fab-button>
-    <ion-fab-button color="primary" routerLink="/reminder/create" routerDirection="forward" data-desc="Anticipos Disponibles">
+    <ion-fab-button color="primary" (click)="listaAnticipos()" data-desc="Anticipos Disponibles">
       <ion-avatar  class="ion-avatar">
         <img src="assets/opciones/wallet.svg" alt="">
        </ion-avatar>
@@ -113,6 +152,9 @@
   </ion-fab-list>
 </ion-fab>
 
-<ion-fab-button style="position: fixed;bottom: 3rem;right: 1rem;" color="danger"  >
+<ion-fab-button [ngStyle]="{'bottom': controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 ||  anticiposService.vistaAnticipo ? '5rem' : '1rem' }" (click)="nuevoGasto()" style="position: fixed;right: 1rem;" color="danger"  >
   <ion-icon name="add"></ion-icon>
+</ion-fab-button>
+<ion-fab-button *ngIf=" controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 || anticiposService.vistaAnticipo" (click)="controlGastosService.limpiarDatosIniciales()" style="position: fixed;bottom: 1rem;right: 1rem;" color="warning"  >
+  <ion-icon name="trash"></ion-icon>
 </ion-fab-button>

@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { GastoSinAnticipo } from 'src/app/models/gastoSinAnticipo';
-import { TiposGastosPage } from '../tipos-gastos/tipos-gastos.page';
 import { CalendarioPopoverPage } from '../calendario-popover/calendario-popover.page';
 import { TiposGastos } from 'src/app/models/tiposGastos';
 import { AlertasService } from 'src/app/services/alertas.service';
@@ -11,6 +10,7 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { TiposGastosService } from 'src/app/services/tipos-gastos.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { NgForm } from '@angular/forms';
+import { CompaniasService } from 'src/app/services/companias.service';
 
 @Component({
   selector: 'app-editar-gasto-sin-anticipo',
@@ -20,6 +20,9 @@ import { NgForm } from '@angular/forms';
 export class EditarGastoSinAnticipoPage implements OnInit {
 @Input() nuevoGasto:GastoSinAnticipo
 @Input() tipo:TiposGastos;
+tipoMoneda = [{id:'$',valor:'Dolares'},{id:'¢',valor:'Colones'}]
+formaPago = [{id:'true',valor:'Tarjeta'},{id:'false',valor:'Efectivo'}]
+companias = [];
 file = null;
   constructor(
 public alertasService:AlertasService,
@@ -30,11 +33,22 @@ public changeDetector:ChangeDetectorRef,
 public modalctrl:ModalController,
 public popOverCtrl:PopoverController,
 public tiposGastosService:TiposGastosService,
-public usuariosService:UsuariosService
+public usuariosService:UsuariosService,
+public companiasService:CompaniasService
     
   ) { }
 
   ngOnInit() {
+    this.companiasService.syncGetCompaniasToPromise().then(companias =>{
+
+      companias.forEach( compania =>{
+let data = {
+  id:compania.nombre,
+  valor:compania.nombre
+}
+this.companias.push(data)
+      })
+    })
     console.log(this.nuevoGasto)
     let i = this.tiposGastosService.tiposGastos.findIndex(e => e.id == this.nuevoGasto.iD_TIPO_GASTO);
     if(i >=0) this.tiposGastosService.tipo = this.tiposGastosService.tiposGastos[i];
@@ -46,7 +60,10 @@ public usuariosService:UsuariosService
     this.nuevoGasto.moneda =  gasto.moneda
     this.nuevoGasto.monto =  gasto.monto
     this.nuevoGasto.descripcion =  gasto.descripcion
-
+    this.nuevoGasto.compania =  gasto.compania
+    this.nuevoGasto.estatus = 'P';
+    this.nuevoGasto.porcentajeiva = gasto.porcentajeiva;
+    this.nuevoGasto.montoiva = gasto.montoiva;
     this.alertasService.presentaLoading('Guardando cambios...')
     this.nuevoGasto.iD_TIPO_GASTO = this.tiposGastosService.tipo.id;
     if(this.gestorImagenesService.images.length > 0){
@@ -122,8 +139,6 @@ public usuariosService:UsuariosService
   async deleteGastoSinAnticipo(){
     await this.gastosSinAnticiposService.syncDeleteGastoSinAnticipoToPromise(this.nuevoGasto.id);
     this.controlGastosService.accionGasto  = true;
-     //await this.anticiposService.sincronizarDatos();
-     //await this.sincronizar()
      this.controlGastosService.sincronizarGastos();
    
      this.modalctrl.dismiss(true)

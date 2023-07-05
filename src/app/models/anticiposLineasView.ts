@@ -8,6 +8,7 @@ export class  anticiposLineasView {
     public coD_COMPANIA:string,
     public usuario :string,
     public compania: string,
+    public moneda: string,
     public monto: number,
     public utilizado: number,
     public restante: number,

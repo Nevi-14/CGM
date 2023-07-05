@@ -11,13 +11,17 @@ export class RobotMessageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    let string = [...this.message]
-    string.forEach(async (element: string, index: number) => {
-      setTimeout(() => {
-        this.showMessage += element;
-      }, index * 60)
 
-    });
+    if(this.message){
+      let string = [...this.message]
+      string.forEach(async (element: string, index: number) => {
+        setTimeout(() => {
+          this.showMessage += element;
+        }, index * 60)
+  
+      });
+    }
+
   }
 
 }

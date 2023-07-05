@@ -12,7 +12,19 @@
     font-size: 1rem;
     transition: 0.3s;
   }
-
+  ion-icon{
+    position: absolute;
+    padding: 0 0.25rem;
+    color: #939fab;
+    font-size: 1rem;
+    transition: 0.3s;
+    top: -0.4rem;
+    right: 0.8rem;
+    font-size: 22px;
+    font-weight: 600;
+    background-color: #fff;
+    z-index: 10;
+  }
   input {
     position: absolute;
     top: 0;

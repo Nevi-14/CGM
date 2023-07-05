@@ -37,7 +37,8 @@ export const environment = {
   putGastosSinAnticipos:'put/gasto/sin/anticipo?id=',
   deleteGastosSinAnticipos:'delete/gasto/sin/anticipo?id=',
   getGastosSinAnticipoTipo:'get/gastos/sin/anticipo/tipo?id=',
-
+// COMPANIAS
+getCompanias:'get/companias',
   // SOBRANTES
 getUsuarioSobrante:'get/sobrante/usuario?id=',
 postSobrante:'post/sobrante',

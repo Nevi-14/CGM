@@ -1,0 +1,98 @@
+<ion-app>
+    <ion-split-pane contentId="main-split">
+      <ion-menu (mouseover)="openMenu()" [ngClass]="configuracionesService.menu   ? 'expand-menu' :'menu-hide'"
+        contentId="main-content" type="overlay" menuId="myMenu">
+        <ion-header class="ion-no-border">
+          <ion-toolbar >
+            <ion-thumbnail>
+              <img src="assets/coris.png" />
+            </ion-thumbnail>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="no-scroll">
+         
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+  
+              <ion-item  (click)="menuAction(p.url)" button lines="{{configuracionesService.menu ? '' : 'none'}}">
+                <ion-fab-button color="transparent"  slot="{{configuracionesService.menu ? 'start' : ''}}" size="small" >
+                  <ion-icon [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                </ion-fab-button>
+    
+                <ion-label style="color:black" >{{ p.title }}</ion-label>
+              </ion-item>
+  
+              
+           
+            </ion-menu-toggle>
+    
+  
+        
+      
+  
+  
+        </ion-content>
+  
+      </ion-menu>
+  
+  
+  
+      <div id="main-split" (mouseover)="closeMenu()">
+        <app-encabezado  titulo="SD1 Móvil"></app-encabezado>
+  <ion-content>
+    
+    <ion-router-outlet id="main-content">
+  
+  
+  
+    </ion-router-outlet>
+  
+  </ion-content>
+  
+  <ion-footer>
+    <ion-toolbar  >
+  
+      <ion-segment  vlue="notificationes"   mode="md"    >
+  
+        <ion-segment-button   (click)="menuAction('/inicio/notificaciones')" value="notificationes" >
+           
+          <ion-icon name="notifications-outline"></ion-icon>
+   <ion-label>Alertas</ion-label>
+        </ion-segment-button>
+
+        <ion-segment-button    (click)="menuAction('/inicio/mis-gastos')"  value="mis-gastos" >
+
+          <ion-icon name="wallet-outline"></ion-icon>
+          <ion-label>Gastos</ion-label>
+          
+
+ 
+        </ion-segment-button>
+
+
+ 
+         
+        <ion-segment-button value="estados"  (click)="menuAction('/inicio/estados-cuenta')" >
+          <ion-icon name="card-outline"></ion-icon>
+       
+  
+          <ion-label>Estados</ion-label>
+        
+        </ion-segment-button>
+        <ion-segment-button value="historial" (click)="menuAction('/inicio/historial')" >
+          <ion-icon name="calendar-outline"></ion-icon>
+        
+         
+      <ion-label>Historial</ion-label>
+        </ion-segment-button>
+   
+   
+         
+      </ion-segment>
+      
+    </ion-toolbar>
+  </ion-footer>
+      </div>
+  
+    </ion-split-pane>
+  
+  </ion-app>

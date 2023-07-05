@@ -4,7 +4,7 @@
    <ion-button slot="start" (click)="regresar()" fill="clear">
      <ion-icon size="large" name="close-outline"></ion-icon>
    </ion-button>
-   <ion-title>Registrar Gasto</ion-title>
+   <ion-title>Actualizar Gasto Sin Anticipo</ion-title>
    <ion-avatar *ngIf="tiposGastosService.tipo" slot="end">
      <img [src]="tiposGastosService.tipo.imagen" />
    </ion-avatar>
@@ -14,7 +14,7 @@
  <ion-content class="ion-padding">
   
    <form id="form" (ngSubmit)="actualziarGasto(fRegistroGasto)" #fRegistroGasto="ngForm">
-  
+    <app-select  name="compania"  [data]="companias"  label="Compañia" ngModel="{{nuevoGasto.compania}}"></app-select>
      <app-input readonly="true"  (click)="calendarioPopOver()"  name="fecha" type="text" label="Fecha" ngModel="{{nuevoGasto.fecha | date}}"></app-input>
  
  
@@ -28,11 +28,15 @@
  
   
      <app-input   name="referencia" type="text" label="Factura" ngModel="{{nuevoGasto.referencia}}"></app-input>
+     <app-select  name="formaPago"  [data]="formaPago"  label="Forma De Pago" ngModel="{{nuevoGasto.tarjeta}}"></app-select>
+     <app-select  name="moneda"  [data]="tipoMoneda"  label="Moneda" ngModel="{{nuevoGasto.moneda}}"></app-select>
  
-     <app-select  name="moneda"  [data]="['Dolares','Colones']"  label="Moneda" ngModel="{{nuevoGasto.moneda}}"></app-select>
   
-   <app-input   name="monto" type="text" label="Monto" ngModel="{{nuevoGasto.monto}}"></app-input>
- 
+   <app-input   name="monto" type="number" label="Monto" ngModel="{{nuevoGasto.monto}}"></app-input>
+   <app-input    name="porcentajeIVA" type="number" label="Porcentaje IVA" ngModel="{{nuevoGasto.porcentajeiva}}"></app-input>
+
+  <app-input  name="montoIVA" type="iva" label="Monto IVA" ngModel="{{nuevoGasto.montoiva}}"></app-input>
+
    <app-input   name="descripcion" type="text" label="Detalle" ngModel="{{nuevoGasto.descripcion}}"></app-input>
  
    <app-input readonly="true"  (click)="adjuntarImagen()"  name="file" type="text" label="Adjunto" ngModel="{{file}}"></app-input>
@@ -57,6 +61,7 @@
      </ion-grid>
   
      <app-button label="Actualizar Gasto Sin Anticipo"></app-button>
+     <app-icon-button (click)="deleteGastoSinAnticipo()" icon="trash" label="Eliminar Gasto"></app-icon-button>
      
    </form>
  

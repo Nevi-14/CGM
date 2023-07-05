@@ -4,6 +4,7 @@ import { AlertasService } from '../../services/alertas.service';
 import { ModalController } from '@ionic/angular';
 import { anticiposLineasView } from 'src/app/models/anticiposLineasView';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import { ControlGastosService } from 'src/app/services/control-gastos.service';
 
 @Component({
   selector: 'app-lista-anticipos',
@@ -20,7 +21,8 @@ export class ListaAnticiposPage implements OnInit {
     public alertasService: AlertasService,
     public anticiposService: AnticiposService,
     public usuariosService:UsuariosService,
-    public modalCtrl:ModalController
+    public modalCtrl:ModalController,
+    public controlGastosService:ControlGastosService
   ) { }
 
   ngOnInit() {
@@ -40,9 +42,15 @@ this.alertasService.presentaLoading('Cargando datos...')
   }
 
 
-  retornarAnticipo(anticipo:anticiposLineasView){
-    this.anticiposService.vistaAnticipo = anticipo;
-    this.modalCtrl.dismiss(true)
+  async retornarAnticipo(anticipo:anticiposLineasView){
+    await this.controlGastosService.limpiarDatos();
+    await this.controlGastosService.destruirDashboard();
+    let anticipos = await this.anticiposService.syncGetUsuarioAnticipoBYId(anticipo.id);
+    await  this.controlGastosService.sincronizarGastos();
+    this.modalCtrl.dismiss({
+      anticipo:anticipos[0],
+      vistaAnticipo:anticipo
+    })
 
   }
 }

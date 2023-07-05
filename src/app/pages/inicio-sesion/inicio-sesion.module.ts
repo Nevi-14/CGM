@@ -15,7 +15,7 @@ import { ComponentModule } from 'src/app/components/component.module';
     FormsModule,
     IonicModule,
     InicioSesionPageRoutingModule,
-    ComponentModule
+    ComponentModule,
   ],
   declarations: [InicioSesionPage]
 })

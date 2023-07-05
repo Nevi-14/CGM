@@ -1,0 +1,52 @@
+ 
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+   <ion-button slot="start" (click)="regresar()" fill="clear">
+     <ion-icon size="large" name="close-outline"></ion-icon>
+   </ion-button>
+   <ion-title>Detalle Notificacion</ion-title>
+    
+  </ion-toolbar>
+  
+ </ion-header>
+ <ion-content class="ion-padding">
+<ion-label class="ion-text-wrap">
+  {{notificacion.descripcion}}
+</ion-label>
+
+
+<form id="form" (ngSubmit)="actualizarNotificacion(fNotificaciones)" #fNotificaciones="ngForm">
+  
+
+
+ 
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" *ngIf="notificacion.adjunto">
+        <app-input readonly="true"  (click)="adjuntarImagen()"  name="file" type="text" label="Adjunto" ngModel="{{file}}"></app-input>
+ 
+      </ion-col>
+      <ion-col size="12" *ngIf="gestorImagenesService.images.length > 0">
+        <ion-toolbar>
+        <h4 slot="start">Adjunto</h4>
+        <ion-fab-button slot="end"  (click)="borrarAdjunto()" *ngIf="gestorImagenesService.images.length > 0" size="small" color="danger">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-toolbar>
+      </ion-col>
+      <ion-col  size="12" *ngIf="gestorImagenesService.images.length > 0" >
+        <img    src="{{gestorImagenesService.images[0].data}}" alt="">
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <app-button label="Recibir consentimiento"></app-button>
+  
+</form>
+
+
+ </ion-content>
+ 
+  
+  

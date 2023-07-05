@@ -13,6 +13,8 @@ export class GastoConAnticipo {
       public observaciones: string,
       public adjunto: string,
       public monto: number,
+      public porcentajeiva: number,
+      public montoiva: number,
       public estatus:string
     ){}
   }

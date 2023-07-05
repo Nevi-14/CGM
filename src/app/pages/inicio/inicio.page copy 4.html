@@ -1,41 +1,55 @@
-<app-encabezado titulo="Inicio"></app-encabezado>
-<ion-toolbar>
-  <h4 class="ion-text-wrap" slot="start" style="margin-left: 1rem;">Resumen Gastos</h4>
-  <ion-fab-button (click)="otrasAcciones()" slot="end"  size="small" color="dark">
-    <ion-icon name="search"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-button (click)="listaAnticipos()" slot="end"  size="small" color="dark">
-    <ion-icon   name="swap-horizontal-outline"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-button *ngIf="!vacio" (click)="limpiarDatosAnticipo()" slot="end"  size="small" color="dark">
-    <ion-icon   name="reload-outline"></ion-icon>
-  </ion-fab-button>
-</ion-toolbar>
-<ion-content >
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="home">
-        <ion-icon name="play-circle"></ion-icon>
-        Listen Now
-      </ion-tab-button>
-      <ion-tab-button tab="radio">
-        <ion-icon name="radio"></ion-icon>
-        Radio
-      </ion-tab-button>
-      <ion-tab-button tab="library">
-        <ion-icon name="library"></ion-icon>
-        Library
-      </ion-tab-button>
-      <ion-tab-button tab="search">
-        <ion-icon name="search"></ion-icon>
-        Search
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
-</ion-content>
-<ion-fab  class="ion-fab-button" slot="fixed" vertical="bottom" horizontal="end">
-  <ion-fab-button (click)="nuevoGasto()" color="danger">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-   
-</ion-fab>
+<ion-app>
+    <ion-split-pane contentId="main-split">
+      <ion-menu (mouseover)="openMenu()" [ngClass]="configuracionesService.menu   ? 'expand-menu' :'menu-hide'"
+        contentId="main-content" type="overlay" menuId="myMenu">
+        <ion-header class="ion-no-border">
+          <ion-toolbar >
+            <ion-thumbnail>
+              <img src="assets/coris.png" />
+            </ion-thumbnail>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="no-scroll">
+         
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+  
+              <ion-item  (click)="menuAction(p.url)" button lines="{{configuracionesService.menu ? '' : 'none'}}">
+                <ion-fab-button color="transparent"  slot="{{configuracionesService.menu ? 'start' : ''}}" size="small" >
+                  <ion-icon [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                </ion-fab-button>
+    
+                <ion-label style="color:black" >{{ p.title }}</ion-label>
+              </ion-item>
+  
+              
+           
+            </ion-menu-toggle>
+    
+  
+        
+      
+  
+  
+        </ion-content>
+  
+      </ion-menu>
+  
+  
+  
+      <div id="main-split" (mouseover)="closeMenu()">
+        <app-encabezado  titulo="SD1 Móvil"></app-encabezado>
+  <ion-content>
+    
+    <ion-router-outlet id="main-content">
+  
+  
+  
+    </ion-router-outlet>
+  
+  </ion-content>
+  
+      </div>
+  
+    </ion-split-pane>
+  
+  </ion-app>

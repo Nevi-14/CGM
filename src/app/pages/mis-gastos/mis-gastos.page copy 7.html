@@ -1,0 +1,150 @@
+<app-encabezado  titulo="SD1 Móvil"></app-encabezado>
+ <ion-toolbar>
+  <ion-label slot="start" class="ion-text-uppercase" style="margin-left: 1rem;font-size: 1rem;"><strong>Mis Gastos</strong></ion-label>
+
+ 
+<ion-chip *ngIf=" controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 || anticiposService.vistaAnticipo &&  anticiposService.vistaAnticipo.utilizado > 0"  (click)="liquidaciones()" color="primary" mode="ios" outline="true" slot="end">
+ 
+  <ion-label>Liquidaciones </ion-label>
+ 
+</ion-chip>
+<ion-fab-button   (click)="menu()" size="small" slot="end">
+  <ion-icon name="search"></ion-icon>
+</ion-fab-button>
+<ion-fab-button *ngIf=" controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 || anticiposService.vistaAnticipo"  (click)="controlGastosService.limpiarDatosIniciales()" size="small" slot="end">
+  <ion-icon name="reload"></ion-icon>
+</ion-fab-button>
+ 
+ </ion-toolbar>
+<ion-content class="ion-padding">
+
+ 
+
+
+
+<ion-grid >
+  <ion-row>
+    
+
+ 
+    <ion-col size="6" *ngIf="!anticiposService.vistaAnticipo">
+      {{controlGastosService.fechaInicioMes | date }}
+
+        </ion-col>
+        <ion-col size="6" *ngIf="!anticiposService.vistaAnticipo">
+         {{controlGastosService.fechaFinMes | date }}
+        </ion-col>
+    
+        <ion-col size="12" *ngIf="!anticiposService.vistaAnticipo">
+          Consumo :  {{ controlGastosService.totalColones    | colones }}  / {{ controlGastosService.totalDolares    | colones : 2 : '.' : ',' :  '$'}}
+        </ion-col>
+
+
+
+        <ion-col size="12" *ngIf="anticiposService.vistaAnticipo">
+          Anticipo :   {{anticiposService.vistaAnticipo.numerO_TRANSACCION  }}
+        </ion-col>
+        <ion-col size="6" *ngIf="anticiposService.vistaAnticipo">
+           {{anticiposService.vistaAnticipo.fechA_INICIAL | date }} 
+   
+            </ion-col>
+            <ion-col size="6" *ngIf="anticiposService.vistaAnticipo">
+              {{anticiposService.vistaAnticipo.fechA_FINAL | date }}
+            </ion-col>
+         
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+          Dispensado  
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+          Consumido    
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+          Restante    
+        </ion-col>
+       
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+            {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.monto     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }} 
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+             {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.utilizado     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+           {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.restante     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}
+        </ion-col>
+        <ion-col size="12" style="height:30vh;margin-top: 1rem;margin-bottom: 1rem;">
+          <canvas  id="barCanvas"  #barCanvas style="position: relative; height:30vh; width:100%"></canvas> 
+        </ion-col>
+  
+     
+ 
+ <ion-col size="12">
+  <ion-toolbar>
+  
+    <ion-chip *ngIf=" controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 || anticiposService.vistaAnticipo &&  anticiposService.vistaAnticipo.utilizado > 0" color="primary" mode="ios" outline="true" slot="end">
+ 
+      <ion-label>Ver Gastos </ion-label>
+     
+    </ion-chip>
+    <ion-fab-button  (click)="nuevoGasto()"  size="small" slot="end" color="danger"  >
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+     
+  </ion-toolbar>
+ </ion-col>
+    <ion-col size="12"  >
+
+      <ion-list >
+        <ng-template ngFor let-tipoGasto [ngForOf]="controlGastosService.gastos"
+  let-i="index" let-odd="odd" >
+  <ion-item  *ngIf="tipoGasto.totalColones > 0 || tipoGasto.totalDolares > 0"  (click)="detalle(tipoGasto)" button  lines="full">
+    <ion-grid >
+      <ion-row>
+        <ion-col size="4">
+          <img src="{{tipoGasto.imagen}}" alt="">
+        
+
+        </ion-col>
+        <ion-col size="8">
+
+          <ion-row>
+            <ion-col size="12">
+              <ion-label  > <strong>{{tipoGasto.descripcion}}</strong> </ion-label>
+            </ion-col>
+            <ion-col size="12">
+         
+               <ion-label >
+
+                <strong>{{tipoGasto.totalColones   | colones }}</strong>
+         <span *ngIf="!anticiposService.vistaAnticipo">
+          /
+          <strong>{{tipoGasto.totalDolares    | colones : 2 : '.' : ',' :  '$' }}</strong>
+         </span>
+               </ion-label>
+            </ion-col>
+          </ion-row>
+   
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ng-template>
+
+
+    
+ 
+      </ion-list>
+     
+    </ion-col>
+ 
+ 
+  </ion-row>
+
+ 
+</ion-grid>
+</ion-content>
+
+
+<app-pie-pagina-inicio></app-pie-pagina-inicio>
+ 
+
+ 

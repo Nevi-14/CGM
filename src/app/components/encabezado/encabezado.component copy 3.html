@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border" >
+    <ion-toolbar  >
+  
+      
+      <ion-button  slot="start" contentId="main-content"  (click)="toggle()"  fill="clear" >
+        <ion-icon color="light" name="menu" size="large"></ion-icon>
+      </ion-button>
+  <strong slot="start">{{titulo}}</strong>
+   <ion-chip color="transparent"  slot="end" mode="ios" outline="false" size="large">
+    <ion-avatar>
+      <img src="assets/icon/user.svg" />
+    </ion-avatar>
+    <ion-label *ngIf="usuariosService.usuario">{{usuariosService.usuario.usuario}}</ion-label>
+   </ion-chip>
+  <span slot="end" style="margin-right: 0.5rem;">
+    <ion-button (click)="notificaciones()" style="margin-right: 0.5rem;"    fill="clear"  >
+      <ion-icon   name="notifications-outline"></ion-icon>
+     </ion-button>
+       <ion-badge  color="dark" mode="ios" style="position: absolute;right: 0.5rem;"> {{notificacionesService.notificaciones.length }}</ion-badge>
+   
+  </span>
+    </ion-toolbar>
+  
+    <ion-toolbar class="ion-no-padding ion-no-margin" style="height: 32px;">
+      <ion-segment class="ion-no-padding ion-no-margin" mode="md" scrollable value="home">
+        <ion-segment-button   (click)="redirigir('/inicio/mis-gastos')" value="home" >
+
+          <ion-label>Mis Gastos</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="heart" (click)="redirigir('/inicio/sobrantes')">
+          <ion-label>Sobrantes</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="pin" (click)="redirigir('/inicio/devoluciones')">
+          <ion-label>Devoluciones</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="star" (click)="redirigir('/inicio/liquidaciones')"> 
+          <ion-label>Liquidaciones</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="call" (click)="redirigir('/inicio/historial')">
+          <ion-label>Historial</ion-label>
+        </ion-segment-button>
+         
+      </ion-segment>
+      
+    </ion-toolbar>
+  </ion-header>
+  
+  

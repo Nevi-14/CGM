@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ConfiguracionesServiceService {
-  menu:boolean
+  menu:boolean = false;
+  segment:string = 'gastos';
   constructor() { }
 }

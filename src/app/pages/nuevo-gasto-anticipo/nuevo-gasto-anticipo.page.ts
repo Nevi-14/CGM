@@ -40,11 +40,13 @@ export class NuevoGastoAnticipoPage implements OnInit {
     observaciones: null,
     adjunto: null,
     monto: null,
+    porcentajeiva:null,
+    montoiva:null,
     estatus: 'P'
 
   }
   
-
+tipoMoneda = [{id:'$',valor:'Dolares'},{id:'₡',valor:'Colones'}]
   constructor(
     private usuariosService: UsuariosService,
     private modalCtrl: ModalController,
@@ -78,14 +80,18 @@ export class NuevoGastoAnticipoPage implements OnInit {
     //this.nuevoGasto.moneda =  gasto.moneda
     this.nuevoGasto.monto =  gasto.monto
     this.nuevoGasto.descripcion =  gasto.descripcion
-
+    this.nuevoGasto.porcentajeiva = gasto.porcentajeiva;
+    this.nuevoGasto.montoiva = gasto.montoiva;
     if (!this.nuevoGasto.referencia || !this.nuevoGasto.monto || !this.nuevoGasto.proveedor) {
-      this.usuariosService.presentAlert('SD1 Móvil', 'Todos los campos son requeridos!..');
-      return
+      return  this.usuariosService.presentAlert('SD1 Móvil', 'Todos los campos son requeridos!..');
+      
+    }
+    if (this.anticiposService.vistaAnticipo.restante == 0) {
+      return this.usuariosService.presentAlert('SD1 Móvil', 'Lo sentimos no se pueden registrar gastos, por favor liquidar el anticipo!..');
     }
     if (this.nuevoGasto.monto > this.anticiposService.vistaAnticipo.restante) {
-      this.Alerta();
-      return
+      return this.Alerta();
+      
     }
     this.alertasService.presentaLoading('Guardando cambios...')
     this.nuevoGasto.iD_TIPO_GASTO = this.tiposGastosService.tipo.id

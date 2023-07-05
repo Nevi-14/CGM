@@ -1,15 +1,16 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-   <ion-button slot="start" (click)="regresar()" fill="clear">
-     <ion-icon size="large" name="close-outline"></ion-icon>
-   </ion-button>
-   <ion-title>Estados Cuenta</ion-title>
-   <ion-avatar slot="end">
-    <img src="assets/gastos/court.svg" />
-  </ion-avatar>
-  </ion-toolbar>
+ 
+  <ion-header mode="ios">
+    <app-encabezado  titulo="SD1 Móvil"></app-encabezado>
+    <ion-toolbar>
+ 
+      <ion-label slot="start"  style="margin-left: 1rem;font-size: 1rem;"><strong>Estados De Cuenta</strong></ion-label>
   
- </ion-header>
+      <ion-avatar slot="end">
+       <img src="assets/gastos/court.svg" />
+     </ion-avatar>
+     </ion-toolbar>
+  </ion-header>
+ 
  
 <ion-content>
 <app-robot-message   *ngIf="estadosCuenta.length == 0;" message="No hay datos que mostrar!.."></app-robot-message>
@@ -59,3 +60,4 @@
 
 </ion-content>
 
+<app-pie-pagina-inicio></app-pie-pagina-inicio>

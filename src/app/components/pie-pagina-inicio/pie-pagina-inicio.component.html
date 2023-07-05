@@ -1,0 +1,40 @@
+ 
+  <ion-footer>
+    <ion-toolbar  >
+  
+      <ion-segment  [(ngModel)]="configuracionesService.segment "   mode="md"    >
+   
+  
+        <ion-segment-button    (click)="menuAction('/inicio/mis-gastos','gastos')"  value="gastos" >
+  
+          <ion-icon name="wallet-outline"></ion-icon>
+          <ion-label>Gastos</ion-label>
+          
+  
+  
+        </ion-segment-button>
+  
+  
+   
+  
+         
+        <ion-segment-button value="estados"  (click)="menuAction('/inicio/estados-cuenta','estados')" >
+          <ion-icon name="card-outline"></ion-icon>
+       
+  
+          <ion-label>Estados</ion-label>
+        
+        </ion-segment-button>
+        <ion-segment-button value="historial" (click)="menuAction('/inicio/historial','historial')" >
+          <ion-icon name="calendar-outline"></ion-icon>
+        
+         
+      <ion-label>Historial</ion-label>
+        </ion-segment-button>
+   
+   
+         
+      </ion-segment>
+      
+    </ion-toolbar>
+  </ion-footer>

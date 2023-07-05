@@ -1,4 +1,5 @@
 <div class="form-field">
   <label [ngClass]="focused ? 'label-focused' : ''">{{label}}</label>
-  <input [readonly]="readonly"  name="name"   [value]="ngModel"   [type]="type" (change)="changeText($event)"   (focus)="focused = true" (blur)="onBlur($event)" />
+  <input   [readonly]="readonly"  name="name"   [value]="ngModel"   [type]="!showPass ? 'text' : type " (change)="changeText($event)"   (focus)="focused = true" (blur)="onBlur($event)" />
+  <ion-icon *ngIf="type == 'password'"  item-right name="{{showPass ? 'eye' : 'eye-off'}}" (click)="showPass=!showPass"></ion-icon>
 </div>

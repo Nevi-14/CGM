@@ -1,86 +1,140 @@
-
-<ion-content >
-<ion-grid  style="margin-bottom: 6rem;">
-  <ion-row>
-    <ion-col size="12">
-      <ion-button *ngIf="anticiposService.vistaAnticipo"  size="large"  expand="block" fill="solid" color="danger"  >
-  <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;font-size: 16px;">
-    <li style="margin-bottom: 0.5rem;">Anticipo # {{anticiposService.vistaAnticipo ? anticiposService.vistaAnticipo.numerO_TRANSACCION : '' }}</li>
-    <li style="margin-bottom: 0.5rem;">Balance {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.restante     | colones }}</li>
-    <li>Utilizado {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.utilizado     | colones }}</li>
-  </ul>
-    
-      </ion-button>
-      <ion-button *ngIf="!anticiposService.vistaAnticipo"  size="large"  expand="block" fill="solid" color="primary"  >
-        <ul  class="ion-text-left" style="list-style-type: none;width: 100%;margin: 0;padding: 0;font-size: 16px;">
-          <li style="margin-bottom: 1rem;">Gastos Sin Anticipo</li>
  
-          <li> {{ controlGastosService.total    | colones }}</li>
-        </ul>
-          
-            </ion-button>
-    </ion-col>
- 
-    <ion-col size="12">
-      <ion-slides pager="true"   mode="ios" [options]="sliderOpts" >
-        <ion-slide *ngFor="let tipoGasto of controlGastosService.gastos">
-          <ion-card class="ion-card" (click)="detalle(tipoGasto)" button >
-      <ion-grid >
-        <ion-row>
-          <ion-col size="4">
-            <img src="{{tipoGasto.imagen}}" alt="">
-          
-
-          </ion-col>
-          <ion-col size="8">
-            <ion-card-header>
-              <ion-label> <strong>{{tipoGasto.descripcion}}</strong> </ion-label>
-                  </ion-card-header>
-                  <ion-card-content  >
-                 <ion-label><strong>{{tipoGasto.total   | colones }}</strong></ion-label>
-                  </ion-card-content>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-          </ion-card>
-        </ion-slide>
-      </ion-slides>
-    </ion-col>
-    <ion-col size="12">
-      <div>
-        <ion-card>
-          <ion-card-header>
-            Gráfico De Barras
-          </ion-card-header>
-          <ion-card-content>
-            <canvas  id="barCanvas"  #barCanvas style="position: relative; height:35vh; width:100%"></canvas>
-          </ion-card-content>
-        </ion-card>
-    
-        <ion-card>
-          <ion-card-header>
-            Gráfico De Anillos
-
-          </ion-card-header>
-          <ion-card-content>
-            <canvas  id="doughnutCanvas"  #doughnutCanvas style="position: relative; height:35vh; width:100%"></canvas>
-          </ion-card-content>
-        </ion-card>
-
-       
+<ion-header mode="ios">
+  <app-encabezado  titulo="SD1 Móvil"></app-encabezado>
+  <ion-toolbar >
+    <ion-label slot="start"  style="margin-left: 1rem;font-size: 1rem;"><strong>Mis Gastos</strong></ion-label>
+  
+   
+   
      
-        <ion-card>
-          <ion-card-header>
-            Gráfico De Linea
+  <ion-fab-button   (click)="menu()" size="small" slot="end">
+    <ion-icon name="search"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button *ngIf=" controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 || anticiposService.vistaAnticipo"  (click)="limpiarDatos()" size="small" slot="end">
+    <ion-icon name="reload"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-button   (click)="nuevoGasto()"  size="small" slot="end" color="danger"  >
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+   </ion-toolbar>
+</ion-header>
+ 
+<ion-content class="ion-padding">
 
-          </ion-card-header>
-          <ion-card-content>
-            <canvas  id="lineCanvas"  #lineCanvas style="position: relative; height:35vh; width:100%"></canvas>
-          </ion-card-content>
-        </ion-card>
-      </div>
+ 
+
+
+
+<ion-grid >
+  <ion-row>
+    
+
+ 
+    <ion-col size="6" *ngIf="!anticiposService.vistaAnticipo">
+      {{controlGastosService.fechaInicioMes | date }}
+
+        </ion-col>
+        <ion-col size="6" *ngIf="!anticiposService.vistaAnticipo">
+         {{controlGastosService.fechaFinMes | date }}
+        </ion-col>
+    
+        <ion-col size="12" *ngIf="!anticiposService.vistaAnticipo">
+          Consumo :  {{ controlGastosService.totalColones    | colones }}  / {{ controlGastosService.totalDolares    | colones : 2 : '.' : ',' :  '$'}}
+        </ion-col>
+
+
+
+        <ion-col size="12" *ngIf="anticiposService.vistaAnticipo">
+          Anticipo :   {{anticiposService.vistaAnticipo.numerO_TRANSACCION  }}
+        </ion-col>
+        <ion-col size="6" *ngIf="anticiposService.vistaAnticipo">
+           {{anticiposService.vistaAnticipo.fechA_INICIAL | date }} 
+   
+            </ion-col>
+            <ion-col size="6" *ngIf="anticiposService.vistaAnticipo">
+              {{anticiposService.vistaAnticipo.fechA_FINAL | date }}
+            </ion-col>
+         
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+          Dispensado  
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+          Consumido    
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+          Restante    
+        </ion-col>
+       
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+            {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.monto     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }} 
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+             {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.utilizado     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}
+        </ion-col>
+        <ion-col size="4" *ngIf="anticiposService.vistaAnticipo">
+           {{!anticiposService.vistaAnticipo ? 0 :  anticiposService.vistaAnticipo.restante     | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}
+        </ion-col>
+        <ion-col size="12" style="height:30vh;margin-top: 1rem;margin-bottom: 1rem;">
+          <canvas  id="barCanvas"  #barCanvas style="position: relative; height:30vh; width:100%"></canvas> 
+        </ion-col>
+  
+     
+ 
+ <ion-col size="12" *ngIf=" controlGastosService.totalColones > 0 || controlGastosService.totalDolares > 0 || anticiposService.vistaAnticipo &&  anticiposService.vistaAnticipo.utilizado > 0">
+  <ion-toolbar>
+    <ion-label slot="start"   style="margin-left: 1rem;font-size: 1rem;"><strong>Desglose</strong></ion-label>
+    <ion-chip    (click)="liquidaciones()" color="primary" mode="ios" outline="true" slot="end">
+ 
+      <ion-label>Liquidaciones</ion-label>
+     
+    </ion-chip>
+  </ion-toolbar>
+ </ion-col>
+    <ion-col size="12"  >
+
+      <ion-list >
+        <ng-template ngFor let-tipoGasto [ngForOf]="controlGastosService.gastos"
+  let-i="index" let-odd="odd" >
+  <ion-item  *ngIf="tipoGasto.totalColones > 0 || tipoGasto.totalDolares > 0"  (click)="detalle(tipoGasto)" button  lines="full">
+    <ion-grid >
+      <ion-row>
+        <ion-col size="4">
+          <img src="{{tipoGasto.imagen}}" alt="">
+        
+
+        </ion-col>
+        <ion-col size="8">
+
+          <ion-row>
+            <ion-col size="12">
+              <ion-label  > <strong>{{tipoGasto.descripcion}}</strong> </ion-label>
+            </ion-col>
+            <ion-col size="12">
+         
+               <ion-label >
+
+                <strong>{{tipoGasto.totalColones   | colones }}</strong>
+         <span *ngIf="!anticiposService.vistaAnticipo">
+          /
+          <strong>{{tipoGasto.totalDolares    | colones : 2 : '.' : ',' :  '$' }}</strong>
+         </span>
+               </ion-label>
+            </ion-col>
+          </ion-row>
+   
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-item>
+</ng-template>
+
+
+    
+ 
+      </ion-list>
+     
     </ion-col>
-
+ 
  
   </ion-row>
 
@@ -88,34 +142,4 @@
 </ion-grid>
 </ion-content>
 
-
-
-<ion-fab  [ngStyle]="{'bottom': controlGastosService.total > 0  || anticiposService.vistaAnticipo ? '9rem' : '5rem' }" style="position: fixed;right: 1rem;">
-  <ion-fab-button color="primary" class="">
-    <ion-icon name="search"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-list side="top">
-    <ion-fab-button color="primary" (click)="estadosDeCuenta()"  data-desc="Estados De Cuenta">
-      <ion-avatar  class="ion-avatar">
-        <img src="assets/opciones/financial-statement.svg" alt="">
-       </ion-avatar>
-    </ion-fab-button>
-    <ion-fab-button color="primary" (click)="gastosSinAnticipo()"  data-desc="Gastos Sin Anticipo">
-      <ion-avatar  class="ion-avatar">
-        <img src="assets/opciones/cash-on-delivery.svg" alt="">
-       </ion-avatar>
-    </ion-fab-button>
-    <ion-fab-button color="primary" (click)="listaAnticipos()" data-desc="Anticipos Disponibles">
-      <ion-avatar  class="ion-avatar">
-        <img src="assets/opciones/wallet.svg" alt="">
-       </ion-avatar>
-    </ion-fab-button>
-  </ion-fab-list>
-</ion-fab>
-
-<ion-fab-button [ngStyle]="{'bottom': controlGastosService.total > 0 || anticiposService.vistaAnticipo ? '5rem' : '1rem' }" (click)="nuevoGasto()" style="position: fixed;right: 1rem;" color="danger"  >
-  <ion-icon name="add"></ion-icon>
-</ion-fab-button>
-<ion-fab-button *ngIf="controlGastosService.total > 0 || anticiposService.vistaAnticipo" (click)="limpiarGraficos()" style="position: fixed;bottom: 1rem;right: 1rem;" color="warning"  >
-  <ion-icon name="trash"></ion-icon>
-</ion-fab-button>
+ <app-pie-pagina-inicio></app-pie-pagina-inicio>

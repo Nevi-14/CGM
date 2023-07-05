@@ -43,13 +43,9 @@ export class InicioSesionPage implements OnInit {
  
   login(fLogin: NgForm){
 
-
-    console.log('fLogin', fLogin.value);
     this.loginUser.usuario =  fLogin.value.usuario;
     this.loginUser.password =  fLogin.value.password;
-    console.log('this.loginUser', this.loginUser)
     if (fLogin.valid){
-      console.log('Login')
       this.usuariosService.presentaLoading('Espere...');
       this.usuariosService.syncGetExactusToPromise(this.loginUser.usuario).then(
        async (resp) => {
@@ -62,12 +58,11 @@ export class InicioSesionPage implements OnInit {
 
             }else{
           if(this.codigoSeguridad == this.loginUser.password){
-            this.controlGastosService.limpiarDatos();
-      await this.controlGastosService.syncTiposGastos();
-      this.controlGastosService.cargarGRaficos();
+         //   await this.controlGastosService.limpiarDatosIniciales();
+         this.usuariosService.usuario = resp[0];
+         this.usuariosService.guardarUsuario();
             this.router.navigateByUrl('/inicio', {replaceUrl:true});
-            this.usuariosService.usuario = resp[0];
-            this.usuariosService.guardarUsuario();
+  
           }else{
             this.usuariosService.presentAlert('SD1 Móvil', 'Código de seguridad incorrecto!..');
           }
@@ -106,7 +101,7 @@ this.cd.detectChanges();
         toEmail:resp[0].correO_ELECTRONICO,
         file:null,
         subject:'Código verificación',
-        body:`Código verificación inicio de sesión ${this.codigoSeguridad } Por favor no compartir el  código de verificación con nadie, si usted no solicito este código de verificación por favor cominicarse con el adminisrrador.`
+        body:`Código verificación inicio de sesión <strong>${this.codigoSeguridad }</strong> Por favor no compartir el  código de verificación con nadie, si usted no solicito este código de verificación por favor cominicarse con el adminisrrador.`
       }
              await this.emailService.syncPostEmailToPromise(email)
     }, error =>{
@@ -129,12 +124,7 @@ this.cd.detectChanges();
     }
     return result;
 }
-  send(){
-    this.alertasService.message('SD1 Móvil', 'Opción no disponible!.')
-  }
-
-  salir(){
-    this.modalCtrl.dismiss({'Aut': false});
-  }
+ 
+ 
 
 }

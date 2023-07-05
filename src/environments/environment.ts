@@ -51,7 +51,19 @@ deleteSobrante:'delete/sobrante?id=',
 
 // ESTADOS CUENTA
 getUsuarioEstadosCuenta:'get/usuario/estados/cuenta?id=',
+// COMPANIAS
+getCompanias:'get/companias',
+// notificaciones
 
+getNotificacionesUsuario:'get/notificaciones/usuario?id=',
+putNotificacion:'put/notificacion?id=',
+
+  // DEVOLUCIONES
+  getUsuarioDevolucion:'get/devolucion/usuario?id=',
+  getUsuarioDevoluciones:'get/devoluciones/usuario?id=',
+  postDevolucion:'post/devolucion',
+  putDevolucion:'put/devolucion?id=',
+  deleteDevolucion:'delete/devolucion?id=',
   prdMode:true,
 };
 

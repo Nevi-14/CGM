@@ -1,10 +1,27 @@
 ion-header{
-   
+    ion-segment {
+        width: 100%;
+    }
     ion-toolbar{
+        width: 100vw;
       --background:#36acc6;
       color: #fff;
       ion-icon{
           color: #fff;
       }
   }
+  }  
+ 
+  ion-segment-button {
+    height: 32px;
+    min-height: 32px;
+    --background-checked: var(--ion-color-danger);
+    --color-checked: var(--ion-color-primary-contrast);
+    --indicator-color: transparent;
+ font-size: 12px;
   }
+ 
+ 
+ion-segment-button ion-label{
+    margin:auto; 
+}

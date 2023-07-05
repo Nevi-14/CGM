@@ -9,7 +9,6 @@ import { CalendarioPopoverPage } from '../calendario-popover/calendario-popover.
 import { GastosConAnticipoService } from 'src/app/services/gastos-con-anticipo.service';
 import { TiposGastosService } from 'src/app/services/tipos-gastos.service';
 import { TiposGastos } from 'src/app/models/tiposGastos';
-import { TiposGastosPage } from '../tipos-gastos/tipos-gastos.page';
 import { ControlGastosService } from 'src/app/services/control-gastos.service';
 import { NgForm } from '@angular/forms';
 
@@ -42,7 +41,6 @@ export class EditarGastoPage implements OnInit {
     this.montoAnterior = this.nuevoGasto.monto;
     let i = this.tiposGastosService.tiposGastos.findIndex(e => e.id == this.nuevoGasto.iD_TIPO_GASTO);
     if(i >=0) this.tiposGastosService.tipo = this.tiposGastosService.tiposGastos[i];
-    //   this.restanteAnterior = this.nuevoGasto.;
     console.log(this.nuevoGasto)
 
     if(this.nuevoGasto.estatus == 'R'){
@@ -54,9 +52,10 @@ export class EditarGastoPage implements OnInit {
     let gasto = fRegistroGasto.value;
     this.nuevoGasto.proveedor =  gasto.proveedor
     this.nuevoGasto.referencia =  gasto.referencia
-    //this.nuevoGasto.moneda =  gasto.moneda
     this.nuevoGasto.monto =  gasto.monto
     this.nuevoGasto.descripcion =  gasto.descripcion
+    this.nuevoGasto.porcentajeiva = gasto.porcentajeiva;
+    this.nuevoGasto.montoiva = gasto.montoiva;
     if(this.nuevoGasto.monto < 0  || this.nuevoGasto.monto > this.anticiposService.vistaAnticipo.restante){
 
       return this.alertasService.message('SD1','Lo sentimos el monto excede el limite de disponible')
@@ -97,7 +96,6 @@ export class EditarGastoPage implements OnInit {
  
 
     await this.anticiposService.syncPutLineaAnticipoToPromise(linea);
-   // this.anticiposService.sincronizarDatos();
    this.controlGastosService.sincronizarGastos();
     this.regresar();
     this.alertasService.loadingDissmiss();
@@ -114,8 +112,6 @@ export class EditarGastoPage implements OnInit {
   adjuntarImagen( ){
     
     this.gestorImagenesService.alertaCamara().then(resp =>{
-      console.log('done')
-      console.log('resp')
       this.changeDetector.detectChanges();
     
      })
@@ -189,15 +185,10 @@ export class EditarGastoPage implements OnInit {
       let lineas = await this.anticiposService.syncGetLineaUsuarioAnticipoBYId(this.anticiposService.vistaAnticipo.iD_LINEA);
       await this.anticiposService.syncPutAnticipoToPromise(anticipo);
       let linea = lineas[0];
-      console.log('lineas', lineas)
-      console.log('linea', linea)
       linea.utilizado -=  this.nuevoGasto.monto;
       linea.restante = linea.monto - linea.utilizado;
       await this.anticiposService.syncPutLineaAnticipoToPromise(linea);
     this.gastosConAnticipoService.syncDeleteGastoConAnticipoToPromise( this.nuevoGasto.id);
-    //await this.anticiposService.sincronizarDatos();
-    //await this.sincronizar()
-    //this.controlGastosService.sincronizarGastos();
     this.controlGastosService.accionGasto = true;
     this.alertasService.loadingDissmiss();
     this.modalctrl.dismiss(true);

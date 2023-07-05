@@ -35,10 +35,8 @@ public sobrantesService:SobrantesService
    this.estadosCuentaService.syncGetUsuarioEstadosCuentaToPromise(this.usuariosService.usuario.usuario).then(resp =>{
       this.alertasService.loadingDissmiss();
       this.estadosCuenta = resp;
-      console.log('resp',resp)
     }, error =>{
       this.alertasService.loadingDissmiss();
-      console.log('error',error)
     })
 
   }
@@ -52,13 +50,9 @@ console.log(estado)
 let vistaAnticipo  = await this.anticiposService.syncGetVistaAnticipoLineas(estado.usuario,estado.referencia);
 console.log(vistaAnticipo)
 let lineaAnticipo = await this.anticiposService.syncGetLineaUsuarioAnticipoBYId(vistaAnticipo[0].id)
-console.log('lineaAnticipo',lineaAnticipo)
-let gastos = await this.gastosConAnticipoService.getUsuarioGastosConAnticipoEstadoToPromise(vistaAnticipo[0].id,"");
-console.log('gastos',gastos)  
+let gastos = await this.gastosConAnticipoService.getUsuarioGastosConAnticipoEstadoToPromise(vistaAnticipo[0].id,""); 
 let sobrantes = await this.sobrantesService.syncGetSobranteAnticipoUsuarioToPromise(estado.usuario, vistaAnticipo[0].numerO_TRANSACCION)
-console.log('sobrantes',sobrantes)
 this.pdfService.generatePDF(lineaAnticipo[0],gastos)
-
 this.alertasService.loadingDissmiss();
 
     }

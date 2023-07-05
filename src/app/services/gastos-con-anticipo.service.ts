@@ -44,6 +44,7 @@ public http: HttpClient
 
 
   postGastoConAnticipo( lineasGasto: GastoConAnticipo[] ){
+    console.log('lineasGasto', lineasGasto)
     const URL = this.getIRPURL( environment.postGastosConAnticipos, `` );
     const options = {
       headers: {

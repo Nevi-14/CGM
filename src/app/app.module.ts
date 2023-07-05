@@ -13,6 +13,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { PdfMakeWrapper } from 'pdfmake-wrapper';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { ComponentModule } from './components/component.module';
 //  npm install @ionic-native/camera --save --dev
 // npm i @ionic/storage-angular
 // set font to PDF
@@ -23,7 +24,7 @@ PdfMakeWrapper.setFonts(pdfFonts);
     scrollPadding:true,
     scrollAssist:false
 
-  }),IonicStorageModule.forRoot()],
+  }),IonicStorageModule.forRoot(), ComponentModule],
   providers: [ Camera, {provide: RouteReuseStrategy, useClass: IonicRouteStrategy },FileOpener],
   bootstrap: [AppComponent],
 })

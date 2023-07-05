@@ -26,12 +26,13 @@
  
      <app-input   name="proveedor" type="text" label="Proveedor" ngModel="{{nuevoGasto.proveedor}}"></app-input>
  
-  
-     <app-input   name="referencia" type="text" label="Factura" ngModel="{{nuevoGasto.referencia}}"></app-input>
  
-     <app-select  name="moneda"  [data]="['Dolares','Colones']"  label="Moneda" ngModel="{{nuevoGasto.moneda}}"></app-select>
+ 
   
-   <app-input   name="monto" type="text" label="Monto" ngModel="{{nuevoGasto.monto}}"></app-input>
+   <app-input   name="monto" type="number" label="Monto" ngModel="{{nuevoGasto.monto}}"></app-input>
+   <app-input    name="porcentajeIVA" type="number" label="Porcentaje IVA" ngModel=""></app-input>
+
+   <app-input  name="montoIVA" type="iva" label="Monto IVA" ngModel=""></app-input>
  
    <app-input   name="descripcion" type="text" label="Detalle" ngModel="{{nuevoGasto.descripcion}}"></app-input>
  
@@ -57,7 +58,7 @@
      </ion-grid>
   
      <app-button label="Registrar Gasto Con Anticipo"></app-button>
-     
+     <app-icon-button (click)="deleteGastoConAnticipo()" icon="trash" label="Eliminar Gasto"></app-icon-button>
    </form>
  
    

@@ -1,0 +1,28 @@
+ion-segment{
+    --box-shadow: transparent!important;
+}
+ion-segment-button {
+    --indicator-box-shadow: transparent!important;
+    padding: 0;
+    margin: 0;
+    --background:white;
+    --color-checked: #36acc6;
+    --indicator-color : #36acc6!important; /* this solution */
+    text-transform: capitalize;
+    font-weight: bold;
+   ion-icon{
+    font-size: 24px;
+   }
+   ion-badge{
+    position: 
+    absolute;
+    top: 0.5rem; 
+    right: -0.5rem; 
+  }
+   ion-label{
+    font-size: 14px;
+  }
+  }
+  ion-segment-button ion-label{
+    margin:auto; 
+  }

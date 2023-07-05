@@ -1,0 +1,87 @@
+ 
+  .split-pane-visible>.split-pane-side {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    border: none;
+    background-color: #fff;
+    transition: all 0.25s ease-in;
+    --overflow: hidden;
+  }
+  .split-pane-visible>.expand-menu {
+    min-width: 240px !important;
+    max-width: 240px !important;
+    transition: all 0.25s ease-out;
+  }
+  ion-menu ion-content {
+    --background: var(--ion-item-background, var(--ion-background-color, #222428));
+  }
+  ion-item {
+    width: 100%;
+    --background: transparent !important;
+    color: #fff;
+  }
+ 
+  ion-menu.md ion-item ion-icon {
+    color: #36acc6;
+  }
+  
+  ion-item:hover ion-label {
+    color: var(--ion-color-success);
+  }
+  ion-footer{
+    position: absolute;
+    bottom: 0;
+    ion-button{
+      margin-right: 1rem;
+    }
+  }
+  .no-scroll {
+    background-color: #fff;
+    --offset-bottom: auto!important;
+    
+    --overflow: hidden;
+    
+    overflow: auto;
+    
+    &::-webkit-scrollbar {
+    
+      display: none;
+    
+    }
+    }
+
+    ion-label{
+      --color: #000;
+    }ion-fab-button{
+      --box-shadow:none;
+  }
+
+ #main-content{
+    margin-bottom: 8rem;
+  }
+
+   
+ion-segment-button {
+  --indicator-box-shadow: transparent!important;
+  padding: 0;
+  margin: 0;
+  --background:white;
+  --color-checked: #2d2e87;
+  --indicator-color : #2d2e87!important; /* this solution */
+  text-transform: capitalize;
+ ion-icon{
+  font-size: 24px;
+ }
+ ion-badge{
+  position: 
+  absolute;
+  top: 0.5rem; 
+  right: -0.5rem; 
+}
+ ion-label{
+  font-size: 14px;
+}
+}
+ion-segment-button ion-label{
+  margin:auto; 
+}

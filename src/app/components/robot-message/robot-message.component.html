@@ -3,7 +3,7 @@
  
  
     <ion-col   size="12" class="ion-text-center">
-      <ion-label class="typing ">
+      <ion-label *ngIf="message" class="typing ">
         "{{showMessage}}
       </ion-label>
 

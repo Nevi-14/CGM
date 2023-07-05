@@ -18,6 +18,7 @@ export class LineasAnticiposService {
      coD_COMPANIA:null,
      usuario :null,
      compania: null,
+     moneda:null,
      monto: null,
      utilizado: null,
      restante: null,

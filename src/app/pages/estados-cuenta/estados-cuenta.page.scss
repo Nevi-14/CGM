@@ -1,16 +1,7 @@
  
-ion-header{
-    ion-toolbar{
-      --background:#36acc6;
-      color: #fff;
-      ion-icon{
-          color: #fff;
-      }
-  }
-  }
   ion-avatar{
-      height: 3rem;
-      width:3rem;
+      height: 2rem;
+      width:2rem;
     }
   
     h1 {
@@ -131,4 +122,9 @@ ion-header{
           margin: 0;
           padding: 0;
       }
+    }
+
+
+    ion-toolbar{
+      --background:#fff;
     }

@@ -11,6 +11,7 @@ import { IconButtonComponent } from './icon-button/icon-button.component';
 import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { EncabezadoComponent } from './encabezado/encabezado.component';
 import { SelectComponent } from './select/select.component';
+import { PiePaginaInicioComponent } from './pie-pagina-inicio/pie-pagina-inicio.component';
 
 
 
@@ -22,7 +23,8 @@ import { SelectComponent } from './select/select.component';
   ButtonComponent,
   IconButtonComponent,
   EncabezadoComponent,
-  SelectComponent
+  SelectComponent,
+  PiePaginaInicioComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { SelectComponent } from './select/select.component';
     ButtonComponent,
     IconButtonComponent,
     EncabezadoComponent,
-    SelectComponent
+    SelectComponent,
+    PiePaginaInicioComponent
   ],
 
 })

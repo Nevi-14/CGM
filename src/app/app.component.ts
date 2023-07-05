@@ -8,6 +8,7 @@ import { UsuariosService } from './services/usuarios.service';
 import { EstadosCuentaPage } from './pages/estados-cuenta/estados-cuenta.page';
 import { InformacionPage } from './pages/informacion/informacion.page';
 import { MiPerfilPage } from './pages/mi-perfil/mi-perfil.page';
+import { ControlGastosService } from './services/control-gastos.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -21,7 +22,9 @@ export class AppComponent implements OnInit {
   value2 = new Date(this.y, this.m+1 , 0).toISOString();
   public appPages = [
     { title: 'Inicio', url: '/inicio', icon: 'home' },
-    { title: 'Estados Cuenta', url: '/inicio/control-estados-cuenta', icon: 'card' },
+    { title: 'Sobrantes', url: '/inicio/sobrantes', icon: 'cash' },
+    { title: 'Devoluciones', url: '/inicio/devoluciones', icon: 'wallet' },
+    { title: 'Estados De Cuenta', url: '/inicio/control-estados-cuenta', icon: 'card' },
     { title: 'Mi Perfil', url: 'perfil', icon: 'person' },
     { title: 'Información', url: 'informacion', icon: 'information-circle' },
     { title: 'Cerrar Sesión', url: 'salir', icon: 'exit' }
@@ -39,7 +42,8 @@ export class AppComponent implements OnInit {
     public menuCtrl: MenuController,
     public configuracionesService: ConfiguracionesServiceService,
     public usuariosService:UsuariosService,
-    public modalCtrl:ModalController
+    public modalCtrl:ModalController,
+    public controlGastosService:ControlGastosService
   ) {}
 
 ngOnInit() {
@@ -98,7 +102,7 @@ async informacion(){
   }
 }
 cerrarSesion() {
- 
+  this.controlGastosService.limpiarDatosIniciales()
   this.usuariosService.usuario = null;
   this.router.navigateByUrl('/');
 }
