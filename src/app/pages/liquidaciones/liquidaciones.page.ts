@@ -283,14 +283,14 @@ await this.controlGastosService.syncTiposGastos();
       this.lineaAnticipo.utilizado =  this.anticiposService.vistaAnticipo.utilizado ; 
     
       this.alertasService.presentaLoading('Liquidando gastos..')
-      this.lineaAnticipo.estatus = 'I'  
+      this.lineaAnticipo.estatus = 'RA'  
       let anticipo:any =   await this.anticiposService.syncPutLineaAnticipoToPromise(this.lineaAnticipo);
         this.anticiposService.anticipo = anticipo;
  
  
     let gastos = await  this.gastosConAnticipoService.getUsuarioGastosConAnticipoEstadoToPromise(this.anticiposService.vistaAnticipo.iD_LINEA, 'P')
     gastos.forEach(async (element, index) => { 
-      element.estatus = 'I'
+      element.estatus = 'RA'
      await this.gastosConAnticipoService.syncPutGastoConAnticipoToPromise(element)
      
      if(index == gastos.length -1){
@@ -315,7 +315,7 @@ this.alertasService.presentaLoading('Liquidando gastos sin anticipo!...')
 await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario,'P', this.controlGastosService.fechaInicioMes, this.controlGastosService.fechaFinMes).then(gastos =>{
   if(gastos.length == 0) return    this.alertasService.message('SD1 Móvil', 'No hay gastos pendientes que liquidar!'),this.alertasService.loadingDissmiss(), this.modalCtrl.dismiss(true)
   gastos.forEach(async (element, index) => {
-  element.estatus = 'I'
+  element.estatus = 'RA'
    await this.gastosSinAnticipoService.syncPutGastoSinAnticipoToPromise(element)
    if(index == gastos.length -1){
     this.limpiarDatos();

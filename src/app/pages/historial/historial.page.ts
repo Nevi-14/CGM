@@ -43,7 +43,7 @@ public anticiposService:AnticiposService
     const modal = await this.modalCtrl.create({
       component: FiltroHistorialPage,
       mode: 'ios',
-      initialBreakpoint: 0.55,
+      initialBreakpoint: 0.45,
       breakpoints: [0, 0.25, 0.5, 0.75]
     })
 

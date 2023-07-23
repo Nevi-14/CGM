@@ -278,7 +278,7 @@ if(doughnutCanvas){
  async sincronizarGastos(){
   this.totalColones = 0;
   this.totalDolares = 0;
-  this.alertasService.presentaLoading('Cargando gastos..')
+//  this.alertasService.presentaLoading('Cargando gastos..')
 let gastosUsuario = [];
     if(this.anticiposService.vistaAnticipo){
       gastosUsuario =  await this.lineasAnticiposService.syncGetAnticipoLineaGastosToPromise(this.anticiposService.vistaAnticipo.iD_LINEA);

@@ -29,41 +29,6 @@ interface gastos {
 })
 export class MisGastosPage {
   vacio: boolean = true;
-  sliderOpts = {
-    zoom: false,
-    slidesPerView: 4,
-    spaceBetween: 2,
-    centeredSlides: false,
-    // Responsive breakpoints
-    breakpoints: {
-      // when window width is >= 320px
-      320: {
-        slidesPerView: 1,
-        spaceBetween: 5
-      },
-      // when window width is >= 480px
-      480: {
-        slidesPerView: 2,
-        spaceBetween: 30
-      },
-      // when window width is >= 640px
-      640: {
-        slidesPerView: 2,
-        spaceBetween: 40
-      },
-      // when window width is >= 940px
-      940: {
-        slidesPerView: 3,
-        spaceBetween: 40
-      },
-
-      // when window width is >= 1200px
-      1300: {
-        slidesPerView: 4,
-        spaceBetween: 40
-      }
-    },
-  };
   listo: boolean
   constructor(
     public usuariosService: UsuariosService,
@@ -82,8 +47,6 @@ export class MisGastosPage {
     public changeDetector: ChangeDetectorRef
 
   ) { }
-
-
 
   async ionViewWillEnter() {
     this.cargarGastos()
@@ -110,8 +73,12 @@ export class MisGastosPage {
 
  
   async cargarGastos() {
-    if (this.controlGastosService.gastoSinAnticipo || this.anticiposService.vistaAnticipo) return this.controlGastosService.cargarGRaficos();
+    this.controlGastosService.cargarGRaficos();
     await this.controlGastosService.limpiarDatosIniciales();
+ /**
+  if (this.controlGastosService.gastoSinAnticipo || this.anticiposService.vistaAnticipo) return this.controlGastosService.cargarGRaficos();
+  await this.controlGastosService.limpiarDatosIniciales();
+  */
   }
 
   async detalle(tipo: gastos) {
@@ -148,43 +115,7 @@ export class MisGastosPage {
     }
   }
 
-  async alertaGastosSinAnticipo() {
-
-
-    const alert = await this.alertCtrl.create({
-      header: 'SD1',
-      subHeader: 'Se han detectado gastos sin anticipos existentes!..',
-      message: '¿Desea cargar los gastos sin anticipo?',
-      buttons: [
-
-        {
-          text: 'SI',
-          role: 'confirm',
-          handler: async () => {
-            this.controlGastosService.gastoSinAnticipo = true;
-            if (this.controlGastosService.gastoSinAnticipo) {
-              this.gastosSinAnticipo()
-            }
-          },
-        },
-        {
-          text: 'NO',
-          role: 'cancel',
-          handler: () => {
-            this.vacio = true;
-            this.controlGastosService.cargarGRaficos();
-
-          },
-        }
-      ],
-    });
-
-    await alert.present();
-
-    const { role } = await alert.onDidDismiss();
-
-
-  }
+ 
 
   async limpiarDatos() {
     const alert = await this.alertCtrl.create({
@@ -263,14 +194,12 @@ export class MisGastosPage {
   async gastosSinAnticipo() {
     this.controlGastosService.labels = [];
     this.controlGastosService.data = [];
+    this.controlGastosService.gastos = [];
     await this.controlGastosService.limpiarDatos();
     await this.controlGastosService.destruirDashboard();
     this.controlGastosService.gastoSinAnticipo = true;
     await this.controlGastosService.sincronizarGastos();
-    if(this.controlGastosService.gastos.length > 0){
-      this.controlGastosService.labels = [];
-      this.controlGastosService.data =[];
-    }
+ 
     for (let i = 0; i < this.controlGastosService.gastos.length; i++) {
 
       if (this.controlGastosService.gastos[i].gastos.length > 0) {
@@ -290,6 +219,7 @@ export class MisGastosPage {
 
   }
   async gastosConAnticipo() {
+    this.controlGastosService.gastos = [];
     let anticipo =  this.anticiposService.anticipo;
     let vistaAnticipo =  this.anticiposService.vistaAnticipo;
     await this.controlGastosService.limpiarDatos();
@@ -297,10 +227,8 @@ export class MisGastosPage {
     this.anticiposService.anticipo = anticipo;
     this.anticiposService.vistaAnticipo = vistaAnticipo;
     await  this.controlGastosService.sincronizarGastos();
-    if(this.controlGastosService.gastos.length > 0){
-      this.controlGastosService.labels = [];
-      this.controlGastosService.data =[];
-    }
+    this.controlGastosService.labels = [];
+    this.controlGastosService.data =[];
 
     for (let i = 0; i < this.controlGastosService.gastos.length; i++) {
       if (this.controlGastosService.gastos[i].gastos.length > 0) {
@@ -370,19 +298,5 @@ export class MisGastosPage {
     }
   }
 
-
-  async estadosDeCuenta() {
-    this.modalCtrl.dismiss();
-    let modal = await this.modalCtrl.create({
-      component: EstadosCuentaPage,
-
-    })
-
-    await modal.present();
-    const { data } = await modal.onDidDismiss();
-    if (data !== undefined) {
-
-      this.controlGastosService.sincronizarGastos();
-    }
-  }
+ 
 }

@@ -11,10 +11,10 @@
  </ion-header>
 <ion-content class="ion-padding">
   <h1>Liquidaciones,</h1>
-  <h3>Gastos Sin Anticipo</h3>
+  <h3>Gastos {{anticiposService.vistaAnticipo ? 'Con Anticipo' : ' Sin Anticipo'}}</h3>
   <form id="form" (ngSubmit)="liquidarGastos(fLiquidaciones)" #fLiquidaciones="ngForm">
   
-    <p style="margin-bottom: 1rem;margin-top:1rem;">  Si desea liquidar los gastos, por favor completar el formulario adjunto y dale click al botón de liquidar</p>
+    <p style="margin-bottom: 1rem;margin-top:1rem;">  Si desea liquidar los gastos y proceder con el sobrante de  {{anticiposService.vistaAnticipo.restante | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}, por favor completar el formulario adjunto y dale click al botón de liquidar</p>
     <app-select name="metodoDevolucion" (ionChange)="metodoPago(fLiquidaciones, $event)" label="Metodo Devolución" [data]="metodoDevolucion" ngModel="{{sobrante.metodO_DEVOLUCION}}"></app-select>
     <app-input name="telefono" *ngIf="sobrante.metodO_DEVOLUCION == 'S'" label="Telefono" type="text"  ngModel="{{sobrante.telefono}}"></app-input>
     <app-input name="cuenta"  *ngIf="sobrante.metodO_DEVOLUCION == 'T' || sobrante.metodO_DEVOLUCION == 'D'" label="Cuenta" type="text" ngModel="{{sobrante.cuenta}}"></app-input>

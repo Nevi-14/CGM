@@ -164,6 +164,7 @@ this.companias.push(data)
 
   }
   async alertaGastoSinAnticipoFaltante(fRegistroGasto:NgForm) {
+    this.anticiposService.vistaAnticipo = null;
     const alert = await this.alertCtrl.create({
       header: 'SD1 Móvil',
       message:'Selecciona continuar si desea registrar el gasto y cerrar la guia existente!..',

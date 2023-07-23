@@ -83,6 +83,14 @@ export class AnticiposService {
     const URL = this.getIRPURL(environment.getVistaUsuarioLineaAnticipo, `${usuario}`);
     return this.http.get<anticiposLineasView[]>(URL);
   }
+
+  getvistaAnticipoReferencia(referencia) {
+    let URL = this.getIRPURL(environment.getVistaAnticipoReferencia, ``);
+        URL = URL + referencia;
+    return this.http.get<anticiposLineasView[]>(URL);
+  }
+
+   
   getUsuarioGastosAnticipoTipo(usuario: string, anticipo: number, tipo: number) {
     const URL = this.getIRPURL(environment.getGastosConAnticipoTipo, `${anticipo}&tipo=${tipo}`);
     return this.http.get<GastoConAnticipo[]>(URL);
@@ -124,5 +132,7 @@ export class AnticiposService {
     return this.getUsuarioAnticiposRangoFecha(usuario, valor1).toPromise();
   }
 
-
+syncGetVistaAnticipoReferenciaToPromise(referencia){
+  return this.getvistaAnticipoReferencia(referencia).toPromise();
+}
 }

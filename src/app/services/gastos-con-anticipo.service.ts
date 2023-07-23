@@ -42,6 +42,13 @@ public http: HttpClient
 
   }
 
+  private getUsuarioGastosConAnticiporeferencia(referencia:string){
+    let URL = this.getIRPURL(environment.getGastosConAnticipoReferencia,'');
+    URL = URL+referencia
+        console.log('URL', URL)
+    return this.http.get<GastoConAnticipo[]>(URL);
+
+  }
 
   postGastoConAnticipo( lineasGasto: GastoConAnticipo[] ){
     console.log('lineasGasto', lineasGasto)
@@ -91,6 +98,10 @@ public http: HttpClient
   }
 syncPutGastoConAnticipoToPromise(lineasGasto:GastoConAnticipo){
   return this.putGastoConAnticipo(lineasGasto).toPromise();
+}
+
+syncGetUsuarioGastosConAnticiporeferenciaToPromise(referencia:string){
+  return this.getUsuarioGastosConAnticiporeferencia(referencia).toPromise();
 }
 
   syncDeleteGastoConAnticipoToPromise(id:number){

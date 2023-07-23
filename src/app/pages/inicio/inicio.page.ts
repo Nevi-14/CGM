@@ -57,7 +57,7 @@ ngOnInit() {
 // REMVOE MENU ON BIGGER SCREENS
 menuAction(url) {
   //this.configuracionesService.menu = !this.configuracionesService.menu ;
-  //this.menuCtrl.toggle('myMenu');
+  this.menuCtrl.toggle('myMenu');
   //alert('hello')
   console.log('url', url)
  

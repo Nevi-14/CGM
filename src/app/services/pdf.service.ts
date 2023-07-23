@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ColonesPipe } from '../pipes/colones.pipe';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { Platform } from '@ionic/angular';
+import { EstadosCuenta } from '../models/estadosCuenta';
  // npm i pdfmake-wrapper --save --dev
  // npm i pdfmake --save --dev
  // npm i @ionic-native/file-opener --save --dev
@@ -44,7 +45,7 @@ public platform: Platform
 }
 
 
-generatePDF( linea:any, gastos:any[]){
+generatePDF( linea:EstadosCuenta, gastos:any[]){
 
   this.http.get('assets/coris.png', { responseType: 'blob' })
   .subscribe(res => {
@@ -64,7 +65,7 @@ generatePDF( linea:any, gastos:any[]){
 }
 
 
-  async rellenarpdf(image,linea:any, gastos:any[]){
+  async rellenarpdf(image,linea:EstadosCuenta, gastos:any[]){
 
  
     
@@ -155,6 +156,7 @@ generatePDF( linea:any, gastos:any[]){
         );
    
         if(!this.platform.is('mobileweb')) {
+          pdf.create().download('estado cuenta');
           pdf.create().getBase64( base64URL =>{
 
  

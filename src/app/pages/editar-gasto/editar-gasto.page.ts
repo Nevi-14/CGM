@@ -44,7 +44,7 @@ export class EditarGastoPage implements OnInit {
     console.log(this.nuevoGasto)
 
     if(this.nuevoGasto.estatus == 'R'){
-      this.alertasService.message('SD1 Móvil', this.nuevoGasto.observaciones)
+     // this.alertasService.message('SD1 Móvil', this.nuevoGasto.observaciones)
     }
   }
 
@@ -52,10 +52,10 @@ export class EditarGastoPage implements OnInit {
     let gasto = fRegistroGasto.value;
     this.nuevoGasto.proveedor =  gasto.proveedor
     this.nuevoGasto.referencia =  gasto.referencia
-    this.nuevoGasto.monto =  gasto.monto
+    this.nuevoGasto.monto =  Number(gasto.monto)
     this.nuevoGasto.descripcion =  gasto.descripcion
-    this.nuevoGasto.porcentajeiva = gasto.porcentajeiva;
-    this.nuevoGasto.montoiva = gasto.montoiva;
+    this.nuevoGasto.porcentajeiva =Number( gasto.porcentajeiva);
+    this.nuevoGasto.montoiva = Number( gasto.montoiva);
     if(this.nuevoGasto.monto < 0  || this.nuevoGasto.monto > this.anticiposService.vistaAnticipo.restante){
 
       return this.alertasService.message('SD1','Lo sentimos el monto excede el limite de disponible')

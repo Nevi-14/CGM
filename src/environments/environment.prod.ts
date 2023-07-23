@@ -19,6 +19,7 @@ export const environment = {
   getAnticipo:'get/anticipo?id=',
   getVistaAnticipoLineasAnticipo:'get/vista/anticipo/linea/anticipo?id=',
   putAnticipoAPI: 'put/anticipo?id=',
+
   // LINEA ANTICIPOS
   getLineaAnticipo:'get/linea/anticipo?id=',
   getVistaUsuarioLineaAnticipo:'get/vista/usuario/linea/anticipo?id=',
@@ -37,15 +38,27 @@ export const environment = {
   putGastosSinAnticipos:'put/gasto/sin/anticipo?id=',
   deleteGastosSinAnticipos:'delete/gasto/sin/anticipo?id=',
   getGastosSinAnticipoTipo:'get/gastos/sin/anticipo/tipo?id=',
-// COMPANIAS
-getCompanias:'get/companias',
+
   // SOBRANTES
 getUsuarioSobrante:'get/sobrante/usuario?id=',
 postSobrante:'post/sobrante',
 putSobrante:'put/sobrante?id=',
 deleteSobrante:'delete/sobrante?id=',
+
 // ESTADOS CUENTA
 getUsuarioEstadosCuenta:'get/usuario/estados/cuenta?id=',
+// COMPANIAS
+getCompanias:'get/companias',
+// notificaciones
 
+getNotificacionesUsuario:'get/notificaciones/usuario?id=',
+putNotificacion:'put/notificacion?id=',
+
+  // DEVOLUCIONES
+  getUsuarioDevolucion:'get/devolucion/usuario?id=',
+  getUsuarioDevoluciones:'get/devoluciones/usuario?id=',
+  postDevolucion:'post/devolucion',
+  putDevolucion:'put/devolucion?id=',
+  deleteDevolucion:'delete/devolucion?id=',
   prdMode:true,
 };

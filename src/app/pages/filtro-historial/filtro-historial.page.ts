@@ -9,6 +9,7 @@ import { ListaAnticiposPage } from '../lista-anticipos/lista-anticipos.page';
 import { Anticipos } from 'src/app/models/anticipos';
 import { VistaAnticipoLineasAnticipo } from 'src/app/models/vistaAnticipoLineasAnticipo';
 import { GastosConAnticipoService } from 'src/app/services/gastos-con-anticipo.service';
+import { AnticiposService } from 'src/app/services/anticipos.service';
 
 @Component({
   selector: 'app-filtro-historial',
@@ -63,7 +64,8 @@ vistaAnticipo:VistaAnticipoLineasAnticipo = null;
   public gastosSinAnticipoService:GastosSinAnticipoService ,
   public usuariosService:UsuariosService,
   public modalCtrl:ModalController ,
-  public gastosConAnticipoService:GastosConAnticipoService
+  public gastosConAnticipoService:GastosConAnticipoService,
+  public anticiposService:AnticiposService
   ) { }
   fechaInicial = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   fechaFinal = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
@@ -73,6 +75,7 @@ vistaAnticipo:VistaAnticipoLineasAnticipo = null;
     const popover = await this.popOverCtrl.create({
       component: CalendarioPopoverPage,
       cssClass: 'my-custom-class',
+      mode:'md',
       translucent: true,
       componentProps: {
         fecha:  fecha == 'fechaInicial' ? this.fechaInicial  : this.fechaFinal
@@ -94,9 +97,22 @@ vistaAnticipo:VistaAnticipoLineasAnticipo = null;
     this.estado = fFiltro.value.estado;
     
   }
+
+ async  buscarGastoAnticipo($event){
+    let gastos = await this.gastosConAnticipoService.syncGetUsuarioGastosConAnticiporeferenciaToPromise($event.detail.value)
+    
+     this.anticiposService.syncGetVistaAnticipoReferenciaToPromise($event.detail.value).then( resp =>{
+      this.modalCtrl.dismiss({
+        vistaAnticipo:resp[0],
+        gastos:gastos
+      })
+    })
+   
+  }
   filtroGastoConAnticipo(fFiltro:NgForm, $event){ 
     console.log($event, 'event')
 
+    
     this.estado = 'null';
     this.referencia = '';
     this.anticipo= null;
@@ -132,14 +148,7 @@ if(!this.anticipo){
   })
 }
 
-  return
-    if(this.estado == 'null'){
-      let gastos =  await this.lineasAnticiposService.syncGetAnticipoLineaGastosToPromise(this.referencia);
-      console.log('gastos con anticipo', gastos)
-    }else {
-      let gastos = await this.gastosSinAnticipoService.syncGetGastosSinAnticipoToPromise(this.usuariosService.usuario.usuario, this.estado, this.fechaInicial.toISOString().split('T')[0], this.fechaFinal.toISOString().split('T')[0])
-      console.log('gastos sin anticipo', gastos)
-    }
+
   }
 
   async listaAnticipos() {

@@ -8,6 +8,7 @@ import { EditarGastoSinAnticipoPageRoutingModule } from './editar-gasto-sin-anti
 
 import { EditarGastoSinAnticipoPage } from './editar-gasto-sin-anticipo.page';
 import { ComponentModule } from 'src/app/components/component.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ComponentModule } from 'src/app/components/component.module';
     FormsModule,
     IonicModule,
     EditarGastoSinAnticipoPageRoutingModule,
-    ComponentModule
+    ComponentModule,
+    PipesModule
   ],
   declarations: [EditarGastoSinAnticipoPage]
 })

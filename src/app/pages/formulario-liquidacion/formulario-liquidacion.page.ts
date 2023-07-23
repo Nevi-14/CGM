@@ -21,7 +21,7 @@ import { UsuariosService } from 'src/app/services/usuarios.service';
 export class FormularioLiquidacionPage implements OnInit {
   sobrante:Sobrantes = {
     id : null,
-    estatus:'P',
+    estatus:'RA',
     usuario:this.usuariosService.usuario.usuario,
     usuariO_APROBADOR:null,
     anticipo:this.anticiposService.vistaAnticipo ? true : false,
@@ -51,6 +51,11 @@ export class FormularioLiquidacionPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.sobrantesService.syncGetSobranteAnticipoUsuarioToPromise(this.sobrante.usuario,this.anticiposService.vistaAnticipo.numerO_TRANSACCION).then( resp =>{
+      if(resp[0]){
+        this.sobrante = resp[0]
+      }
+    })
   }
   regresar(){
 this.modalCtrl.dismiss();
@@ -60,8 +65,6 @@ this.modalCtrl.dismiss();
 console.log('fLiquidacion',fLiquidacion)
 console.log('fLiquidacion.value.metodoDevolucion', fLiquidacion.value.metodoDevolucion)
 this.sobrante.metodO_DEVOLUCION = fLiquidacion.value.metodoDevolucion;
-this.sobrante.cuenta = null;
-this.sobrante.telefono = null;
 this.cd.detectChanges();
   }
   async  liquidarGastos (fLiquidacion: NgForm,data?) {
@@ -76,12 +79,13 @@ this.cd.detectChanges();
         'rarayab@grupocoris.com' + '<br>'  +
         'mherra@sde.cr'
       }
-    
+      this.sobrante.cuenta =  fLiquidacion.value.cuenta;
+      this.sobrante.telefono =  fLiquidacion.value.telefono;
       this.lineaAnticipo.restante =    this.anticiposService.vistaAnticipo.restante;
       this.lineaAnticipo.utilizado =  this.anticiposService.vistaAnticipo.utilizado ; 
     
-      this.alertasService.presentaLoading('Liquidando gastos..')
-      this.lineaAnticipo.estatus = 'I'
+    //  this.alertasService.presentaLoading('Liquidando gastos..')
+      this.lineaAnticipo.estatus = 'RA'
     
       let anticipo:any =   await this.anticiposService.syncPutLineaAnticipoToPromise(this.lineaAnticipo);
         this.anticiposService.anticipo = anticipo;
@@ -90,9 +94,14 @@ this.cd.detectChanges();
     if(this.anticiposService.vistaAnticipo.estatus == 'R') await this.sobrantesService.syncPutSobranteToPromise(this.sobrante)
     let gastos = await  this.gastosConAnticipoService.getUsuarioGastosConAnticipoEstadoToPromise(this.anticiposService.vistaAnticipo.iD_LINEA, 'P')
     gastos.forEach(async (element, index) => {
-    
-      element.estatus = 'I'
-     await this.gastosConAnticipoService.syncPutGastoConAnticipoToPromise(element)
+
+      if(this.anticiposService.vistaAnticipo.estatus == 'P'){
+        element.estatus = 'RA'
+      }
+    if(element.estatus == 'R'){
+      element.estatus = 'RA'
+    }
+    await this.gastosConAnticipoService.syncPutGastoConAnticipoToPromise(element)
      
      if(index == gastos.length -1){
       this.emailService.syncPostEmailToPromise(email).then(async (resp) =>{

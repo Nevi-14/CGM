@@ -5,16 +5,32 @@
  
       <ion-label slot="start"  style="margin-left: 1rem;font-size: 1rem;"><strong>Estados De Cuenta</strong></ion-label>
   
-      <ion-avatar slot="end">
-       <img src="assets/gastos/court.svg" />
-     </ion-avatar>
+<ion-fab-button size="small" slot="end">
+  <img src="assets/gastos/court.svg" />
+</ion-fab-button>
      </ion-toolbar>
   </ion-header>
  
  
-<ion-content>
-<app-robot-message   *ngIf="estadosCuenta.length == 0;" message="No hay datos que mostrar!.."></app-robot-message>
+<ion-content class="ion-padding">
  
+  <ion-grid *ngIf="estadosCuenta.length == 0"  style="height: 100%;">
+    <ion-row  style="height: 100%;display: flex;justify-content: center;align-items: center;">
+     
+      <ion-col size="12">
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <ion-icon  style="font-size: 75px;" color="danger" name="alert-circle-outline"></ion-icon>
+          </ion-col>
+          <ion-col size="12"  class="ion-text-center" style="margin-top: 1rem;" >
+            <ion-label class="ion-text-uppercase" ><strong> No hay datos que mostrar!..</strong></ion-label>
+          </ion-col>
+        </ion-row>
+   
+      </ion-col>
+    
+    </ion-row>
+  </ion-grid>
 <ion-list *ngIf="estadosCuenta.length > 0">
   <ion-item (click)="descargarEstadoDeCuenta(estadoCuenta)" *ngFor="let estadoCuenta of estadosCuenta" detail>
     <ion-grid >

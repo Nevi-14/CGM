@@ -1,0 +1,72 @@
+ 
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+   <ion-button slot="start" (click)="regresar()" fill="clear">
+     <ion-icon size="large" name="close-outline"></ion-icon>
+   </ion-button>
+   <ion-title>Actualizar Gasto Sin Anticipo</ion-title>
+   <ion-avatar *ngIf="tiposGastosService.tipo" slot="end">
+     <img [src]="tiposGastosService.tipo.imagen" />
+   </ion-avatar>
+  </ion-toolbar>
+  
+ </ion-header>
+ <ion-content class="ion-padding">
+  
+   <form id="form" (ngSubmit)="actualziarGasto(fRegistroGasto)" #fRegistroGasto="ngForm">
+    <app-select  name="compania"  [data]="companias"  label="Compañia" ngModel="{{nuevoGasto.compania}}"></app-select>
+     <app-input readonly="true"  (click)="calendarioPopOver()"  name="fecha" type="text" label="Fecha" ngModel="{{nuevoGasto.fecha | date}}"></app-input>
+ 
+ 
+     <app-input  readonly="true" (click)="tiposGastosModal()" name="tipoGasto" type="text" label="Tipo Gasto" ngModel="{{tiposGastosService.tipo ? tiposGastosService.tipo.descripcion : ''}}"></app-input>
+ 
+  
+    
+  
+ 
+     <app-input   name="proveedor" type="text" label="Proveedor" ngModel="{{nuevoGasto.proveedor}}"></app-input>
+ 
+  
+     <app-input   name="referencia" type="text" label="Factura" ngModel="{{nuevoGasto.referencia}}"></app-input>
+     <app-select  name="formaPago"  [data]="formaPago"  label="Forma De Pago" ngModel="{{nuevoGasto.tarjeta}}"></app-select>
+     <app-select  name="moneda"  [data]="tipoMoneda"  label="Moneda" ngModel="{{nuevoGasto.moneda}}"></app-select>
+ 
+  
+   <app-input   name="monto" type="number" label="Monto" ngModel="{{nuevoGasto.monto}}"></app-input>
+   <app-input    name="porcentajeIVA" type="number" label="Porcentaje IVA" ngModel="{{nuevoGasto.porcentajeiva}}"></app-input>
+
+  <app-input  name="montoIVA" type="iva" label="Monto IVA" ngModel="{{nuevoGasto.montoiva}}"></app-input>
+
+   <app-input   name="descripcion" type="text" label="Detalle" ngModel="{{nuevoGasto.descripcion}}"></app-input>
+ 
+   <app-input readonly="true"  (click)="adjuntarImagen()"  name="file" type="text" label="Adjunto" ngModel="{{file}}"></app-input>
+ 
+  
+    
+     <ion-grid *ngIf="gestorImagenesService.images.length > 0">
+       <ion-row>
+         <ion-col size="12">
+           <ion-toolbar>
+           <h4 slot="start">Adjunto</h4>
+           <ion-fab-button slot="end"  (click)="borrarAdjunto()" *ngIf="gestorImagenesService.images.length > 0" size="small" color="danger">
+             <ion-icon name="trash-outline"></ion-icon>
+           </ion-fab-button>
+         </ion-toolbar>
+         </ion-col>
+         <ion-col size="12">
+           <img    src="{{gestorImagenesService.images[0].data}}" alt="">
+   
+         </ion-col>
+       </ion-row>
+     </ion-grid>
+  
+     <app-button label="Actualizar Gasto Sin Anticipo"></app-button>
+     <app-icon-button (click)="deleteGastoSinAnticipo()" icon="trash" label="Eliminar Gasto"></app-icon-button>
+     
+   </form>
+ 
+   
+ </ion-content>
+ 
+  
+  

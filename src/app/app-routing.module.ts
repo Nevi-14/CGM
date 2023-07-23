@@ -19,10 +19,6 @@ const routes: Routes = [
     canLoad:[IntroGuard]
   },
   {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
-  },
-  {
     path: 'ordenes-compra',
     loadChildren: () => import('./pages/ordenes-compra/ordenes-compra.module').then( m => m.OrdenesCompraPageModule)
   },
@@ -101,11 +97,8 @@ const routes: Routes = [
   {
     path: 'filtro-historial',
     loadChildren: () => import('./pages/filtro-historial/filtro-historial.module').then( m => m.FiltroHistorialPageModule)
-  },  {
-    path: 'menu',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
   },
-
+ 
  
    
 

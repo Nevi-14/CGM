@@ -46,7 +46,7 @@
                 </ion-row>
          
               </ion-col>
-              <ion-badge color="{{gasto.estatus == 'I' ? 'primary' : gasto.estatus == 'P' ? 'warning' : 'success'}}" mode="ios" style="position: absolute;top:0.5rem; right:3rem;">{{gasto.estatus == 'I' ? 'En Proceso' : gasto.estatus == 'P' ? 'Pendiente' : 'Aprobado'}}</ion-badge>
+              <ion-badge color="{{gasto.estatus == 'RA' ? 'primary' : gasto.estatus == 'P' ? 'warning' :  gasto.estatus == 'R' ?  'warning':'success'}}" mode="ios" style="position: absolute;top:0.5rem; right:3rem;">{{gasto.estatus == 'RA' ? 'En Proceso' : gasto.estatus == 'P' ?  'Pendiente' : gasto.estatus == 'R' ? 'Rechazado' : 'Aprobado'}}</ion-badge>
             </ion-row>
           </ion-grid>
         </ion-item>

@@ -1,6 +1,6 @@
 <ion-app>
   <ion-split-pane contentId="main-split">
-    <ion-menu (mouseover)="openMenu()" [ngClass]="configuracionesService.menu   ? 'expand-menu' :'menu-hide'"
+    <ion-menu  [ngClass]="configuracionesService.menu   ? 'expand-menu' :'menu-hide'"
       contentId="main-content" type="overlay" menuId="myMenu">
       <ion-header class="ion-no-border">
         <ion-toolbar >
@@ -9,9 +9,9 @@
           </ion-thumbnail>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="no-scroll">
+      <ion-content >
        
-          <ion-menu-toggle auto-hide="true" *ngFor="let p of appPages; let i = index">
+          <ion-menu-toggle button auto-hide="true" *ngFor="let p of appPages; let i = index">
 
             <ion-item  (click)="menuAction(p.url)" button >
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
