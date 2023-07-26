@@ -11,7 +11,7 @@
  </ion-header>
  <ion-content class="ion-padding">
   
-   <form id="form" (ngSubmit)="registrarGasto(fRegistroGasto)" #fRegistroGasto="ngForm">
+   <form id="form"  #fUsuario="ngForm">
   <ion-avatar style="display: block;margin: 0 auto; height: 14rem;width: 14rem;margin-top: 1rem;margin-bottom: 1rem;">
     <img src="assets/icon/user.svg" />
   </ion-avatar>
@@ -19,16 +19,16 @@
  
 
 
-    <app-input readonly="true"  name="nombre" type="text" label="Nombre" ngModel="{{usuariosService.usuario.nombre}}"></app-input>
+    <app-input [readonly]="readonly"  name="nombre" type="text" label="Nombre" ngModel="{{usuariosService.usuario.nombre}}"></app-input>
  
      
-    <app-input readonly="true"  name="cia" type="text" label="Compañia" ngModel="{{usuariosService.usuario.cia}}"></app-input>
+    <app-input [readonly]="readonly"  name="cia" type="text" label="Compañia" ngModel="{{usuariosService.usuario.cia}}"></app-input>
     <app-input   name="centroCosto" type="text" label="Centro Costo" ngModel="{{usuariosService.usuario.centrO_COSTO}}"></app-input>
    
-     <app-input readonly="true"  name="usuario" type="text" label="Usuario" ngModel="{{usuariosService.usuario.usuario}}"></app-input>
+     <app-input [readonly]="readonly"  name="usuario" type="text" label="Usuario" ngModel="{{usuariosService.usuario.usuario}}"></app-input>
 
  
-     <app-input readonly="true"  name="correo" type="text" label="Correo" ngModel="{{usuariosService.usuario.correO_ELECTRONICO}}"></app-input>
+     <app-input [readonly]="readonly"  name="correo" type="text" label="Correo" ngModel="{{usuariosService.usuario.correO_ELECTRONICO}}"></app-input>
 
   
      <app-button (click)="regresar()"  label="Cerrar Perfil"></app-button>

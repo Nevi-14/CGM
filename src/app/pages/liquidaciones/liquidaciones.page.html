@@ -60,6 +60,6 @@
 </ion-content>
 <ion-footer class="ion-no-border" *ngIf="totalColones > 0 || totalDolares > 0">
   <ion-toolbar style="padding: 0.5rem;">
-    <app-button  (click)="formularioLiquidacion()" label="Liquidar {{totalColones | colones}}  / {{ totalDolares | colones : '2' : '.' : ',' :  '$'}} "></app-button>
+    <app-button  (click)="formularioLiquidacion()" label="Liquidar {{totalColones | colones}}  / {{ totalDolares | colones : 2 : '.' : ',' :  '$'}} "></app-button>
   </ion-toolbar>
 </ion-footer>

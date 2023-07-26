@@ -15,10 +15,10 @@
   
    <form id="form" (ngSubmit)="actualziarGasto(fRegistroGasto)" #fRegistroGasto="ngForm">
     <app-select  name="compania"  [data]="companias"  label="Compañia" ngModel="{{nuevoGasto.compania}}"></app-select>
-     <app-input readonly="true"  (click)="calendarioPopOver()"  name="fecha" type="text" label="Fecha" ngModel="{{nuevoGasto.fecha | date}}"></app-input>
+     <app-input [readonly]="readonly"  (click)="calendarioPopOver()"  name="fecha" type="text" label="Fecha" ngModel="{{nuevoGasto.fecha | date}}"></app-input>
  
  
-     <app-input  readonly="true" (click)="tiposGastosModal()" name="tipoGasto" type="text" label="Tipo Gasto" ngModel="{{tiposGastosService.tipo ? tiposGastosService.tipo.descripcion : ''}}"></app-input>
+     <app-input  [readonly]="readonly" (click)="tiposGastosModal()" name="tipoGasto" type="text" label="Tipo Gasto" ngModel="{{tiposGastosService.tipo ? tiposGastosService.tipo.descripcion : ''}}"></app-input>
  
   
     
@@ -39,7 +39,7 @@
 
    <app-input   name="descripcion" type="text" label="Detalle" ngModel="{{nuevoGasto.descripcion}}"></app-input>
  
-   <app-input readonly="true"  (click)="adjuntarImagen()"  name="file" type="text" label="Adjunto" ngModel="{{file}}"></app-input>
+   <app-input [readonly]="readonly"  (click)="adjuntarImagen()"  name="file" type="text" label="Adjunto" ngModel="{{file}}"></app-input>
  
   
     

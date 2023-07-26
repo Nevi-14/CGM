@@ -30,6 +30,7 @@ export class NuevoGastoSinAnticipoPage implements OnInit {
 
   focused: boolean;
   file = null;
+  readonly: boolean = true;
   nuevoGasto :GastoSinAnticipo  = {
     id:null,
     compania:null,

@@ -19,8 +19,9 @@ interface gastos {
   imagen: string,
   tipo: string,
   descripcion: string,
-  total: number,
-  gastos: any[]
+  totalColones:number,
+  totalDolares:number,
+  gastos: any[] 
 }
 @Component({
   selector: 'app-mis-gastos',

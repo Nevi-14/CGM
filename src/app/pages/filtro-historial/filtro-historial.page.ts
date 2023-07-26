@@ -58,6 +58,7 @@ referencia = '';
 gastosConAnticipo:string = 'SA';
 anticipo:Anticipos = null;
 vistaAnticipo:VistaAnticipoLineasAnticipo = null;
+readonly:boolean = true;
   constructor(
   public popOverCtrl:PopoverController,
   public lineasAnticiposService:LineasAnticiposService,

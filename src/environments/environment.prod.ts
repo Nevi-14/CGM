@@ -23,12 +23,14 @@ export const environment = {
   // LINEA ANTICIPOS
   getLineaAnticipo:'get/linea/anticipo?id=',
   getVistaUsuarioLineaAnticipo:'get/vista/usuario/linea/anticipo?id=',
+  getVistaAnticipoReferencia:'get/vista/anticipo/linea/anticipo?referencia=',
   getLineanticipo:'get/linea/anticipo?id=',
   putLineaAnticipo:'put/linea/anticipo?id=',
   // GASTOS CON ANTICIPO
   getGastosConAnticipo:'get/gastos/linea/anticipo?id=',
   getGastosConAnticipoTipo:'get/gastos/linea/anticipo/tipo?id=',
   getGastosConAnticipoEstado:'get/gastos/linea/anticipo/estado/?id=',
+  getGastosConAnticipoReferencia:'get/anticipo?referencia=',
   postGastosConAnticipos:'post/gasto/linea/anticipo',
   putGastosConAnticipos:'put/gasto/linea/anticipo?id=',
   deleteGastosConAnticipos:'delete/gasto/linea/anticipo?id=',

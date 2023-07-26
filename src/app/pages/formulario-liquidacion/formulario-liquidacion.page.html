@@ -15,53 +15,13 @@
   <form id="form" (ngSubmit)="liquidarGastos(fLiquidaciones)" #fLiquidaciones="ngForm">
   
     <p style="margin-bottom: 1rem;margin-top:1rem;">  Si desea liquidar los gastos y proceder con el sobrante de  {{anticiposService.vistaAnticipo.restante | colones : 2 : '.' : ',' :   anticiposService.anticipo ? anticiposService.anticipo.moneda : '¢' }}, por favor completar el formulario adjunto y dale click al botón de liquidar</p>
-    <app-select name="metodoDevolucion" (ionChange)="metodoPago(fLiquidaciones, $event)" label="Metodo Devolución" [data]="metodoDevolucion" ngModel="{{sobrante.metodO_DEVOLUCION}}"></app-select>
+    <app-select name="metodoDevolucion" (ionChange)="metodoPago(fLiquidaciones)" label="Metodo Devolución" [data]="metodoDevolucion" ngModel="{{sobrante.metodO_DEVOLUCION}}"></app-select>
     <app-input name="telefono" *ngIf="sobrante.metodO_DEVOLUCION == 'S'" label="Telefono" type="text"  ngModel="{{sobrante.telefono}}"></app-input>
     <app-input name="cuenta"  *ngIf="sobrante.metodO_DEVOLUCION == 'T' || sobrante.metodO_DEVOLUCION == 'D'" label="Cuenta" type="text" ngModel="{{sobrante.cuenta}}"></app-input>
     
     <app-button label='Liquidar Gastos'></app-button>
    
   </form>
-<ion-list  style="margin-top: 1rem;margin-bottom: 2rem;">
-  
-  <ion-card (click)="editarGasto(item)" button size="12"  *ngFor="let item of gastos">
-    <ion-grid >
-      <ion-row >
-        <ion-col size="4">
-          <img src="{{imagenT(item)}}" alt="">
-        
-  
-        </ion-col>
-        <ion-col size="8">
-          <ion-card-header>
-   <ion-grid>
-    <ion-row >
-      <ion-col  class="ion-col" size="12">
-        <ion-label>{{item.fecha | date }}</ion-label>
-  
-      </ion-col>
-      <ion-col  class="ion-col" size="12">
-        <ion-label> <strong>{{item.proveedor}}</strong> </ion-label>
-      </ion-col>
-      <ion-col  class="ion-col"  size="12">
-        <ion-label color="danger"><strong>-{{item.monto | colones}}</strong></ion-label>
-      </ion-col>
-    </ion-row>
-   </ion-grid>
-                </ion-card-header>
-                
-        </ion-col>
-        <ion-col size="12">
-          
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-        </ion-card>
-
-       
-      
-</ion-list>
-
 
 </ion-content>
  

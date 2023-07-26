@@ -13,7 +13,7 @@ export class MiPerfilPage implements OnInit {
   public modalCtrl:ModalController,
   public usuariosService:UsuariosService  
   ) { }
-
+readonly:boolean = true;
   ngOnInit() {
   }
   regresar(){

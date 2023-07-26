@@ -23,6 +23,7 @@ export class EditarGastoPage implements OnInit {
   restanteAnterior = 0;
   @Input() tipo:TiposGastos;
   file = null;
+  readonly: boolean = true;
 
   constructor(
     public modalctrl: ModalController,

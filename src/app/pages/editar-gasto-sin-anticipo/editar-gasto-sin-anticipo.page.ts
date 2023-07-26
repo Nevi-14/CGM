@@ -24,6 +24,7 @@ tipoMoneda = [{id:'$',valor:'Dolares'},{id:'¢',valor:'Colones'}]
 formaPago = [{id:'true',valor:'Tarjeta'},{id:'false',valor:'Efectivo'}]
 companias = [];
 file = null;
+readonly:boolean = true;
   constructor(
 public alertasService:AlertasService,
 public gastosSinAnticiposService:GastosSinAnticipoService,

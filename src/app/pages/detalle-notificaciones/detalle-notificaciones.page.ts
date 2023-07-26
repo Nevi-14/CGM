@@ -13,6 +13,7 @@ import { NotificacionesService } from 'src/app/services/notificaciones.service';
 })
 export class DetalleNotificacionesPage implements OnInit {
 @Input() notificacion:Notificaciones
+readonly:boolean = true;
 file = null;
   constructor(
   public modalCtrl:ModalController,

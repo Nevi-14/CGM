@@ -45,7 +45,7 @@ export class NuevoGastoAnticipoPage implements OnInit {
     estatus: 'P'
 
   }
-  
+  readonly: boolean = true;
 tipoMoneda = [{id:'$',valor:'Dolares'},{id:'₡',valor:'Colones'}]
   constructor(
     private usuariosService: UsuariosService,
